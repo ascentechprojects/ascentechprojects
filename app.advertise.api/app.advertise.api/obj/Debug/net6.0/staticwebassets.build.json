@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "yneXPLdGQzJhy90ptPDBhwjEpDasDqXWw+e0ez0qhUo=",
+  "Source": "app.advertise.api",
+  "BasePath": "_content/app.advertise.api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "zqdEhp6B3F5qLuhMwPCsf7xfiU7d4Qb8SptFgpZHkkBRe85D4kxhmp7dyBN2R7RfhLWvQBrzNh3E5Qgi8BvWDw==",
+  "success": true,
+  "projectFilePath": "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Manoj\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\Manoj\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.1\\microsoft.extensions.logging.abstractions.7.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

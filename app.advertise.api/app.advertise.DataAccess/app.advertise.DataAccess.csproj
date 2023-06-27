@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.138" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.100" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\app.advertise.dtos\app.advertise.dtos.csproj" />
+    <ProjectReference Include="..\app.advertise.libraries\app.advertise.libraries.csproj" />
+  </ItemGroup>
+
+</Project>
