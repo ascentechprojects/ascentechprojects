@@ -1,10 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace app.advertise.libraries.Middlewares
 {
@@ -21,7 +15,7 @@ namespace app.advertise.libraries.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            string userIpAddress = context.Request.Headers["UserIpAddress"];
+            string userIpAddress = context.Request.Headers[AppConstants.Header_IPAddress];
 
             _userRequestHeaders.IpAddress=userIpAddress;
 

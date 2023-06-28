@@ -10,7 +10,7 @@ namespace app.advertise.dtos
         public int ULBId { get; set; }
         public string InsBy { get; set; }
         public DateTime InsDt { get; set; }
-        public DateTime UpdBy { get; set; }
+        public string UpdBy { get; set; }
         public DateTime UpdDt { get; set; }
         public string StatusFlag { get; set; }
         public int UserId { get; set; }

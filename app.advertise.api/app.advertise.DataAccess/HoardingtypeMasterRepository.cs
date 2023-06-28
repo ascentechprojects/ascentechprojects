@@ -12,7 +12,7 @@ namespace app.advertise.DataAccess
         Task<IEnumerable<HoardingtypeMaster>> GetAll();
         Task<HoardingtypeMaster> GetById(int id);
     }
-    public class HoardingtypeMasterRepository: IHoardingtypeMasterRepository
+    public class HoardingtypeMasterRepository : IHoardingtypeMasterRepository
     {
         private readonly AdvertisementDbContext _context;
         private readonly ILogger<HoardingtypeMasterRepository> _logger;
@@ -46,7 +46,7 @@ namespace app.advertise.DataAccess
         public async Task<HoardingtypeMaster> GetById(int id)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<HoardingtypeMaster>(Queries.Single_HOARDINGTYPE_MST, id) ?? new HoardingtypeMaster();
+            return await connection.QueryFirstOrDefaultAsync<HoardingtypeMaster>(Queries.Single_HOARDINGTYPE_MST, new { id }) ?? new HoardingtypeMaster();
         }
     }
 }

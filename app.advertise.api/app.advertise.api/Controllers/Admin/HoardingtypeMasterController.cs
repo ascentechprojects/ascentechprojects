@@ -52,7 +52,7 @@ namespace app.advertise.api.Controllers.Admin
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -71,8 +71,8 @@ namespace app.advertise.api.Controllers.Admin
             }
         }
 
-        [HttpPost]
-        [Route("{id:int}/GetById")]
+        [HttpGet]
+        [Route("{id:int}/ById")]
         public async Task<IActionResult> GetById(int id)
         {
             try
