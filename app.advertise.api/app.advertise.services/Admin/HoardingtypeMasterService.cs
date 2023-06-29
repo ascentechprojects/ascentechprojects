@@ -10,12 +10,10 @@ namespace app.advertise.services.Admin
 {
     public class HoardingtypeMasterService: IHoardingtypeMasterService
     {
-        private readonly ILogger<HoardingtypeMasterService> _logger;
         private readonly IHoardingtypeMasterRepository _hoardingtypeMasterRepository;
         private readonly UserRequestHeaders _authData;
-        public HoardingtypeMasterService(ILogger<HoardingtypeMasterService> logger, IHoardingtypeMasterRepository hoardingtypeMasterRepository, UserRequestHeaders authData)
+        public HoardingtypeMasterService(IHoardingtypeMasterRepository hoardingtypeMasterRepository, UserRequestHeaders authData)
         {
-            _logger = logger;
             _hoardingtypeMasterRepository = hoardingtypeMasterRepository;
             _authData = authData;
         }

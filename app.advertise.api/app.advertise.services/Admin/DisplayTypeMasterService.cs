@@ -1,36 +1,32 @@
 ﻿using app.advertise.DataAccess;
 using app.advertise.DataAccess.Entities;
-using app.advertise.dtos;
 using app.advertise.dtos.Admin;
 using app.advertise.libraries;
 using app.advertise.services.Admin.Interfaces;
 using Dapper;
-using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace app.advertise.services.Admin
 {
     public class DisplayTypeMasterService : IDisplayTypeMasterService
     {
-        private readonly ILogger<DisplayTypeMasterService> _logger;
         private readonly IDisplayTypeMasterRepository _displayTypeMasterRepository;
-        private readonly UseroAuthClaims _authClaims;
-        public DisplayTypeMasterService(ILogger<DisplayTypeMasterService> logger, IDisplayTypeMasterRepository displayTypeMasterRepository)
+        private readonly UserRequestHeaders _authData;
+        public DisplayTypeMasterService(IDisplayTypeMasterRepository displayTypeMasterRepository, UserRequestHeaders authData)
         {
-            _authClaims=new UseroAuthClaims();
-            _logger = logger;
+            _authData=authData;
             _displayTypeMasterRepository = displayTypeMasterRepository;
         }
 
         public async Task InsertUpdate(dtoDisplayTypeMaster dtoRequest, QueryExecutionMode mode)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("in_Userid", _authClaims.Userid, DbType.String, ParameterDirection.Input);
+            parameters.Add("in_Userid", _authData.UserId, DbType.String, ParameterDirection.Input);
             parameters.Add("in_disptypeid", dtoRequest.Id, DbType.Int32, ParameterDirection.Input);
             parameters.Add("in_disptypename", dtoRequest.Name, DbType.String, ParameterDirection.Input);
             parameters.Add("in_disptypestatus", dtoRequest.StatusFlag, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_Ipaddress", _authClaims.IPAddress??dtoRequest.IPAddress, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_Source", _authClaims.Source, DbType.String, ParameterDirection.Input);
+            parameters.Add("in_Ipaddress", _authData.IpAddress, DbType.String, ParameterDirection.Input);
+            parameters.Add("in_Source", _authData.Source, DbType.String, ParameterDirection.Input);
             parameters.Add("in_Mode", mode, DbType.Int32, ParameterDirection.Input);
 
             await _displayTypeMasterRepository.InsertUpdate(parameters);
@@ -71,7 +67,7 @@ namespace app.advertise.services.Admin
                 NUM_DISPLAYTYPE_ID = id,
                 VAR_DISPLAYTYPE_STATUS = status,
                 DAT_DISPLAYTYPE_UPDT = DateTime.Now,
-                VAR_DISPLAYTYPE_UPDBY = _authClaims.Userid
+                VAR_DISPLAYTYPE_UPDBY = _authData.UserId
             };
             await _displayTypeMasterRepository.ModifyStatusById(parameters);
         }
