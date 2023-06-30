@@ -13,6 +13,7 @@ namespace app.advertise.api
             _logger = logger;
             _internalExceptionHandler = internalExceptionHandler;
         }
+
         protected IActionResult HandleError(Exception ex)
         {
             var result = _internalExceptionHandler.HandleException(ex);
@@ -21,6 +22,9 @@ namespace app.advertise.api
             {
                 case libraries.StatusCode.InternalServer:
                     _logger.LogError(ex, "Exception occurred. Message: {message}", result.ErrorMessage);
+                    break;
+                case libraries.StatusCode.BadRequest:
+                    _logger.LogError(ex, "Input validation failed. Message: {message}", result.ErrorMessage);
                     break;
                 default:
                     break;

@@ -50,7 +50,8 @@ namespace app.advertise.DataAccess
                     MobileNo = parameters.Get<string?>("Out_mobileno"),
                     OtpValidate = parameters.Get<string?>("Out_OtpValidate"),
                     OrgId = parameters.Get<int?>("out_OrgId"),
-                    ForceFullPassChag = parameters.Get<string?>("out_forceFullPassChage")
+                    ForceFullPassChag = parameters.Get<string?>("out_forceFullPassChage"),
+                    UlbId=0
                 };
         }
     }

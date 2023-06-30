@@ -3,7 +3,6 @@ using app.advertise.dtos.Admin;
 using app.advertise.libraries;
 using app.advertise.services.Admin.Interfaces;
 using Dapper;
-using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace app.advertise.services.Admin
@@ -27,7 +26,7 @@ namespace app.advertise.services.Admin
             parameters.Add("in_Hoardypestatus", dtoRequest.HoardTypestatus, DbType.String, ParameterDirection.Input);
             parameters.Add("in_Ipaddress", _authData.IpAddress, DbType.String, ParameterDirection.Input);
             parameters.Add("in_Source", _authData.Source, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_Mode", mode, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("in_Mode", (int)mode, DbType.Int32, ParameterDirection.Input);
             
             await _hoardingtypeMasterRepository.InsertUpdate(parameters);
         }

@@ -20,5 +20,7 @@
         
         public int? OrgId { get; set; }
         public string ForceFullPassChag { get; set; }
+
+        public int UlbId { get;set;}
     }
 }

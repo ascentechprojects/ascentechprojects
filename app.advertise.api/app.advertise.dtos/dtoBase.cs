@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace app.advertise.dtos
+﻿namespace app.advertise.dtos
 {
     public class dtoBase
     {
@@ -17,14 +15,6 @@ namespace app.advertise.dtos
         public int OrgId { get; set; }
         public string IPAddress { get; set; }
         public int PrabhagId { get; set; }
-
-        public string DisplayStatus => !string.IsNullOrEmpty(StatusFlag) && StatusPrefix.Contains(StatusFlag, StringComparer.OrdinalIgnoreCase) ? "Active" : "InActive";
-
-        private static readonly string[] StatusPrefix = new string[] { "Y", "A" };
-
-        public string FormattedInsDt => InsDt.ToString("dd-MMM-yyyy");
-        public string FormattedUpdDt => UpdDt.ToString("dd-MMM-yyyy");
-
-        public readonly Dictionary<string,string> StatusFlags = new(){ { "A", "Active" }, { "I", "Inactive" }, };
+        
     }
 }

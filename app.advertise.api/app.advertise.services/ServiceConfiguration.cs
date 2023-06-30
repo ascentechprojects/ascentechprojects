@@ -1,5 +1,6 @@
 ﻿using app.advertise.services.Admin;
 using app.advertise.services.Admin.Interfaces;
+using app.advertise.services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace app.advertise.services
@@ -13,6 +14,8 @@ namespace app.advertise.services
             services.AddTransient<IDisplayTypeMasterService, DisplayTypeMasterService>();
             services.AddTransient<ILocationMasterService, LocationMasterService>();
             services.AddScoped<IOAuthService, OAuthService>();
+            services.AddTransient<IHoardingMasterService, HoardingMasterService>();
+            services.AddTransient<IListItemService, ListItemService>();
             return services;
         }
     }

@@ -1,6 +1,5 @@
 ﻿using app.advertise.libraries.Exceptions;
 using app.advertise.libraries.Interfaces;
-using System.Net;
 
 namespace app.advertise.libraries
 {
@@ -19,6 +18,11 @@ namespace app.advertise.libraries
                 DBException => new ApiResponse()
                 {
                     Status = StatusCode.InternalServer,
+                    ErrorMessage = ex.Message,
+                },
+                FluentException => new ApiResponse()
+                {
+                    Status = StatusCode.BadRequest,
                     ErrorMessage = ex.Message,
                 },
                 _ => new ApiResponse()

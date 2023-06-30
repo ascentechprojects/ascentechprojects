@@ -18,7 +18,7 @@ namespace app.advertise.services.Admin
             _logger = logger;
         }
 
-
+        //to do claim,
         public async Task<dtoAuthResponse> AuthenticateUser(dtoAuthRequest authRequest)
         {
             var parameters = new DynamicParameters();
@@ -70,7 +70,8 @@ namespace app.advertise.services.Admin
                 CollectionCenter = response.CollectionCenter,
                 MobileNo = response.MobileNo,
                 OrgId = response.OrgId,
-                AuthKey=Guid.NewGuid().ToString(),  
+                AuthKey=Guid.NewGuid().ToString(),
+                ULBId=response.UlbId
             };
             return userResponse;
 
