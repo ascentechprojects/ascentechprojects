@@ -1,11 +1,10 @@
 using app.advertise.DataAccess;
 using app.advertise.libraries;
 using app.advertise.libraries.AppSettings;
-using app.advertise.libraries.Interfaces;
 using app.advertise.libraries.Middlewares;
 using app.advertise.services;
-using app.advertise.services.Admin;
-using app.advertise.services.Admin.Interfaces;
+using FluentValidation.AspNetCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,11 +15,20 @@ builder.Services.AddSwaggerGen();
 LibrariesConfiguration.Configure(builder.Services);
 RepositoryConfiguration.Configure(builder.Services);
 ServiceConfiguration.Configure(builder.Services);
+
 builder.Services.AddControllers()
         .ConfigureApiBehaviorOptions(options =>
         {//disable the automatic validation of non-nullable properties
             options.SuppressModelStateInvalidFilter = true;
-        });
+        }).AddFluentValidation(options =>
+        {
+            // Validate child properties and root collection elements
+            options.ImplicitlyValidateChildProperties = true;
+            options.ImplicitlyValidateRootCollectionElements = true;
+
+            // Automatic registration of validators in assembly
+            options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        }); ;
 
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
 
