@@ -24,7 +24,6 @@
         public string VAR_APPLI_APPROVBY { get; set; }
         public DateTime DAT_APPLI_APPROVDT { get; set; }
         public string VAR_APPLI_APPROVREMARK { get; set; }
-        public string VAR_APPLI_IPADDRESS { get; set; }
         public int NUM_APPLI_PRABHAGID { get; set; }
         public int NUM_APPLI_LOCATIONID { get; set; }
         public int NUM_HORDING_ULBID { get; set; }
@@ -44,7 +43,6 @@
         public DateTime DAT_HORDING_INSDT { get; set; }
         public string VAR_HORDING_UPDBY { get; set; }
         public DateTime DAT_HORDING_UPDT { get; set; }
-        public string VAR_HORDING_IPADDRESS { get; set; }
         public string VAR_HORDING_OWNERSHIP { get; set; }
         public int NUM_PRABHAG_ID { get; set; }
         public string VAR_PRABHAG_NAME { get; set; }
@@ -62,7 +60,6 @@
         public DateTime DAT_LOCATION_INSDT { get; set; }
         public string VAR_LOCATION_UPDBY { get; set; }
         public DateTime DAT_LOCATION_UPDT { get; set; }
-        public string VAR_LOCATION_IPADDRESS { get; set; }
         public int NUM_LOCATION_LATITUDE { get; set; }
         public int NUM_LOCATION_LONGITUDE { get; set; }
 

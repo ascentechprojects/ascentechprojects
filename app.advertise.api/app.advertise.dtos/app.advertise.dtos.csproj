@@ -10,4 +10,8 @@
     <PackageReference Include="FluentValidation" Version="11.5.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\app.advertise.libraries\app.advertise.libraries.csproj" />
+  </ItemGroup>
+
 </Project>

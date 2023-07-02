@@ -1,6 +1,6 @@
 ﻿namespace app.advertise.dtos
 {
-    public class dtoApplicationAuthResult
+    public class dtoApplicationAuthResult:dtoBase
     {
         public string ApplicationNo { get; set; }
         public string AppliAppName { get; set; }
@@ -13,7 +13,7 @@
         public string AppliFromDate { get; set; }
         public string AppliUpToDate { get; set; }
         public string AppliInsBy { get; set; }
-        public DateTime AppliInsDt { get; set; }
+        public string AppliInsDt { get; set; }
         public string HordingHoldName { get; set; }
         public string HordingHoldAddress { get; set; }
         public string HordingOwnership { get; set; }
@@ -21,5 +21,10 @@
         public int HordingWidth { get; set; }
         public int HordingTotalSqFt { get; set; }
         public string DisplayTypeName { get; set; }
+        public string PrabhagName { get; set; }
+        public string Quantity { get; set; }
+        public string LocationName { get; set; }
+        public string Remark { get; set; }
+        public string RemarkFlag { get; set; }
     }
 }

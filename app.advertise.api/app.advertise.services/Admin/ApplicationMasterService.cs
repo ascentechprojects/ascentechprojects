@@ -3,7 +3,7 @@ using app.advertise.dtos;
 using app.advertise.libraries;
 using app.advertise.services.Admin.Interfaces;
 using Dapper;
-using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Data;
 
 namespace app.advertise.services.Admin
@@ -11,11 +11,11 @@ namespace app.advertise.services.Admin
     public class ApplicationMasterService : IApplicationMasterService
     {
         private readonly IApplicationMasterRespository _repository;
-        private readonly ILogger<HoardingMasterService> _logger;
-        public ApplicationMasterService(IApplicationMasterRespository repository, ILogger<HoardingMasterService> logger)
+        private readonly UserRequestHeaders _authData;
+        public ApplicationMasterService(IApplicationMasterRespository repository, UserRequestHeaders authData)
         {
-            _logger = logger;
             _repository = repository;
+            _authData = authData;
         }
 
         public async Task<IEnumerable<dtoApplicationAuthResult>> AuthSerach(dtoApplicationAuthRequest dto)
@@ -38,7 +38,7 @@ namespace app.advertise.services.Admin
                 AppliFromDate = record.DAT_APPLI_FROMDT.ToString(AppConstants.Date_Dafault_Format),
                 AppliUpToDate = record.DAT_APPLI_UPTODT.ToString(AppConstants.Date_Dafault_Format),
                 AppliInsBy = record.VAR_APPLI_INSBY,
-                AppliInsDt = record.DAT_APPLI_INSDT,
+                AppliInsDt = record.DAT_APPLI_INSDT.ToString(AppConstants.Date_Dafault_Format),
                 HordingHoldName = record.VAR_HORDING_HOLDNAME,
                 HordingHoldAddress = record.VAR_HORDING_HOLDADDRESS,
                 HordingLength = record.NUM_HORDING_LENGTH,
@@ -69,15 +69,34 @@ namespace app.advertise.services.Admin
                 AppliFromDate = record.DAT_APPLI_FROMDT.ToString(AppConstants.Date_Dafault_Format),
                 AppliUpToDate = record.DAT_APPLI_UPTODT.ToString(AppConstants.Date_Dafault_Format),
                 AppliInsBy = record.VAR_APPLI_INSBY,
-                AppliInsDt = record.DAT_APPLI_INSDT,
+                AppliInsDt = record.DAT_APPLI_INSDT.ToString(AppConstants.Date_Dafault_Format),
                 HordingHoldName = record.VAR_HORDING_HOLDNAME,
                 HordingHoldAddress = record.VAR_HORDING_HOLDADDRESS,
-                HordingOwnership = record.VAR_HORDING_OWNERSHIP,//StaticHelpers.HoardingOwnerships().TryGetValue(record.VAR_HORDING_OWNERSHIP, out var value) && value != null ? value.ToString() : string.Empty,
+                HordingOwnership = StaticHelpers.HoardingOwnerships().TryGetValue(record.VAR_HORDING_OWNERSHIP, out var value) && value != null && !string.IsNullOrEmpty(value) ? value : string.Empty,
                 HordingLength = record.NUM_HORDING_LENGTH,
                 HordingWidth = record.NUM_HORDING_WIDTH,
                 HordingTotalSqFt = record.NUM_HORDING_TOTALSQFT,
-                DisplayTypeName = record.VAR_DISPLAYTYPE_NAME
+                DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
+                PrabhagName=record.VAR_PRABHAG_NAME,
+                LocationName=record.VAR_LOCATION_NAME,
             };
+        }
+
+        public async Task UpdateStatusFlag(dtoApplicationAuthRequest dto)
+        {
+            var statusKey = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Value.Equals(dto.StatusFlag)).Key;
+
+            var parameters = new DynamicParameters();
+            parameters.Add("in_ulbID", dto.ULBId);
+            parameters.Add("in_userid", _authData.UserId);
+            parameters.Add("IN_AppCloseID", dto.AppliId);
+            parameters.Add("IN_AppliID", dto.AppliId);
+            parameters.Add("in_remark", dto.Remark);
+            parameters.Add("in_AppStatus", statusKey);
+            parameters.Add("in_ipaddress", _authData.IpAddress);
+            parameters.Add("in_source", _authData.Source.ToString());
+
+            await _repository.UpdateAppliStatus(parameters);
         }
     }
 }

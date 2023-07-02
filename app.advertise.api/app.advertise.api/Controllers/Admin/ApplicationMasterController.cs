@@ -46,9 +46,9 @@ namespace app.advertise.api.Controllers.Admin
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("{id:int}/ById")]
-        public async Task<IActionResult> AuthSearch(int id)
+        public async Task<IActionResult> ApplicationDetails(int id)
         {
             try
             {
@@ -56,6 +56,31 @@ namespace app.advertise.api.Controllers.Admin
                 {
                     Status = libraries.StatusCode.Ok,
                     Data = await _service.AppliDetailsbyId(id)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("UpdateStatus")]
+        public async Task<IActionResult> UpdateRemark(dtoApplicationAuthRequest dto)
+        {
+            try
+            {
+                var validator = new ApplicationAuthRequestValidator(dto);
+                var validationResult = validator.Validate(dto);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+               await _service.UpdateStatusFlag(dto);
+
+                return Ok(new ApiResponse()
+                {
+                    Status = libraries.StatusCode.Ok,
                 });
             }
             catch (Exception ex)

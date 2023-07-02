@@ -6,5 +6,6 @@ namespace app.advertise.services.Admin.Interfaces
     {
         Task<IEnumerable<dtoApplicationAuthResult>> AuthSerach(dtoApplicationAuthRequest dto);
         Task<dtoApplicationAuthResult> AppliDetailsbyId(int Id);
+        Task UpdateStatusFlag(dtoApplicationAuthRequest dto);
     }
 }

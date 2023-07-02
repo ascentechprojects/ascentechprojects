@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using app.advertise.libraries;
+using FluentValidation;
 
 namespace app.advertise.dtos.Admin.Validators
 {
@@ -20,6 +21,23 @@ namespace app.advertise.dtos.Admin.Validators
    })
    .WithMessage("Location is required.");
 
+        }
+
+        public ApplicationAuthRequestValidator(dtoApplicationAuthRequest authRequest)
+        {
+            RuleFor(model => model.Remark).NotEmpty().WithMessage("Remark is required.");
+            RuleFor(p => p.StatusFlag)
+            .Must(value =>
+             {
+                return StaticHelpers.RemarkStatus().ContainsValue(value);
+              }).WithMessage("Invalid status flag.");
+
+            RuleFor(p => p.AppliId)
+            .Must(value =>
+            {
+                return !(value <= 0);
+            }).WithMessage("Application Id is required.");
+           
         }
     }
 }
