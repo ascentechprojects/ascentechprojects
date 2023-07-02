@@ -7,7 +7,7 @@ namespace app.advertise.DataAccess
 {
     public interface IListItemRepository<T>
     {
-        Task<IEnumerable<T>> Items(ListItemEntity entityType);
+        Task<IEnumerable<T>> Items(ListItemEntity entityType, DynamicParameters parameters = null);
     }
     public class ListItemRepository<T> : IListItemRepository<T>
     {
@@ -19,10 +19,10 @@ namespace app.advertise.DataAccess
             _logger = logger;
         }
 
-        public async Task<IEnumerable<T>> Items(ListItemEntity entityType)
+        public async Task<IEnumerable<T>> Items(ListItemEntity entityType, DynamicParameters parameters)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<T>(QueryEntityType(entityType));
+            return await connection.QueryAsync<T>(QueryEntityType(entityType), parameters);
         }
 
         private string QueryEntityType(ListItemEntity entityType) =>
@@ -33,6 +33,7 @@ namespace app.advertise.DataAccess
                  ListItemEntity.Location => Queries.ListItem_Locations,
                  ListItemEntity.Prabhag => Queries.ListItem_Prabhags,
                  ListItemEntity.HoardingType => Queries.ListItem_HordingTypes,
+                 ListItemEntity.LocationByPrabhag => Queries.ListItem_Locations_By_PrabhagId,
                  _ => throw new DBException($"{AppConstants.Msg_InvalidEntityType} {entityType}", _logger)
              };
 

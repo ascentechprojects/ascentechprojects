@@ -10,6 +10,7 @@
         internal const string SP_DisplayTypeMaster_Ins = "advertisement.AOAD_DISPLAYTYPE_INS";
         internal const string SP_LocationMaster_Ins = "advertisement.AOAD_LOCATION_INS";
         internal const string SP_HoardingMaster_Ins = "advertisement.AOAD_Hording_ins";
+        internal const string SP_Aoad_Appli_Auth_Search_Result = "advertisement.aoad_appli_auth_search_result";
 
         internal const string List_Active_HoardTypeConfig = $"Select NUM_HOARDINGCONFIG_ID,NUM_HOARDINGCONFIG_HOARDID,NUM_HOARDINGCONFIG_ULBID,VAR_HOARDINGCONFIG_INSBY,DAT_HOARDINGCONFIG_INSDT,VAR_HOARDINGCONFIG_UPDBY,DAT_HOARDINGCONFIG_UPDT,VAR_HOARDINGCONFIG_ACTIVEFLAG from {Schema_Adevertisement}.AOAD_HOARDINGTYPE_CONFIG Where VAR_HOARDINGCONFIG_ACTIVEFLAG='Y'";
         internal const string Single_HoardTypeConfig = "Select Top 1 NUM_HOARDINGCONFIG_ID,NUM_HOARDINGCONFIG_HOARDID,NUM_HOARDINGCONFIG_ULBID,VAR_HOARDINGCONFIG_INSBY,DAT_HOARDINGCONFIG_INSDT,VAR_HOARDINGCONFIG_UPDBY,DAT_HOARDINGCONFIG_UPDT,VAR_HOARDINGCONFIG_ACTIVEFLAG from advertisement.AOAD_HOARDINGTYPE_CONFIG Where NUM_HOARDINGCONFIG_ID={id}";
@@ -28,5 +29,11 @@
         public const string ListItem_Locations = "select NUM_LOCATION_ID As Id, VAR_LOCATION_NAME As DisplayName from aoad_location_mst where VAR_LOCATION_ACTIVE='A'";
         public const string ListItem_DisplayTypes = "Select NUM_DISPLAYTYPE_ID As Id ,VAR_DISPLAYTYPE_NAME As DisplayName,VAR_DISPLAYTYPE_STATUS as Active from aoad_displaytype_mst where VAR_DISPLAYTYPE_STATUS='A'";
         public const string ListItem_Prabhags = "SELECT NUM_PRABHAG_ID As Id, VAR_PRABHAG_NAME As DisplayName from aoad_prabhag_mas where VAR_PRABHAG_STATUS='Y'";
+        public const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId";
+        public const string Application_Auth_Search1 = "SELECT apm.*, ahm.*,aprm.*,alocm.*  FROM aoad_appli_mst apm LEFT JOIN aoad_hording_mst ahm ON ahm.NUM_HORDING_ID = apm.NUM_APPLI_HORDINGID LEFT JOIN aoad_prabhag_mas aprm ON aprm.NUM_PRABHAG_ID=ahm.num_hording_prabhagid LEFT JOIN aoad_location_mst alocm ON alocm.NUM_LOCATION_ID=ahm.num_hording_locationid LEFT JOIN aoad_displaytype_mst adm ON adm.num_displaytype_id=ahm.NUM_HORDING_DISPTYPEID WHERE ahm.num_hording_locationid : p_location_id AND ahm.num_hording_prabhagid : p_prabhag_id";
+        public const string Application_Auth_Search = "SELECT apm.*,ahm.*  FROM aoad_appli_mst apm LEFT JOIN aoad_hording_mst ahm ON ahm.NUM_HORDING_ID = apm.NUM_APPLI_HORDINGID  WHERE ahm.num_hording_locationid = :p_location_id AND ahm.num_hording_prabhagid = :p_prabhag_id";
+        public const string Application_Details_By_AppliId = "SELECT apm.*,ahm.*  FROM aoad_appli_mst apm LEFT JOIN aoad_hording_mst ahm ON ahm.NUM_HORDING_ID = apm.NUM_APPLI_HORDINGID  WHERE apm.NUM_APPLI_ID=:p_appli_id";
+
+
     }
 }

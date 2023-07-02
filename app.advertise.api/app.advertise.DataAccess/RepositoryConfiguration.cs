@@ -15,6 +15,7 @@ namespace app.advertise.DataAccess
             services.AddScoped<IHoardingMasterRepository,HoardingMasterRepository>();
             services.AddScoped<IUpdateStatusRespository, UpdateStatusRespository>();
             services.AddScoped(typeof(IListItemRepository<>), typeof(ListItemRepository<>));
+            services.AddScoped<IApplicationMasterRespository, ApplicationMasterRespository>();
             return services;
 
         }

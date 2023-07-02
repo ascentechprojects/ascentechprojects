@@ -9,5 +9,9 @@
 
             return RecordStatus.I.ToString();
         }
+
+        public static Dictionary<string,string> HoardingOwnerships()=> new() { { "P", "Private" }, { "C", "Corporation" } };
+      
+        
     }
 }

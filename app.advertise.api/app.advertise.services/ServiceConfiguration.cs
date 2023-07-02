@@ -16,6 +16,7 @@ namespace app.advertise.services
             services.AddScoped<IOAuthService, OAuthService>();
             services.AddTransient<IHoardingMasterService, HoardingMasterService>();
             services.AddTransient<IListItemService, ListItemService>();
+            services.AddTransient<IApplicationMasterService, ApplicationMasterService>();
             return services;
         }
     }

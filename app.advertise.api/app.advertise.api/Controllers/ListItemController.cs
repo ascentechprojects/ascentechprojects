@@ -105,5 +105,23 @@ namespace app.advertise.api.Controllers
                 return HandleError(ex);
             }
         }
+
+        [HttpGet]
+        [Route("{prabhagId:int}/PrabhaLocations")]
+        public async Task<IActionResult> LocationsByPrabhagId(int prabhagId)
+        {
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoListItem>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _listItemService.LocationsByPrabhagId(prabhagId)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
     }
 }

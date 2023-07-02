@@ -9,5 +9,7 @@ namespace app.advertise.services.Interfaces
         Task<IEnumerable<dtoListItem>> Prabhags();
         Task<IEnumerable<dtoListItem>> HoardingTypes();
         IEnumerable<dtoListItem> HoardingOwnerships();
+
+        Task<IEnumerable<dtoListItem>> LocationsByPrabhagId(int prabhagId);
     }
 }
