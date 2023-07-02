@@ -4,9 +4,7 @@ using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using app.advertise.libraries.Interfaces;
 using app.advertise.services.Admin.Interfaces;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace app.advertise.api.Controllers.Admin
 {
