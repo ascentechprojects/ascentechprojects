@@ -32,7 +32,15 @@ builder.Services.AddControllers()
 
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyCorsPolicy", builder =>
+    {
+        builder.WithOrigins("http://example.com", "https://localhost:7058")
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -49,7 +57,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseCors("MyCorsPolicy");
 app.UseMiddleware<RequestHeadersMiddleware>();
 
 app.Run();

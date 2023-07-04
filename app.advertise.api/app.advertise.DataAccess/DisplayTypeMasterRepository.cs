@@ -12,6 +12,9 @@ namespace app.advertise.DataAccess
         Task<IEnumerable<DisplayTypeMaster>> GetAll();
         Task<DisplayTypeMaster> GetById(int id);
         Task ModifyStatusById(DisplayTypeMaster parameters);
+        Task<IEnumerable<DisplayTypeMaster>> ActiveDisplayTypes();
+        Task<IEnumerable<DisplayTypeMaster>> DisplayTypesExistsInConfig(int displayConfigUlbId);
+        Task InsertUpdateConfig(DynamicParameters parameters);
     }
     public class DisplayTypeMasterRepository : IDisplayTypeMasterRepository
     {
@@ -57,6 +60,33 @@ namespace app.advertise.DataAccess
 
             if (!(rowsAffected > 0))
                 throw new DBException("No rows updated", _logger);
+        }
+
+        public async Task<IEnumerable<DisplayTypeMaster>> ActiveDisplayTypes()
+        {
+            using var connection = _context.CreateConnection();
+            return await connection.QueryAsync<DisplayTypeMaster>(Queries.Select_Active_DisplayTypes) ?? Enumerable.Empty<DisplayTypeMaster>();
+        }
+
+        public async Task<IEnumerable<DisplayTypeMaster>> DisplayTypesExistsInConfig(int displayConfigUlbId)
+        {
+            using var connection = _context.CreateConnection();
+            return await connection.QueryAsync<DisplayTypeMaster>(Queries.Select_DisplayTypes_Exists_Config, new { displayConfigUlbId }) ?? Enumerable.Empty<DisplayTypeMaster>();
+        }
+
+        public async Task InsertUpdateConfig(DynamicParameters parameters)
+        {
+            parameters.Add("Out_ErrorCode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("Out_ErrorMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 4000);
+
+            using var connection = _context.CreateConnection();
+            await connection.ExecuteAsync(Queries.SP_DisplayTypeConfig_Ins, parameters, commandType: CommandType.StoredProcedure);
+
+            var errorCode = parameters.Get<int?>("Out_ErrorCode");
+            var errorMsg = parameters.Get<string?>("Out_ErrorMsg");
+
+            if (errorCode != 9999)
+                throw new DBException($"Status:{errorCode}, Message:{errorMsg} ", _logger); ;
         }
     }
 }
