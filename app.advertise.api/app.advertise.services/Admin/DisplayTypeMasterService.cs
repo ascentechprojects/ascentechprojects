@@ -71,5 +71,51 @@ namespace app.advertise.services.Admin
             };
             await _displayTypeMasterRepository.ModifyStatusById(parameters);
         }
+
+        public async Task<IEnumerable<dtoDisplayTypeMaster>> ActiveDisplayTypes()
+        {
+
+            var result = await _displayTypeMasterRepository.ActiveDisplayTypes();
+
+            return result.Select(config => new dtoDisplayTypeMaster
+            {
+                Name = config.VAR_DISPLAYTYPE_NAME,
+                Id = config.NUM_DISPLAYTYPE_ID,
+                StatusFlag = config.VAR_DISPLAYTYPE_STATUS,
+            });
+        }
+
+        public async Task<IEnumerable<dtoDisplayTypeMaster>>DisplayTypesExistsInConfig(int displayConfigUlbId)
+        {
+
+            var result = await _displayTypeMasterRepository.DisplayTypesExistsInConfig(displayConfigUlbId);
+
+            return result.Select(config => new dtoDisplayTypeMaster
+            {
+                Name = config.VAR_DISPLAYTYPE_NAME,
+                Id = config.NUM_DISPLAYTYPE_ID,
+                ConfigUlbId = config.NUM_DISPLAYCONFIG_ULBID,
+                IsExistsInConfig=config.ExistsInConfig==1?true:false,
+                DisplayConfigId=config.NUM_DISPLAYCONFIG_ID
+            });
+        }
+
+        public async Task AddUpdateDisplayConfig(IEnumerable<dtoDisplayTypeMaster> dto)
+        {
+
+            foreach (var item in dto)
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("In_UserId", _authData.UserId);
+                parameters.Add("In_OrgId", item.ULBId);
+                parameters.Add("In_DisplayTypeStr", item.Id);
+                parameters.Add("In_Mode", item.DisplayConfigId > 0 ? (int)QueryExecutionMode.Update : (int)QueryExecutionMode.Insert);
+                parameters.Add("In_Ipaddress", _authData.IpAddress);
+                parameters.Add("In_Source", _authData.Source);
+               await _displayTypeMasterRepository.InsertUpdateConfig(parameters);
+                
+            }
+
+        }
     }
 }

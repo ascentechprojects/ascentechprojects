@@ -17,7 +17,7 @@ namespace app.advertise.libraries.Middlewares
         {
             string userIpAddress = context.Request.Headers[AppConstants.Header_IPAddress];
 
-            _userRequestHeaders.IpAddress=userIpAddress;
+            _userRequestHeaders.IpAddress= context.Connection.RemoteIpAddress.ToString()?? userIpAddress;
 
             await _next(context);
         }
