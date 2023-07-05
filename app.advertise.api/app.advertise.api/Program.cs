@@ -31,13 +31,14 @@ builder.Services.AddControllers()
         }); ;
 
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
-
+var corsUrls=builder.Configuration.GetSection("Cors:AllowedOrigins").Value;
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyCorsPolicy", builder =>
+    options.AddPolicy("_AdvCORSPolicy", builder =>
     {
-        builder.WithOrigins("http://example.com", "https://localhost:7058")
+        builder.WithOrigins(corsUrls)
                .AllowAnyHeader()
+               .WithMethods("GET", "POST")
                .AllowAnyMethod();
     });
 });
@@ -57,7 +58,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors("MyCorsPolicy");
+app.UseCors("_AdvCORSPolicy");
 app.UseMiddleware<RequestHeadersMiddleware>();
 
 app.Run();

@@ -65,7 +65,7 @@ namespace app.advertise.api.Controllers.Admin
         }
 
         [HttpPost]
-        [Route("UpdateStatus")]
+        [Route("auth")]
         public async Task<IActionResult> UpdateRemark(dtoApplicationAuthRequest dto)
         {
             try
@@ -81,6 +81,58 @@ namespace app.advertise.api.Controllers.Admin
                 return Ok(new ApiResponse()
                 {
                     Status = libraries.StatusCode.Ok,
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("Deauth")]
+        public async Task<IActionResult> DeauthApplicationStatus(dtoApplicationAuthRequest dto)
+        {
+            try
+            {
+                var validator = new ApplicationAuthRequestValidator(dto);
+                var validationResult = validator.Validate(dto);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+                await _service.DeauthStatus(dto);
+
+                return Ok(new ApiResponse()
+                {
+                    Status = libraries.StatusCode.Ok,
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("DeauthSearch")]
+        public async Task<IActionResult> DeauthSearch(dtoApplicationAuthRequest dto)
+        {
+            try
+            {
+                var validator = new ApplicationAuthRequestValidator();
+                var validationResult = validator.Validate(dto);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+
+
+                return Ok(new ApiResponse<IEnumerable<dtoApplicationAuthResult>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.DeauthSearch(dto)
                 });
             }
             catch (Exception ex)
