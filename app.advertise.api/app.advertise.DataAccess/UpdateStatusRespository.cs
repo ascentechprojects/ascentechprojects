@@ -32,6 +32,7 @@ namespace app.advertise.DataAccess
              entityType switch
              {
                  EntityType.HoardingMaster => Queries.ModifyStatus_HoardingMaster,
+                 EntityType.LocationMaster => Queries.ModifyStatus_LocationMaster,
                  _ => throw new DBException($"{AppConstants.Msg_InvalidEntityType} {entityType}", _logger)
              };
 

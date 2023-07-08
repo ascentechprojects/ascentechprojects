@@ -7,5 +7,6 @@ namespace app.advertise.services.Admin.Interfaces
         Task InsertUpdate(dtoLocationMaster dtoRequest, QueryExecutionMode mode);
         Task<IEnumerable<dtoLocationMaster>> GetAll();
         Task<dtoLocationMaster> GetById(int id);
+        Task ModifyStatusById(int id);
     }
 }

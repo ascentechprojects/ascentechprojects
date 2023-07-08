@@ -9,7 +9,7 @@ namespace app.advertise.DataAccess
     public interface ILocationMasterRepository
     {
         Task InsertUpdate(DynamicParameters parameters);
-        Task<IEnumerable<LocationMaster>> GetAll();
+        Task<IEnumerable<LocationMaster>> GetAll(int ulbid);
         Task<LocationMaster> GetById(int id);
     }
     public class LocationMasterRepository : ILocationMasterRepository
@@ -37,16 +37,16 @@ namespace app.advertise.DataAccess
                 throw new DBException(errorMsg, _logger);
         }
 
-        public async Task<IEnumerable<LocationMaster>> GetAll()
+        public async Task<IEnumerable<LocationMaster>> GetAll(int ulbid)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<LocationMaster>(Queries.List_location_MST) ?? Enumerable.Empty<LocationMaster>();
+            return await connection.QueryAsync<LocationMaster>(Queries.List_location_MST,new { ulbid }) ?? Enumerable.Empty<LocationMaster>();
         }
 
         public async Task<LocationMaster> GetById(int id)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<LocationMaster>(Queries.Single_ById_location_MST, id) ?? new LocationMaster();
+            return await connection.QueryFirstOrDefaultAsync<LocationMaster>(Queries.Single_ById_location_MST, new { id }) ?? new LocationMaster();
         }
     }
 }

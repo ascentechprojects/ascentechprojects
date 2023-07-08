@@ -14,7 +14,8 @@
         public int UserId { get; set; }
         public int OrgId { get; set; }
         public string IPAddress { get; set; }
+        public string PrabhagName { get; set; }
         public int PrabhagId { get; set; }
-        
+
     }
 }

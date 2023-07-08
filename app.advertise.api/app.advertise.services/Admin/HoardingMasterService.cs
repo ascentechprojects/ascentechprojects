@@ -78,7 +78,7 @@ namespace app.advertise.services.Admin
             parameters.Add("in_holdtype", dtoRequest.DisplayTypeId, DbType.Int32, ParameterDirection.Input);
             parameters.Add("in_ownership", dtoRequest.Ownership, DbType.String, ParameterDirection.Input);
             parameters.Add("in_disptypeid", dtoRequest.DisplayTypeId, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_prabhagid", _authData.PrabhagId, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("in_prabhagid", dtoRequest.PrabhagId, DbType.Int32, ParameterDirection.Input);
             parameters.Add("in_locationid", dtoRequest.LocationId, DbType.Int32, ParameterDirection.Input);
             parameters.Add("in_landmark", dtoRequest.Landmark, DbType.String, ParameterDirection.Input);
             parameters.Add("in_length", dtoRequest.Length, DbType.Decimal, ParameterDirection.Input);

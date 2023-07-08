@@ -1,7 +1,10 @@
 ﻿using app.advertise.api.Controllers.Admin;
 using app.advertise.dtos.Admin;
+using app.advertise.dtos.Admin.Validators;
 using app.advertise.libraries;
+using app.advertise.libraries.Exceptions;
 using app.advertise.libraries.Interfaces;
+using app.advertise.services.Admin;
 using app.advertise.services.Admin.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +22,17 @@ namespace app.advertise.api
 
         [HttpPost]
         [Route("Add")]
-        public async Task<IActionResult> Add(dtoLocationMaster dtoMaster)
+        public async Task<IActionResult> Add(dtoLocationMaster dto)
         {
             try
             {
-                await _locationMasterService.InsertUpdate(dtoMaster, services.QueryExecutionMode.Insert);
+                var validator = new LocationMasterValidator();
+                var validationResult = validator.Validate(dto);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+                await _locationMasterService.InsertUpdate(dto, services.QueryExecutionMode.Insert);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -41,6 +50,12 @@ namespace app.advertise.api
         {
             try
             {
+                var validator = new LocationMasterValidator();
+                var validationResult = validator.Validate(dtoMaster);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
                 await _locationMasterService.InsertUpdate(dtoMaster, services.QueryExecutionMode.Update);
                 return Ok(new ApiResponse
                 {
@@ -53,7 +68,7 @@ namespace app.advertise.api
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
@@ -72,7 +87,7 @@ namespace app.advertise.api
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("{id:int}/GetById")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -83,6 +98,24 @@ namespace app.advertise.api
                 {
                     Status = libraries.StatusCode.Ok,
                     Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id:int}/toggleStatus")]
+        public async Task<IActionResult> Deactivate(int id)
+        {
+            try
+            {
+                await _locationMasterService.ModifyStatusById(id);
+                return Ok(new ApiResponse
+                {
+                    Status = libraries.StatusCode.Ok,
                 });
             }
             catch (Exception ex)
