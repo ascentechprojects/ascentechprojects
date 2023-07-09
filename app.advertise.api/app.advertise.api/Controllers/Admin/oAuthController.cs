@@ -1,5 +1,7 @@
 ﻿using app.advertise.dtos.Admin;
+using app.advertise.dtos.Admin.Validators;
 using app.advertise.libraries;
+using app.advertise.libraries.Exceptions;
 using app.advertise.libraries.Interfaces;
 using app.advertise.services.Admin.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +26,13 @@ namespace app.advertise.api.Controllers.Admin
             
             try
             {
-             
+                var validator = new AuthRequestValidator();
+                var validationResult = validator.Validate(authRequest);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+
                 return Ok(new ApiResponse<dtoAuthResponse>
                 {
                     Data =await _oAuthService.AuthenticateUser(authRequest),

@@ -11,7 +11,7 @@
         public string UpdBy { get; set; }
         public DateTime UpdDt { get; set; }
         public string StatusFlag { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int OrgId { get; set; }
         public string IPAddress { get; set; }
         public string PrabhagName { get; set; }

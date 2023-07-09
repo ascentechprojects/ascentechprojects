@@ -1,5 +1,6 @@
 ﻿using app.advertise.DataAccess;
 using app.advertise.dtos.Admin;
+using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using app.advertise.services.Admin.Interfaces;
 using Dapper;
@@ -12,10 +13,12 @@ namespace app.advertise.services.Admin
     {
         private readonly IAdminUserRepository _adminUserRepository;
         private readonly ILogger<OAuthService> _logger;
-        public OAuthService(IAdminUserRepository adminUserRepository, ILogger<OAuthService> logger)
+        private readonly UserRequestHeaders _authData;
+        public OAuthService(IAdminUserRepository adminUserRepository, ILogger<OAuthService> logger, UserRequestHeaders authData)
         {
             _adminUserRepository = adminUserRepository;
             _logger = logger;
+            _authData = authData;
         }
 
         //to do claim,
@@ -25,9 +28,9 @@ namespace app.advertise.services.Admin
             parameters.Add("in_UserId", authRequest.User);
             parameters.Add("in_password", authRequest.Password);
             parameters.Add("in_macaddr", "");
-            parameters.Add("in_ipaddr", "");
-            parameters.Add("in_hostname", "");
-            parameters.Add("in_source", "Web");
+            parameters.Add("in_ipaddr",_authData.IpAddress);
+            parameters.Add("in_hostname", _authData.HostAddress);
+            parameters.Add("in_source", _authData.Source);
             parameters.Add("in_deptid", "");
 
             parameters.Add("Out_UserName", dbType: DbType.String, direction: ParameterDirection.Output, size: 100);
@@ -55,7 +58,7 @@ namespace app.advertise.services.Admin
             if(!string.Equals(response.UserId,authRequest.User,StringComparison.OrdinalIgnoreCase))
                 throw new ApiException("User is Unauthorized",_logger);
 
-            var userResponse = new dtoAuthResponse
+            return new dtoAuthResponse
             {
                 UserName = response.UserName,
                 UserId = response.UserId,
@@ -73,8 +76,6 @@ namespace app.advertise.services.Admin
                 AuthKey=Guid.NewGuid().ToString(),
                 ULBId=response.UlbId
             };
-            return userResponse;
-
         }
 
 

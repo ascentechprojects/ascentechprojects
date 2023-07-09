@@ -7,5 +7,8 @@
         public string UserId { get; internal set; }= "WT_BNCMC1";
         public string Source { get; internal set; } = UserSource.Web.ToString();
         public int UlbId { get; internal set; }=1;
+        public string HostAddress { get; internal set; }
+
+        public string DeptId { get;internal set;}
     }
 }

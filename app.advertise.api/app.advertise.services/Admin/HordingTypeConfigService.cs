@@ -19,7 +19,7 @@ namespace app.advertise.services.Admin
         public async Task InsertUpdate(dtoHordingTypeConfig dtoHordingType, QueryExecutionMode mode)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("In_UserId", dtoHordingType.UserId);
+            parameters.Add("In_UserId", 1);
             parameters.Add("In_OrgId", dtoHordingType.OrgId);
             parameters.Add("In_HoardingTypeStr", dtoHordingType.HordingType);
             parameters.Add("In_Mode", (int)mode);
