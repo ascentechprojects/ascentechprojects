@@ -4,6 +4,8 @@ using app.advertise.libraries.AppSettings;
 using app.advertise.libraries.Middlewares;
 using app.advertise.services;
 using FluentValidation.AspNetCore;
+using Serilog.Events;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,17 +20,27 @@ ServiceConfiguration.Configure(builder.Services);
 
 builder.Services.AddControllers()
         .ConfigureApiBehaviorOptions(options =>
-        {//disable the automatic validation of non-nullable properties
+        {
             options.SuppressModelStateInvalidFilter = true;
         }).AddFluentValidation(options =>
         {
-            // Validate child properties and root collection elements
             options.ImplicitlyValidateChildProperties = true;
             options.ImplicitlyValidateRootCollectionElements = true;
 
-            // Automatic registration of validators in assembly
             options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        }); ;
+        });
+
+Log.Logger = new LoggerConfiguration()
+           .MinimumLevel.Information()
+           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+           .Enrich.FromLogContext()
+           .WriteTo.File(
+                path: $@"{builder.Configuration.GetSection("Logging:Path:LogFilePath").Value}\log-{DateTime.Now:yyyyMMdd}.txt",
+                rollingInterval: RollingInterval.Day
+                )
+           .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
 var corsUrls=builder.Configuration.GetSection("Cors:AllowedOrigins").Value;
@@ -56,7 +68,7 @@ app.UseSwaggerUI(options =>
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseSerilogRequestLogging();
 app.MapControllers();
 app.UseCors("_AdvCORSPolicy");
 app.UseMiddleware<RequestHeadersMiddleware>();
