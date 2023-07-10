@@ -41,7 +41,7 @@ namespace app.advertise.api.Controllers.Admin
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, authRequest);
             }
         }
     }
