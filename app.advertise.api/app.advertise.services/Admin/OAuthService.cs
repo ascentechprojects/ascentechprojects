@@ -4,6 +4,7 @@ using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using app.advertise.services.Admin.Interfaces;
 using Dapper;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using System.Data;
 
@@ -14,11 +15,13 @@ namespace app.advertise.services.Admin
         private readonly IAdminUserRepository _adminUserRepository;
         private readonly ILogger<OAuthService> _logger;
         private readonly UserRequestHeaders _authData;
-        public OAuthService(IAdminUserRepository adminUserRepository, ILogger<OAuthService> logger, UserRequestHeaders authData)
+        private readonly IDataProtector _dataProtector;
+        public OAuthService(IAdminUserRepository adminUserRepository, ILogger<OAuthService> logger, UserRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector)
         {
             _adminUserRepository = adminUserRepository;
             _logger = logger;
             _authData = authData;
+            _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.AdminAuthValue);
         }
 
         //to do claim,
@@ -61,7 +64,7 @@ namespace app.advertise.services.Admin
             return new dtoAuthResponse
             {
                 UserName = response.UserName,
-                UserId = response.UserId,
+                UserId = _dataProtector.Protect(response.UserId),
                 Corporation = response.Corporation,
                 CorporationAddress = response.CorporationAddress,
                 ReceiptOfficeName = response.ReceiptOfficeName,
@@ -74,7 +77,8 @@ namespace app.advertise.services.Admin
                 MobileNo = response.MobileNo,
                 OrgId = response.OrgId,
                 AuthKey=Guid.NewGuid().ToString(),
-                ULBId=response.UlbId
+                ULBId=1,//response.UlbId,
+                P_ULBId= _dataProtector.Protect(response.UlbId.ToString()),
             };
         }
 

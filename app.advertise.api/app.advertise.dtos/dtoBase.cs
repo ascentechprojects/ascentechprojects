@@ -18,6 +18,7 @@
         public int PrabhagId { get; set; }
 
         public string RecordId { get;set; }
+        public string P_ULBId { get;set;} 
 
     }
 }

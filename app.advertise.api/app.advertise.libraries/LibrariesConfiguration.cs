@@ -9,6 +9,7 @@ namespace app.advertise.libraries
         {
             services.AddSingleton<UserRequestHeaders>();
             services.AddSingleton<IInternalExceptionHandler, InternalExceptionHandler>();
+            services.AddSingleton<DataProtectionPurpose>();
             return services;
         }
     }

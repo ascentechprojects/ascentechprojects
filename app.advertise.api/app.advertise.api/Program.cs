@@ -4,9 +4,9 @@ using app.advertise.libraries.AppSettings;
 using app.advertise.libraries.Middlewares;
 using app.advertise.services;
 using FluentValidation.AspNetCore;
-using Serilog.Events;
+using Microsoft.AspNetCore.DataProtection;
 using Serilog;
-using System.Reflection;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,21 +14,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 LibrariesConfiguration.Configure(builder.Services);
 RepositoryConfiguration.Configure(builder.Services);
 ServiceConfiguration.Configure(builder.Services);
+
 
 builder.Services.AddControllers()
         .ConfigureApiBehaviorOptions(options =>
         {
             options.SuppressModelStateInvalidFilter = true;
-        }).AddFluentValidation(options =>
-        {
-            options.ImplicitlyValidateChildProperties = true;
-            options.ImplicitlyValidateRootCollectionElements = true;
-
-            options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         });
+
+builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo($@"{builder.Configuration.GetSection("Secrets:ProtectorPath").Value}"))
+    .SetDefaultKeyLifetime(TimeSpan.FromDays(14));
 
 Log.Logger = new LoggerConfiguration()
            .MinimumLevel.Information()
@@ -43,7 +46,8 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
-var corsUrls=builder.Configuration.GetSection("Cors:AllowedOrigins").Value;
+
+var corsUrls = builder.Configuration.GetSection("Cors:AllowedOrigins").Value;
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("_AdvCORSPolicy", builder =>
@@ -55,9 +59,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
