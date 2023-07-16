@@ -9,9 +9,8 @@ namespace app.advertise.DataAccess
     public interface IHoardingMasterRepository
     {
         Task InsertUpdate(DynamicParameters parameters);
-        Task<IEnumerable<HoardingMaster>> GetAll();
-        Task<HoardingMaster> GetById(int id);
-        Task ModifyStatusById(HoardingMaster parameters);
+        Task<IEnumerable<HoardingMaster>> GetAll(int ulbId);
+        Task<HoardingMaster> GetById(int id, int ulbId);
     }
     public class HoardingMasterRepository : IHoardingMasterRepository
     {
@@ -29,7 +28,7 @@ namespace app.advertise.DataAccess
             parameters.Add("out_errormsg", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
 
             using var connection = _context.CreateConnection();
-            await connection.ExecuteAsync(Queries.SP_HoardTypeMaster_Ins, parameters, commandType: CommandType.StoredProcedure);
+            await connection.ExecuteAsync(Queries.SP_HoardingMaster_Ins, parameters, commandType: CommandType.StoredProcedure);
 
             var errorCode = parameters.Get<int?>("out_errorcode");
             var errorMsg = parameters.Get<string?>("out_errormsg");
@@ -38,25 +37,17 @@ namespace app.advertise.DataAccess
                 throw new DBException(errorMsg, _logger);
         }
 
-        public async Task<IEnumerable<HoardingMaster>> GetAll()
+        public async Task<IEnumerable<HoardingMaster>> GetAll(int ulbId)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<HoardingMaster>(Queries.SelectAll_HoardingMaster) ?? Enumerable.Empty<HoardingMaster>();
+            return await connection.QueryAsync<HoardingMaster>(Queries.SelectAll_HoardingMaster, new { ulbId }) ?? Enumerable.Empty<HoardingMaster>();
         }
 
-        public async Task<HoardingMaster> GetById(int id)
+        public async Task<HoardingMaster> GetById(int id, int ulbId)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<HoardingMaster>(Queries.Select_byId_HoardingMaster, new { id }) ?? new HoardingMaster();
+            return await connection.QueryFirstOrDefaultAsync<HoardingMaster>(Queries.Select_byId_HoardingMaster, new { id, ulbId }) ?? new HoardingMaster();
         }
 
-        public async Task ModifyStatusById(HoardingMaster parameters)
-        {
-            using var connection = _context.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(Queries.ModifyStatus_HoardingMaster, parameters);
-
-            if (!(rowsAffected > 0))
-                throw new DBException("No rows updated", _logger);
-        }
     }
 }

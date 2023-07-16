@@ -22,7 +22,7 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                await _displayTypeMasterService.InsertUpdate(dtoMaster, services.QueryExecutionMode.Insert);
+                await _displayTypeMasterService.InsertUpdate(dtoMaster, QueryExecutionMode.Insert);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -40,7 +40,7 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                await _displayTypeMasterService.InsertUpdate(dtoMaster, services.QueryExecutionMode.Update);
+                await _displayTypeMasterService.InsertUpdate(dtoMaster, QueryExecutionMode.Update);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,

@@ -22,7 +22,7 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                await _hordingTypeConfigService.InsertUpdate(dtoHording, services.QueryExecutionMode.Insert);
+                await _hordingTypeConfigService.InsertUpdate(dtoHording, QueryExecutionMode.Insert);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -40,7 +40,7 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                await _hordingTypeConfigService.InsertUpdate(dtoHording, services.QueryExecutionMode.Update);
+                await _hordingTypeConfigService.InsertUpdate(dtoHording, QueryExecutionMode.Update);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,

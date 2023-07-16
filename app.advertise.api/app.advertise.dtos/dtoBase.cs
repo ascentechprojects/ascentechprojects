@@ -5,7 +5,7 @@
         public int ErrorCode { get; set; }
         public string ErrorMsg { get; set; }
         public bool IsSuccess { get { return string.IsNullOrEmpty(ErrorMsg); } }
-        public int ULBId { get; set; }
+        public string ULBId { get; set; }
         public string InsBy { get; set; }
         public DateTime InsDt { get; set; }
         public string UpdBy { get; set; }
@@ -18,7 +18,6 @@
         public int PrabhagId { get; set; }
 
         public string RecordId { get;set; }
-        public string P_ULBId { get;set;} 
 
     }
 }

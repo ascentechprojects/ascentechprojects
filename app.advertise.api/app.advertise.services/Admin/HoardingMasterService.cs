@@ -4,6 +4,7 @@ using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using app.advertise.services.Admin.Interfaces;
 using Dapper;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using System.Data;
 
@@ -15,21 +16,26 @@ namespace app.advertise.services.Admin
         private readonly UserRequestHeaders _authData;
         private readonly IUpdateStatusRespository _updateStatusRespository;
         private readonly ILogger<HoardingMasterService> _logger;
-        public HoardingMasterService(IHoardingMasterRepository hoardingMasterRepository, UserRequestHeaders authData, IUpdateStatusRespository updateStatusRespository, ILogger<HoardingMasterService> logger)
+        private readonly IDataProtector _dataProtector;
+
+
+        public HoardingMasterService(IHoardingMasterRepository hoardingMasterRepository, UserRequestHeaders authData, IUpdateStatusRespository updateStatusRespository, ILogger<HoardingMasterService> logger, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector)
         {
             _authData = authData;
             _hoardingMasterRepository = hoardingMasterRepository;
             _updateStatusRespository = updateStatusRespository;
-            _logger= logger;
+            _logger = logger;
+            _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
+
         }
         public async Task<IEnumerable<dtoHoardingMaster>> GetAll()
         {
-            var result = await _hoardingMasterRepository.GetAll();
+            var result = await _hoardingMasterRepository.GetAll(_authData.UlbId);
 
             return result.Select(record => new dtoHoardingMaster
             {
                 Name = record.VAR_HORDING_HOLDNAME,
-                Id = record.NUM_HORDING_ID,
+                RecordId = _dataProtector.Protect(record.NUM_HORDING_ID.ToString()),
                 Address = record.VAR_HORDING_HOLDADDRESS,
                 HoardingType = record.VAR_HORDING_HOLDTYPE,
                 DisplayTypeId = record.NUM_HORDING_DISPTYPEID,
@@ -40,17 +46,27 @@ namespace app.advertise.services.Admin
                 StatusFlag = record.VAR_HORDING_ACTIVE,
                 InsDt = record.DAT_HORDING_INSDT,
                 UpdDt = record.DAT_HORDING_UPDT,
-                Ownership=record.VAR_HORDING_OWNERSHIP
+                Ownership = record.VAR_HORDING_OWNERSHIP,
+                PrabhagName = record.VAR_PRABHAG_NAME,
+                LocationName = record.VAR_LOCATION_NAME,
+                DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
+                HordingTypeName = record.VAR_HOARDINGTYPE_NAME,
+                Id = record.NUM_HORDING_ID,
+                Building=record.var_hording_buildname,
+                Latitude=record.num_hording_latitude,
+                Longitude=record.Num_hording_longitude
             });
         }
 
-        public async Task<dtoHoardingMaster> GetById(int id)
+        public async Task<dtoHoardingMaster> GetById(string id)
         {
-            var result = await _hoardingMasterRepository.GetById(id);
+            var recordId = Convert.ToInt32(_dataProtector.Unprotect(id));
+
+            var result = await _hoardingMasterRepository.GetById(recordId, _authData.UlbId);
 
             return new dtoHoardingMaster
             {
-                ULBId = result.NUM_HORDING_ULBID,
+               // ULBId = result.NUM_HORDING_ULBID,
                 Name = result.VAR_HORDING_HOLDNAME,
                 Id = result.NUM_HORDING_ID,
                 Address = result.VAR_HORDING_HOLDADDRESS,
@@ -63,43 +79,79 @@ namespace app.advertise.services.Admin
                 Width = result.NUM_HORDING_WIDTH,
                 TotalSQFT = result.NUM_HORDING_TOTALSQFT,
                 StatusFlag = result.VAR_HORDING_ACTIVE,
-                Ownership = result.VAR_HORDING_OWNERSHIP
+                Ownership = result.VAR_HORDING_OWNERSHIP,
+                RecordId = _dataProtector.Protect(result.NUM_HORDING_ID.ToString()),
             };
         }
 
-        public async Task InsertUpdate(dtoHoardingMaster dtoRequest, QueryExecutionMode mode)
+        public async Task Insert(dtoHoardingMaster dto)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("in_ULBID", dtoRequest.ULBId, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_UserId", _authData.UserId, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_holdid", dtoRequest.Id, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_holdname", dtoRequest.Name, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_holdaddress", dtoRequest.Address, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_holdtype", dtoRequest.DisplayTypeId, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_ownership", dtoRequest.Ownership, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_disptypeid", dtoRequest.DisplayTypeId, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_prabhagid", dtoRequest.PrabhagId, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_locationid", dtoRequest.LocationId, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_landmark", dtoRequest.Landmark, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_length", dtoRequest.Length, DbType.Decimal, ParameterDirection.Input);
-            parameters.Add("in_width", dtoRequest.Width, DbType.Decimal, ParameterDirection.Input);
-            parameters.Add("in_totalsqft", dtoRequest.TotalSQFT, DbType.Decimal, ParameterDirection.Input);
-            parameters.Add("in_active", RecordStatus.A.ToString(), DbType.String, ParameterDirection.Input);
-            parameters.Add("in_ipaddress", _authData.IpAddress, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_source", _authData.Source, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_mode", (int)mode, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_Userid", _authData.UserId, DbType.String, ParameterDirection.Input);
+
+            parameters.Add("in_UserId", _authData.UserId);
+            parameters.Add("in_ULBID", _authData.UlbId);
+            parameters.Add("in_prabhagid", dto.PrabhagId);
+            parameters.Add("in_locationid", dto.LocationId);
+            parameters.Add("in_holdid", 0);
+            parameters.Add("in_holdtype", dto.HoardingType);
+            parameters.Add("in_holdname", dto.Name);
+            parameters.Add("in_buildname", dto.Building);
+            parameters.Add("in_holdaddress", dto.Address);
+            parameters.Add("in_landmark", dto.Landmark);
+            parameters.Add("in_ownership", dto.Ownership);
+            parameters.Add("in_disptypeid", dto.DisplayTypeId);
+            parameters.Add("in_latitude", dto.Latitude);
+            parameters.Add("in_longitude", dto.Longitude);
+            parameters.Add("in_length", dto.Length);
+            parameters.Add("in_width", dto.Width);
+            parameters.Add("in_totalsqft", dto.TotalSQFT);
+            parameters.Add("in_active", RecordStatus.A.ToString());
+            parameters.Add("in_ipaddress", _authData.IpAddress);
+            parameters.Add("in_source", _authData.Source);
+            parameters.Add("in_mode", (int)QueryExecutionMode.Insert);
 
             await _hoardingMasterRepository.InsertUpdate(parameters);
         }
+
+        public async Task Update(dtoHoardingMaster dto)
+        {
+            var recordId = Convert.ToInt32(_dataProtector.Unprotect(dto.RecordId));
+            var existingRecord = await _hoardingMasterRepository.GetById(recordId, _authData.UlbId) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
+
+            var parameters = new DynamicParameters();
+            parameters.Add("in_UserId", _authData.UserId);
+            parameters.Add("in_ULBID", existingRecord.NUM_HORDING_ULBID);
+            parameters.Add("in_prabhagid", dto.PrabhagId);
+            parameters.Add("in_locationid", dto.LocationId);
+            parameters.Add("in_holdid", existingRecord.NUM_HORDING_ID);
+            parameters.Add("in_holdtype", dto.HoardingType);
+            parameters.Add("in_holdname", dto.Name);
+            parameters.Add("in_buildname", dto.Building);
+            parameters.Add("in_holdaddress", dto.Address);
+            parameters.Add("in_landmark", dto.Landmark);
+            parameters.Add("in_ownership", dto.Ownership);
+            parameters.Add("in_disptypeid", dto.DisplayTypeId);
+            parameters.Add("in_latitude", dto.Latitude);
+            parameters.Add("in_longitude", dto.Longitude);
+            parameters.Add("in_length", dto.Length);
+            parameters.Add("in_width", dto.Width);
+            parameters.Add("in_totalsqft", dto.TotalSQFT);
+            parameters.Add("in_active", existingRecord.VAR_HORDING_ACTIVE);
+            parameters.Add("in_ipaddress", _authData.IpAddress);
+            parameters.Add("in_source", _authData.Source);
+            parameters.Add("in_mode", (int)QueryExecutionMode.Update);
+
+            await _hoardingMasterRepository.InsertUpdate(parameters);
+        }
+
         public async Task ModifyStatusById(int id)
         {
-           var existingRecord= await _hoardingMasterRepository.GetById(id) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
+            var existingRecord = await _hoardingMasterRepository.GetById(id, _authData.UlbId) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
 
-            existingRecord.VAR_HORDING_ACTIVE= existingRecord.VAR_HORDING_ACTIVE.ToggleStatus();
-            existingRecord.DAT_HORDING_UPDT=DateTime.Now;
-            existingRecord.VAR_HORDING_UPDBY=_authData.UserId;
-            
+            existingRecord.VAR_HORDING_ACTIVE = existingRecord.VAR_HORDING_ACTIVE.ToggleStatus();
+            existingRecord.DAT_HORDING_UPDT = DateTime.Now;
+            existingRecord.VAR_HORDING_UPDBY = _authData.UserId;
+
             await _updateStatusRespository.UpdateStatus(EntityType.HoardingMaster, existingRecord);
         }
     }

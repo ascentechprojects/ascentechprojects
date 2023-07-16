@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 namespace app.advertise.libraries.Middlewares
 {
@@ -27,7 +26,7 @@ namespace app.advertise.libraries.Middlewares
             if (context.Request.Headers.ContainsKey(AppConstants.Header_ULB))
             {
                 var ulb = context.Request.Headers[AppConstants.Header_ULB];
-                _userRequestHeaders.UlbId= string.IsNullOrEmpty(ulb) ? throw new ApiException("Invalid Ulb header", _logger) : !(Convert.ToInt32(ulb)>0)? throw new ApiException("Invalid Ulb header", _logger): Convert.ToInt32(_adminDataProtector.Unprotect(ulb));
+                _userRequestHeaders.UlbId= string.IsNullOrEmpty(ulb) ? throw new ApiException("Invalid Ulb header", _logger) : !(Convert.ToInt32(_adminDataProtector.Unprotect(ulb)) >0)? throw new ApiException("Invalid Ulb header", _logger): Convert.ToInt32(_adminDataProtector.Unprotect(ulb));
             }
 
             if (context.Request.Headers.ContainsKey(AppConstants.Header_User))

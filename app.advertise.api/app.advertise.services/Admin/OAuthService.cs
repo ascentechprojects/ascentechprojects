@@ -77,8 +77,8 @@ namespace app.advertise.services.Admin
                 MobileNo = response.MobileNo,
                 OrgId = response.OrgId,
                 AuthKey=Guid.NewGuid().ToString(),
-                ULBId=1,//response.UlbId,
-                P_ULBId= _dataProtector.Protect(response.UlbId.ToString()),
+                ULBId="1",//response.UlbId,
+                P_ULBId= _dataProtector.Protect("1"),
             };
         }
 
