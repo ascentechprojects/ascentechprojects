@@ -26,14 +26,14 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                var validator = new HoardingMasterValidator();
+                var validator = new HoardingMasterValidator(QueryExecutionMode.Insert);
                 var validationResult = validator.Validate(dtoHording);
 
                 if (!validationResult.IsValid)
                     throw new FluentException(validationResult);
 
 
-                await _hoardingMasterService.InsertUpdate(dtoHording, services.QueryExecutionMode.Insert);
+                await _hoardingMasterService.Insert(dtoHording);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -51,7 +51,13 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                await _hoardingMasterService.InsertUpdate(dtoHording, services.QueryExecutionMode.Update);
+                var validator = new HoardingMasterValidator(QueryExecutionMode.Update);
+                var validationResult = validator.Validate(dtoHording);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+                await _hoardingMasterService.Update(dtoHording);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -83,8 +89,8 @@ namespace app.advertise.api.Controllers.Admin
         }
 
         [HttpGet]
-        [Route("{id:int}/ById")]
-        public async Task<IActionResult> GetById(int id)
+        [Route("{id}/ById")]
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {

@@ -32,7 +32,7 @@ namespace app.advertise.api
                 if (!validationResult.IsValid)
                     throw new FluentException(validationResult);
 
-                await _locationMasterService.InsertUpdate(dto, services.QueryExecutionMode.Insert);
+                await _locationMasterService.InsertUpdate(dto, QueryExecutionMode.Insert);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -56,7 +56,7 @@ namespace app.advertise.api
                 if (!validationResult.IsValid)
                     throw new FluentException(validationResult);
 
-                await _locationMasterService.InsertUpdate(dtoMaster, services.QueryExecutionMode.Update);
+                await _locationMasterService.InsertUpdate(dtoMaster, QueryExecutionMode.Update);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,

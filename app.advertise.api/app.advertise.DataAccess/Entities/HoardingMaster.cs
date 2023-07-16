@@ -20,6 +20,16 @@
         public string VAR_HORDING_UPDBY { get;set;} 
         public DateTime DAT_HORDING_UPDT { get;set; }   
         public string VAR_HORDING_OWNERSHIP { get;set;}
+
+        public string VAR_DISPLAYTYPE_NAME { get;set;}
+        public string VAR_PRABHAG_NAME { get;set;}
+
+        public string VAR_LOCATION_NAME { get;set;} 
+        public string VAR_HOARDINGTYPE_NAME { get;set;}
+
+        public double  num_hording_latitude { get;set;}
+        public double Num_hording_longitude { get;set;}
+        public string var_hording_buildname { get;set;}
     }
 }
 

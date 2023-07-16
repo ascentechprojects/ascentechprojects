@@ -3,6 +3,8 @@
     public static class AppConstants
     {
         public  const string Header_IPAddress= "_UserIpAddress";
+        public const string Header_ULB = "_ULB";
+        public const string Header_User = "_User";
 
         public const string Msg_RecordNotFound= "Record not found.";
         public const string Msg_InvalidEntityType = "Invalid entity type";

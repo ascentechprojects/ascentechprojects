@@ -4,7 +4,9 @@ using app.advertise.libraries.AppSettings;
 using app.advertise.libraries.Middlewares;
 using app.advertise.services;
 using FluentValidation.AspNetCore;
-using System.Reflection;
+using Microsoft.AspNetCore.DataProtection;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,26 +14,40 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 LibrariesConfiguration.Configure(builder.Services);
 RepositoryConfiguration.Configure(builder.Services);
 ServiceConfiguration.Configure(builder.Services);
 
+
 builder.Services.AddControllers()
         .ConfigureApiBehaviorOptions(options =>
-        {//disable the automatic validation of non-nullable properties
-            options.SuppressModelStateInvalidFilter = true;
-        }).AddFluentValidation(options =>
         {
-            // Validate child properties and root collection elements
-            options.ImplicitlyValidateChildProperties = true;
-            options.ImplicitlyValidateRootCollectionElements = true;
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
-            // Automatic registration of validators in assembly
-            options.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        }); ;
+builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo($@"{builder.Configuration.GetSection("Secrets:ProtectorPath").Value}"))
+    .SetDefaultKeyLifetime(TimeSpan.FromDays(14));
+
+Log.Logger = new LoggerConfiguration()
+           .MinimumLevel.Information()
+           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+           .Enrich.FromLogContext()
+           .WriteTo.File(
+                path: $@"{builder.Configuration.GetSection("Logging:Path:LogFilePath").Value}\log-{DateTime.Now:yyyyMMdd}.txt",
+                rollingInterval: RollingInterval.Day
+                )
+           .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
-var corsUrls=builder.Configuration.GetSection("Cors:AllowedOrigins").Value;
+
+var corsUrls = builder.Configuration.GetSection("Cors:AllowedOrigins").Value;
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("_AdvCORSPolicy", builder =>
@@ -43,9 +59,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
@@ -56,7 +72,7 @@ app.UseSwaggerUI(options =>
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseSerilogRequestLogging();
 app.MapControllers();
 app.UseCors("_AdvCORSPolicy");
 app.UseMiddleware<RequestHeadersMiddleware>();

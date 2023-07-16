@@ -16,5 +16,7 @@
         public string? MobileNo { get; set; }
         public int? OrgId { get; set; }
         public string AuthKey { get; set; }
+        public string P_ULBId { get; set; }
+
     }
 }
