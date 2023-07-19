@@ -1,8 +1,11 @@
 ﻿using app.advertise.DataAccess;
 using app.advertise.dtos;
 using app.advertise.libraries;
+using app.advertise.libraries.Exceptions;
 using app.advertise.services.Admin.Interfaces;
 using Dapper;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Logging;
 using System.Data;
 
 namespace app.advertise.services.Admin
@@ -11,10 +14,14 @@ namespace app.advertise.services.Admin
     {
         private readonly IApplicationMasterRespository _repository;
         private readonly UserRequestHeaders _authData;
-        public ApplicationMasterService(IApplicationMasterRespository repository, UserRequestHeaders authData)
+        private readonly IDataProtector _dataProtector;
+        private readonly ILogger<ApplicationMasterService> _logger;
+        public ApplicationMasterService(IApplicationMasterRespository repository, UserRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationMasterService> logger)
         {
             _repository = repository;
             _authData = authData;
+            _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
+            _logger = logger;
         }
 
         public async Task<IEnumerable<dtoApplicationAuthResult>> AuthSerach(dtoApplicationAuthRequest dto)
@@ -22,6 +29,7 @@ namespace app.advertise.services.Admin
             var parameters = new DynamicParameters();
             parameters.Add("p_location_id", dto.LocationId);
             parameters.Add("p_prabhag_id", dto.PrabhagId);
+            parameters.Add("p_ulb_id", _authData.UlbId);
             var result = await _repository.AuthSearch(parameters);
 
             return result.Select(record => new dtoApplicationAuthResult
@@ -44,15 +52,22 @@ namespace app.advertise.services.Admin
                 HordingWidth = record.NUM_HORDING_WIDTH,
                 HordingTotalSqFt = record.NUM_HORDING_TOTALSQFT,
                 DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
+                RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
                 HordingOwnership = StaticHelpers.HoardingOwnerships().TryGetValue(record.VAR_HORDING_OWNERSHIP, out var value) && value != null && !string.IsNullOrEmpty(value) ? value : string.Empty,
-
+                PrabhagName = record.VAR_PRABHAG_NAME,
+                LocationName = record.VAR_LOCATION_NAME,
+                RecordId = _dataProtector.Protect(record.NUM_APPLI_ID.ToString())
             });
         }
 
-        public async Task<dtoApplicationAuthResult> AppliDetailsbyId(int Id)
+        public async Task<dtoApplicationAuthResult> AppliDetailsbyId(string id)
         {
+            var recordId = Convert.ToInt32(_dataProtector.Unprotect(id));
+
             var parameters = new DynamicParameters();
-            parameters.Add("p_appli_id", Id);
+            parameters.Add("p_appli_id", recordId);
+            parameters.Add("p_ulb_id", _authData.UlbId);
+
             var record = await _repository.ApplicationById(parameters);
 
             return new dtoApplicationAuthResult()
@@ -76,20 +91,26 @@ namespace app.advertise.services.Admin
                 HordingWidth = record.NUM_HORDING_WIDTH,
                 HordingTotalSqFt = record.NUM_HORDING_TOTALSQFT,
                 DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
-                PrabhagName=record.VAR_PRABHAG_NAME,
-                LocationName=record.VAR_LOCATION_NAME,
+                PrabhagName = record.VAR_PRABHAG_NAME,
+                LocationName = record.VAR_LOCATION_NAME,
+                RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
+                Quantity = record.NUM_APPLI_QTY,
+                Remark = record.VAR_APPLI_APPROVREMARK
             };
         }
 
         public async Task UpdateStatusFlag(dtoApplicationAuthRequest dto)
         {
             var statusKey = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Value.Equals(dto.StatusFlag)).Key;
+            var recordId = Convert.ToInt32(_dataProtector.Unprotect(dto.RecordId));
+            var appClose = await _repository.ApplicationCloseByAppId(new() { NUM_APPLICLOSE_ULBID = _authData.UlbId, NUM_APPLICLOSE_APPID = recordId });
+
 
             var parameters = new DynamicParameters();
-            parameters.Add("in_ulbID", dto.ULBId);
+            parameters.Add("in_ulbID", _authData.UlbId);
             parameters.Add("in_userid", _authData.UserId);
-            parameters.Add("IN_AppCloseID", dto.AppliId);
-            parameters.Add("IN_AppliID", dto.AppliId);
+            parameters.Add("IN_AppCloseID", appClose.NUM_APPLICLOSE_ID);
+            parameters.Add("IN_AppliID", recordId);
             parameters.Add("in_remark", dto.Remark);
             parameters.Add("in_AppStatus", statusKey);
             parameters.Add("in_ipaddress", _authData.IpAddress);
@@ -103,6 +124,7 @@ namespace app.advertise.services.Admin
             var parameters = new DynamicParameters();
             parameters.Add("p_location_id", dto.LocationId);
             parameters.Add("p_prabhag_id", dto.PrabhagId);
+            parameters.Add("p_ulb_id", _authData.UlbId);
             var result = await _repository.DeauthSearch(parameters);
 
             return result.Select(record => new dtoApplicationAuthResult
@@ -125,26 +147,38 @@ namespace app.advertise.services.Admin
                 HordingWidth = record.NUM_HORDING_WIDTH,
                 HordingTotalSqFt = record.NUM_HORDING_TOTALSQFT,
                 DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
+                RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
                 HordingOwnership = StaticHelpers.HoardingOwnerships().TryGetValue(record.VAR_HORDING_OWNERSHIP, out var value) && value != null && !string.IsNullOrEmpty(value) ? value : string.Empty,
-
+                PrabhagName = record.VAR_PRABHAG_NAME,
+                LocationName = record.VAR_LOCATION_NAME,
+                RecordId = _dataProtector.Protect(record.NUM_APPLI_ID.ToString())
             });
         }
 
-        public async Task DeauthStatus(dtoApplicationAuthRequest dto)
+        public async Task<string> DeauthStatus(dtoApplicationAuthRequest dto)
         {
             var statusKey = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Value.Equals(dto.StatusFlag)).Key;
+            var recordId = Convert.ToInt32(_dataProtector.Unprotect(dto.RecordId));
 
-            var parameters = new DynamicParameters();
-            parameters.Add("in_ulbID", dto.ULBId);
-            parameters.Add("in_userid", _authData.UserId);
-            parameters.Add("IN_AppCloseID", dto.AppliId);
-            parameters.Add("IN_AppliID", dto.AppliId);
-            parameters.Add("in_remark", dto.Remark);
-            parameters.Add("in_AppStatus", statusKey);
-            parameters.Add("in_ipaddress", _authData.IpAddress);
-            parameters.Add("in_source", _authData.Source.ToString());
+            var appParameters = new DynamicParameters();
+            appParameters.Add("p_appli_id", recordId);
+            appParameters.Add("p_ulb_id", _authData.UlbId);
 
-            await _repository.DeauthAppliStatus(parameters);
+            var application = await _repository.ApplicationById(appParameters) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
+            var appClose = await _repository.ApplicationCloseByAppId(new() { NUM_APPLICLOSE_ULBID = application.NUM_APPLI_ULBID, NUM_APPLICLOSE_APPID = application.NUM_APPLI_ID });
+
+            var appCloseParameters = new DynamicParameters();
+            appCloseParameters.Add("in_ulbID", _authData.UlbId);
+            appCloseParameters.Add("in_userid", _authData.UserId);
+            appCloseParameters.Add("IN_AppCloseID", appClose.NUM_APPLICLOSE_ID);
+            appCloseParameters.Add("in_Holding", application.NUM_APPLI_HORDINGID);
+            appCloseParameters.Add("in_remark", dto.Remark);
+            appCloseParameters.Add("in_STR", application.VAR_APPLI_APPLINO);
+            appCloseParameters.Add("in_ipaddress", _authData.IpAddress);
+            appCloseParameters.Add("in_source", _authData.Source.ToString());
+
+            var result= await _repository.DeauthAppliStatus(appCloseParameters);
+            return result.VAR_APPLICLOSE_ID;
         }
     }
 }

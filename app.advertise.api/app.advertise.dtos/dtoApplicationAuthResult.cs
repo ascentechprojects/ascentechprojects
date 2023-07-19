@@ -22,7 +22,7 @@
         public int HordingTotalSqFt { get; set; }
         public string DisplayTypeName { get; set; }
         public string PrabhagName { get; set; }
-        public string Quantity { get; set; }
+        public double Quantity { get; set; }
         public string LocationName { get; set; }
         public string Remark { get; set; }
         public string RemarkFlag { get; set; }

@@ -42,13 +42,13 @@ namespace app.advertise.api.Controllers.Admin
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, dto);
             }
         }
 
         [HttpGet]
-        [Route("{id:int}/ById")]
-        public async Task<IActionResult> ApplicationDetails(int id)
+        [Route("{id}/ById")]
+        public async Task<IActionResult> ApplicationDetails(string id)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace app.advertise.api.Controllers.Admin
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, dto);
             }
         }
 
@@ -101,16 +101,17 @@ namespace app.advertise.api.Controllers.Admin
                 if (!validationResult.IsValid)
                     throw new FluentException(validationResult);
 
-                await _service.DeauthStatus(dto);
 
-                return Ok(new ApiResponse()
+                return Ok(new ApiResponse<string>
                 {
                     Status = libraries.StatusCode.Ok,
-                });
+                    Data = await _service.DeauthStatus(dto)
+            });
+                
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, dto);
             }
         }
 
@@ -137,7 +138,7 @@ namespace app.advertise.api.Controllers.Admin
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, dto);
             }
         }
     }
