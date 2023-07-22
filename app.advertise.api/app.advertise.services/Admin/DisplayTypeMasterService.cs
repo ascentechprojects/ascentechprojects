@@ -16,9 +16,9 @@ namespace app.advertise.services.Admin
         private readonly IDisplayTypeMasterRepository _displayTypeMasterRepository;
         private readonly UserRequestHeaders _authData;
         private readonly IUpdateStatusRespository _updateStatusRespository;
-        private readonly ILogger<HoardingMasterService> _logger;
+        private readonly ILogger<DisplayTypeMasterService> _logger;
         private readonly IDataProtector _dataProtector;
-        public DisplayTypeMasterService(IDisplayTypeMasterRepository displayTypeMasterRepository, UserRequestHeaders authData, IUpdateStatusRespository updateStatusRespository, ILogger<HoardingMasterService> logger, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector)
+        public DisplayTypeMasterService(IDisplayTypeMasterRepository displayTypeMasterRepository, UserRequestHeaders authData, IUpdateStatusRespository updateStatusRespository, ILogger<DisplayTypeMasterService> logger, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector)
         {
             _authData = authData;
             _displayTypeMasterRepository = displayTypeMasterRepository;
