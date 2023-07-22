@@ -1,10 +1,8 @@
-﻿using app.advertise.api.Controllers.Admin;
-using app.advertise.dtos.Admin;
+﻿using app.advertise.dtos.Admin;
 using app.advertise.dtos.Admin.Validators;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using app.advertise.libraries.Interfaces;
-using app.advertise.services.Admin;
 using app.advertise.services.Admin.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,13 +24,13 @@ namespace app.advertise.api
         {
             try
             {
-                var validator = new LocationMasterValidator();
+                var validator = new LocationMasterValidator(QueryExecutionMode.Insert);
                 var validationResult = validator.Validate(dto);
 
                 if (!validationResult.IsValid)
                     throw new FluentException(validationResult);
 
-                await _locationMasterService.InsertUpdate(dto, QueryExecutionMode.Insert);
+                await _locationMasterService.Insert(dto);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -40,7 +38,7 @@ namespace app.advertise.api
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, dto);
             }
         }
 
@@ -50,13 +48,13 @@ namespace app.advertise.api
         {
             try
             {
-                var validator = new LocationMasterValidator();
+                var validator = new LocationMasterValidator(QueryExecutionMode.Update);
                 var validationResult = validator.Validate(dtoMaster);
 
                 if (!validationResult.IsValid)
                     throw new FluentException(validationResult);
 
-                await _locationMasterService.InsertUpdate(dtoMaster, QueryExecutionMode.Update);
+                await _locationMasterService.Update(dtoMaster);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -64,7 +62,7 @@ namespace app.advertise.api
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, dtoMaster);
             }
         }
 
@@ -74,11 +72,10 @@ namespace app.advertise.api
         {
             try
             {
-                var result = await _locationMasterService.GetAll();
                 return Ok(new ApiResponse<IEnumerable<dtoLocationMaster>>
                 {
                     Status = libraries.StatusCode.Ok,
-                    Data = result
+                    Data = await _locationMasterService.GetAll()
                 });
             }
             catch (Exception ex)
@@ -88,16 +85,15 @@ namespace app.advertise.api
         }
 
         [HttpGet]
-        [Route("{id:int}/GetById")]
-        public async Task<IActionResult> GetById(int id)
+        [Route("{id}/GetById")]
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
-                var result = await _locationMasterService.GetById(id);
                 return Ok(new ApiResponse<dtoLocationMaster>
                 {
                     Status = libraries.StatusCode.Ok,
-                    Data = result
+                    Data = await _locationMasterService.GetById(id)
                 });
             }
             catch (Exception ex)

@@ -5,9 +5,10 @@ namespace app.advertise.services.Admin.Interfaces
 {
     public interface ILocationMasterService
     {
-        Task InsertUpdate(dtoLocationMaster dtoRequest, QueryExecutionMode mode);
+        Task Update(dtoLocationMaster dtoRequest);
+        Task Insert(dtoLocationMaster dtoRequest);
         Task<IEnumerable<dtoLocationMaster>> GetAll();
-        Task<dtoLocationMaster> GetById(int id);
+        Task<dtoLocationMaster> GetById(string id);
         Task ModifyStatusById(int id);
     }
 }

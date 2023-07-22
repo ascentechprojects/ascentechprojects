@@ -66,7 +66,6 @@ namespace app.advertise.services.Admin
 
             return new dtoHoardingMaster
             {
-               // ULBId = result.NUM_HORDING_ULBID,
                 Name = result.VAR_HORDING_HOLDNAME,
                 Id = result.NUM_HORDING_ID,
                 Address = result.VAR_HORDING_HOLDADDRESS,
