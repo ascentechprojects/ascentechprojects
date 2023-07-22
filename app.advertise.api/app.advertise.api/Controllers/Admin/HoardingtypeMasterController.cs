@@ -1,5 +1,7 @@
 ﻿using app.advertise.dtos.Admin;
+using app.advertise.dtos.Admin.Validators;
 using app.advertise.libraries;
+using app.advertise.libraries.Exceptions;
 using app.advertise.libraries.Interfaces;
 using app.advertise.services.Admin.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +24,13 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                await _hoardingtypeMasterService.InsertUpdate(dtoHording, QueryExecutionMode.Insert);
+                var validator = new HoardingTypeMasterValidator(QueryExecutionMode.Insert);
+                var validationResult = validator.Validate(dtoHording);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+                await _hoardingtypeMasterService.Insert(dtoHording);
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -30,7 +38,7 @@ namespace app.advertise.api.Controllers.Admin
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, dtoHording);
             }
         }
 
@@ -40,7 +48,14 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                await _hoardingtypeMasterService.InsertUpdate(dtoHording, QueryExecutionMode.Update);
+                var validator = new HoardingTypeMasterValidator(QueryExecutionMode.Update);
+                var validationResult = validator.Validate(dtoHording);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+                await _hoardingtypeMasterService.Update(dtoHording);
+                
                 return Ok(new ApiResponse
                 {
                     Status = libraries.StatusCode.Ok,
@@ -48,7 +63,7 @@ namespace app.advertise.api.Controllers.Admin
             }
             catch (Exception ex)
             {
-                return HandleError(ex);
+                return HandleError(ex, dtoHording);
             }
         }
 
@@ -58,11 +73,10 @@ namespace app.advertise.api.Controllers.Admin
         {
             try
             {
-                var result = await _hoardingtypeMasterService.GetAll();
                 return Ok(new ApiResponse<IEnumerable<dtoHoardingtypeMaster>>
                 {
                     Status = libraries.StatusCode.Ok,
-                    Data = result
+                    Data = await _hoardingtypeMasterService.GetAll()
                 });
             }
             catch (Exception ex)
@@ -72,16 +86,33 @@ namespace app.advertise.api.Controllers.Admin
         }
 
         [HttpGet]
-        [Route("{id:int}/ById")]
-        public async Task<IActionResult> GetById(int id)
+        [Route("{id}/ById")]
+        public async Task<IActionResult> GetById(string id)
         {
             try
             {
-                var result = await _hoardingtypeMasterService.GetById(id);
                 return Ok(new ApiResponse<dtoHoardingtypeMaster>
                 {
                     Status = libraries.StatusCode.Ok,
-                    Data = result
+                    Data = await _hoardingtypeMasterService.GetById(id)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("{id:int}/toggleStatus")]
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            try
+            {
+                await _hoardingtypeMasterService.ModifyStatusById(id);
+                return Ok(new ApiResponse
+                {
+                    Status = libraries.StatusCode.Ok,
                 });
             }
             catch (Exception ex)

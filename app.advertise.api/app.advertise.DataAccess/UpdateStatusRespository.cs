@@ -34,6 +34,7 @@ namespace app.advertise.DataAccess
                  EntityType.HoardingMaster => Queries.ModifyStatus_HoardingMaster,
                  EntityType.LocationMaster => Queries.ModifyStatus_LocationMaster,
                  EntityType.DisplayTypeMaster => Queries.ModifyStatus_DisplayType_MST,
+                 EntityType.HoardingTypeMaster => Queries.ModifyStatus_HoardingTypeMaster,
                  _ => throw new DBException($"{AppConstants.Msg_InvalidEntityType} {entityType}", _logger)
              };
 
