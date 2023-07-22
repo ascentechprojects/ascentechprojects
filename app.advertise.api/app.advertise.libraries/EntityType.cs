@@ -3,6 +3,8 @@
     public enum EntityType
     {
         HoardingMaster=1,
-        LocationMaster
+        LocationMaster,
+        DisplayTypeMaster,
+        HoardingTypeMaster
     }
 }

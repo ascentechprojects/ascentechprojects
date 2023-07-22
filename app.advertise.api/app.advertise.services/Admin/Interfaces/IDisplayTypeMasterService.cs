@@ -1,14 +1,14 @@
 ﻿using app.advertise.dtos.Admin;
-using app.advertise.libraries;
 
 namespace app.advertise.services.Admin.Interfaces
 {
     public interface IDisplayTypeMasterService
     {
-        Task InsertUpdate(dtoDisplayTypeMaster dtoRequest, QueryExecutionMode mode);
+        Task Insert(dtoDisplayTypeMaster dtoRequest);
+        Task Update(dtoDisplayTypeMaster dtoRequest);
         Task<IEnumerable<dtoDisplayTypeMaster>> GetAll();
-        Task<dtoDisplayTypeMaster> GetById(int id);
-        Task ModifyStatusById(int id, string status);
+        Task<dtoDisplayTypeMaster> GetById(string id);
+        Task ModifyStatusById(int id);
         Task<IEnumerable<dtoDisplayTypeMaster>> ActiveDisplayTypes();
         Task<IEnumerable<dtoDisplayTypeMaster>> DisplayTypesExistsInConfig(int displayConfigUlbId);
          Task AddUpdateDisplayConfig(IEnumerable<dtoDisplayTypeMaster> dto);

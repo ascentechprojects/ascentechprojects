@@ -11,7 +11,6 @@ namespace app.advertise.DataAccess
         Task InsertUpdate(DynamicParameters parameters);
         Task<IEnumerable<DisplayTypeMaster>> GetAll();
         Task<DisplayTypeMaster> GetById(int id);
-        Task ModifyStatusById(DisplayTypeMaster parameters);
         Task<IEnumerable<DisplayTypeMaster>> ActiveDisplayTypes();
         Task<IEnumerable<DisplayTypeMaster>> DisplayTypesExistsInConfig(int displayConfigUlbId);
         Task InsertUpdateConfig(DynamicParameters parameters);
@@ -50,16 +49,7 @@ namespace app.advertise.DataAccess
         public async Task<DisplayTypeMaster> GetById(int id)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<DisplayTypeMaster>(Queries.Single_ById_DisplayTYPE_MST, new { id}) ?? new DisplayTypeMaster();
-        }
-
-        public async Task ModifyStatusById(DisplayTypeMaster parameters)
-        {
-            using var connection = _context.CreateConnection();
-            var rowsAffected = await connection.ExecuteAsync(Queries.ModifyStatus_DisplayType_MST, parameters);
-
-            if (!(rowsAffected > 0))
-                throw new DBException("No rows updated", _logger);
+            return await connection.QueryFirstOrDefaultAsync<DisplayTypeMaster>(Queries.Single_ById_DisplayTYPE_MST, new { id }) ?? new DisplayTypeMaster();
         }
 
         public async Task<IEnumerable<DisplayTypeMaster>> ActiveDisplayTypes()
