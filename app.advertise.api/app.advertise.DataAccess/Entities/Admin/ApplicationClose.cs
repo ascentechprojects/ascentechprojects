@@ -1,6 +1,6 @@
-﻿namespace app.advertise.DataAccess.Entities
+﻿namespace app.advertise.DataAccess.Entities.Admin
 {
-    public record ApplicationClose:baseEntity
+    public record ApplicationClose : baseEntity
     {
         public int NUM_APPLICLOSE_ID { get; set; }
         public int NUM_APPLICLOSE_HORDING_ID { get; set; }
@@ -16,7 +16,7 @@
 
 
         //out parameter
-        public string VAR_APPLICLOSE_ID { get;set; }
+        public string VAR_APPLICLOSE_ID { get; set; }
 
     }
 }

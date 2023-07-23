@@ -1,6 +1,6 @@
-﻿namespace app.advertise.DataAccess.Entities
+﻿namespace app.advertise.DataAccess.Entities.Admin
 {
-    public record AdminUserResponse:baseEntity
+    public record AdminUserResponse : baseEntity
     {
         public string UserName { get; set; }
         public string UserId { get; set; }
@@ -17,10 +17,10 @@
         public int? CollectionCenter { get; set; }
         public string MobileNo { get; set; }
         public string OtpValidate { get; set; }
-        
+
         public int? OrgId { get; set; }
         public string ForceFullPassChag { get; set; }
 
-        public int UlbId { get;set;}
+        public int UlbId { get; set; }
     }
 }

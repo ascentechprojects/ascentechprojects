@@ -24,4 +24,8 @@
     <ProjectReference Include="..\app.advertise.services\app.advertise.services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Vendor\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-﻿using app.advertise.DataAccess;
+﻿using app.advertise.DataAccess.Admin;
 using app.advertise.DataAccess.Entities;
 using app.advertise.dtos.Admin;
 using app.advertise.libraries;

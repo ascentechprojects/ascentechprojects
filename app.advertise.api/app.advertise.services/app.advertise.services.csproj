@@ -11,4 +11,8 @@
     <ProjectReference Include="..\app.advertise.libraries\app.advertise.libraries.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Vendor\" />
+  </ItemGroup>
+
 </Project>

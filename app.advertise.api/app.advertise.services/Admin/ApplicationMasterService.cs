@@ -1,5 +1,5 @@
-﻿using app.advertise.DataAccess;
-using app.advertise.dtos;
+﻿using app.advertise.DataAccess.Admin;
+using app.advertise.dtos.Admin;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using app.advertise.services.Admin.Interfaces;

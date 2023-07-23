@@ -1,4 +1,4 @@
-﻿namespace app.advertise.dtos
+﻿namespace app.advertise.dtos.Admin
 {
     public class dtoBase
     {
@@ -17,7 +17,7 @@
         public string PrabhagName { get; set; }
         public int PrabhagId { get; set; }
 
-        public string RecordId { get;set; }
+        public string RecordId { get; set; }
 
     }
 }

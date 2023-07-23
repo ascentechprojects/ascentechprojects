@@ -1,6 +1,6 @@
-﻿namespace app.advertise.dtos
+﻿namespace app.advertise.dtos.Admin
 {
-    public class dtoApplication:dtoBase
+    public class dtoApplication : dtoBase
     {
         public int NumAppliULBID { get; set; }
         public int NumAppliID { get; set; }

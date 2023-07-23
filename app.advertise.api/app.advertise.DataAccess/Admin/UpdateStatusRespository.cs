@@ -1,9 +1,10 @@
-﻿using app.advertise.libraries;
+﻿using app.advertise.DataAccess.ConnectionStrings;
+using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
-namespace app.advertise.DataAccess
+namespace app.advertise.DataAccess.Admin
 {
     public interface IUpdateStatusRespository
     {

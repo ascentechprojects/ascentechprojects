@@ -1,8 +1,9 @@
-﻿using app.advertise.DataAccess.Entities;
+﻿using app.advertise.DataAccess.ConnectionStrings;
+using app.advertise.DataAccess.Entities.Admin;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
-namespace app.advertise.DataAccess
+namespace app.advertise.DataAccess.Admin
 {
     public interface IAdminDashboardRepository
     {

@@ -1,6 +1,6 @@
-﻿namespace app.advertise.dtos
+﻿namespace app.advertise.dtos.Admin
 {
-    public class dtoApplicationAuthResult:dtoBase
+    public class dtoApplicationAuthResult : dtoBase
     {
         public string ApplicationNo { get; set; }
         public string AppliAppName { get; set; }

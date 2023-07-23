@@ -1,4 +1,4 @@
-﻿namespace app.advertise.dtos
+﻿namespace app.advertise.dtos.Admin
 {
     public class dtoApplicationAuthRequest : dtoBase
     {

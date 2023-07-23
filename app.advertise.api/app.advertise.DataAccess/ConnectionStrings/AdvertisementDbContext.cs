@@ -2,7 +2,7 @@
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
 
-namespace app.advertise.DataAccess
+namespace app.advertise.DataAccess.ConnectionStrings
 {
     public class AdvertisementDbContext
     {

@@ -1,10 +1,11 @@
-﻿using app.advertise.DataAccess.Entities;
+﻿using app.advertise.DataAccess.ConnectionStrings;
+using app.advertise.DataAccess.Entities.Admin;
 using app.advertise.libraries.Exceptions;
 using Dapper;
 using Microsoft.Extensions.Logging;
 using System.Data;
 
-namespace app.advertise.DataAccess
+namespace app.advertise.DataAccess.Admin
 {
     public interface ILocationMasterRepository
     {

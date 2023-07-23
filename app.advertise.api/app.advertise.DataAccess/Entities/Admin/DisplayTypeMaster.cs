@@ -1,4 +1,4 @@
-﻿namespace app.advertise.DataAccess.Entities
+﻿namespace app.advertise.DataAccess.Entities.Admin
 {
     public record class DisplayTypeMaster : baseEntity
     {

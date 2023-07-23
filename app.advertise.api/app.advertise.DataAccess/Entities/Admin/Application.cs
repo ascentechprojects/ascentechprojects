@@ -1,6 +1,6 @@
-﻿namespace app.advertise.DataAccess.Entities
+﻿namespace app.advertise.DataAccess.Entities.Admin
 {
-    public record Application:baseEntity
+    public record Application : baseEntity
     {
         public int NUM_APPLI_ULBID { get; set; }
         public int NUM_APPLI_ID { get; set; }
@@ -29,14 +29,14 @@
         public int NUM_APPLI_LOCATIONID { get; set; }
 
         public string VAR_PRABHAG_NAME { get; set; }
-        public string VAR_LOCATION_NAME { get;set; }
+        public string VAR_LOCATION_NAME { get; set; }
 
         public int NUM_HORDING_LENGTH { get; set; }
         public int NUM_HORDING_WIDTH { get; set; }
         public int NUM_HORDING_TOTALSQFT { get; set; }
         public string VAR_HORDING_HOLDADDRESS { get; set; }
         public string VAR_HORDING_HOLDNAME { get; set; }
-        public string VAR_HORDING_OWNERSHIP { get;set;} 
-        public string VAR_DISPLAYTYPE_NAME { get;set;}
+        public string VAR_HORDING_OWNERSHIP { get; set; }
+        public string VAR_DISPLAYTYPE_NAME { get; set; }
     }
 }
