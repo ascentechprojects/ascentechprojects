@@ -34,10 +34,10 @@ namespace app.advertise.services.Admin
             {
                 StatusFlag_Pending = GetStatusCount(statusDictionary, "P"),
                 StatusFlag_Approved = GetStatusCount(statusDictionary, "A"),
-                StatusFlag_Canceled = GetStatusCount(statusDictionary, "C"),
+                StatusFlag_Closed = GetStatusCount(statusDictionary, "C"),
                 StatusFlag_Rejected = GetStatusCount(statusDictionary, "R"),
             };
-
+            //To Do: Pivod This and one more properties TotalApplication
             result.PrabhagOverview = records.PrabhagOverview.Select(x => new dtoDashboardPrabhagOverview()
             {
                 PrabhagName = x.VAR_PRABHAG_NAME,

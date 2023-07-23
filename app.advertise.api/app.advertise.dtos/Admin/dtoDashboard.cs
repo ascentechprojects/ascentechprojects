@@ -11,7 +11,7 @@
     {
         public int StatusFlag_Pending { get; set; }
         public int StatusFlag_Rejected { get; set; }
-        public int StatusFlag_Canceled { get; set; }
+        public int StatusFlag_Closed { get; set; }
         public int StatusFlag_Approved { get;set; }
     }
     public class dtoDashboardPrabhagOverview : dtoBase

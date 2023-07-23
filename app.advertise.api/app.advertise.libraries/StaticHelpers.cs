@@ -14,7 +14,7 @@ namespace app.advertise.libraries
         }
 
         public static Dictionary<string, string> HoardingOwnerships() => new() { { "P", "Private" }, { "C", "Corporation" } };
-        public static Dictionary<string, string> RemarkStatus() => new() { { "A", "Approved" }, { "R", "Reject" }, { "P", "Pending" }, { "C", "Cancelled" } };
+        public static Dictionary<string, string> RemarkStatus() => new() { { "A", "Approved" }, { "R", "Reject" }, { "P", "Pending" }, { "C", "Closed" } };
 
         public static bool InputValidator(this object input, ValidatorType validatorType)
         {
