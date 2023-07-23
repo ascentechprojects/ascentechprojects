@@ -17,6 +17,7 @@ namespace app.advertise.services
             services.AddTransient<IHoardingMasterService, HoardingMasterService>();
             services.AddTransient<IListItemService, ListItemService>();
             services.AddTransient<IApplicationMasterService, ApplicationMasterService>();
+            services.AddTransient<IDashboardService, DashboardService>();
             return services;
         }
     }

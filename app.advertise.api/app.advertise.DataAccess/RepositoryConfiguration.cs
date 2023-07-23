@@ -11,11 +11,12 @@ namespace app.advertise.DataAccess
             services.AddTransient<IHoardingtypeMasterRepository, HoardingtypeMasterRepository>();
             services.AddTransient<IDisplayTypeMasterRepository, DisplayTypeMasterRepository>();
             services.AddTransient<ILocationMasterRepository,LocationMasterRepository>();
-            services.AddScoped<IAdminUserRepository, AdminUserRepository>();
-            services.AddScoped<IHoardingMasterRepository,HoardingMasterRepository>();
-            services.AddScoped<IUpdateStatusRespository, UpdateStatusRespository>();
+            services.AddTransient<IAdminUserRepository, AdminUserRepository>();
+            services.AddTransient<IHoardingMasterRepository,HoardingMasterRepository>();
+            services.AddTransient<IUpdateStatusRespository, UpdateStatusRespository>();
             services.AddScoped(typeof(IListItemRepository<>), typeof(ListItemRepository<>));
-            services.AddScoped<IApplicationMasterRespository, ApplicationMasterRespository>();
+            services.AddTransient<IApplicationMasterRespository, ApplicationMasterRespository>();
+            services.AddTransient<IAdminDashboardRepository, AdminDashboardRepository>();
             return services;
 
         }
