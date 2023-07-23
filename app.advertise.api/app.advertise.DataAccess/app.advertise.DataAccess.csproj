@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\Vendor\" />
-    <Folder Include="Vendor\" />
+    <Folder Include="Repositories\Vendor\" />
   </ItemGroup>
 
 </Project>

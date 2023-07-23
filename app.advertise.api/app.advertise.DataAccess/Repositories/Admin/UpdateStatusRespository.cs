@@ -4,7 +4,7 @@ using app.advertise.libraries.Exceptions;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
-namespace app.advertise.DataAccess.Admin
+namespace app.advertise.DataAccess.Repositories.Admin
 {
     public interface IUpdateStatusRespository
     {

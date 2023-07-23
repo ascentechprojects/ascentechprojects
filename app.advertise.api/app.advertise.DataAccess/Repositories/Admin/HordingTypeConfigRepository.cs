@@ -5,7 +5,7 @@ using Dapper;
 using Microsoft.Extensions.Logging;
 using System.Data;
 
-namespace app.advertise.DataAccess.Admin
+namespace app.advertise.DataAccess.Repositories.Admin
 {
     public interface IHordingTypeConfigRepository
     {

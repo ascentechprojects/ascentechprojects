@@ -1,5 +1,5 @@
-﻿using app.advertise.DataAccess.Admin;
-using app.advertise.DataAccess.ConnectionStrings;
+﻿using app.advertise.DataAccess.ConnectionStrings;
+using app.advertise.DataAccess.Repositories.Admin;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace app.advertise.DataAccess

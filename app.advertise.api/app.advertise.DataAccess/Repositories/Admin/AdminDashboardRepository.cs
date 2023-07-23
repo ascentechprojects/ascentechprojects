@@ -3,7 +3,7 @@ using app.advertise.DataAccess.Entities.Admin;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
-namespace app.advertise.DataAccess.Admin
+namespace app.advertise.DataAccess.Repositories.Admin
 {
     public interface IAdminDashboardRepository
     {
