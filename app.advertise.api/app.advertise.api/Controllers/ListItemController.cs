@@ -123,5 +123,23 @@ namespace app.advertise.api.Controllers
                 return HandleError(ex);
             }
         }
+
+        [HttpGet]
+        [Route("{locationId:int}/LocHordings")]
+        public async Task<IActionResult> HordingsByLocationId(int locationId)
+        {
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoListItem>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _listItemService.HordingByLocId(locationId)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
     }
 }

@@ -2,6 +2,8 @@
 {
     public enum ValidatorType
     {
-        Pincode
+        Pincode,
+        MobileNo,
+        Email
     }
 }

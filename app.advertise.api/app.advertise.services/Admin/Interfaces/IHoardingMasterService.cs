@@ -9,5 +9,6 @@ namespace app.advertise.services.Admin.Interfaces
         Task<IEnumerable<dtoHoardingMaster>> GetAll();
         Task<dtoHoardingMaster> GetById(string id);
         Task ModifyStatusById(int id);
+        Task<dtoHoardingMaster> GetById(int recordId);
     }
 }

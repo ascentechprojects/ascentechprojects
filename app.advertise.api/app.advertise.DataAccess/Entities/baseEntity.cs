@@ -1,4 +1,4 @@
-﻿namespace app.advertise.DataAccess.Entities.Admin
+﻿namespace app.advertise.DataAccess.Entities
 {
     public record baseEntity
     {

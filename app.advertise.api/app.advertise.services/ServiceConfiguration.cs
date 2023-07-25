@@ -1,6 +1,8 @@
 ﻿using app.advertise.services.Admin;
 using app.advertise.services.Admin.Interfaces;
 using app.advertise.services.Interfaces;
+using app.advertise.services.Vendor;
+using app.advertise.services.Vendor.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace app.advertise.services
@@ -18,6 +20,9 @@ namespace app.advertise.services
             services.AddTransient<IListItemService, ListItemService>();
             services.AddTransient<IApplicationMasterService, ApplicationMasterService>();
             services.AddTransient<IDashboardService, DashboardService>();
+
+            services.AddTransient<IApplicationService, ApplicationService>();
+            services.AddTransient<IFileService, FileService>();
             return services;
         }
     }

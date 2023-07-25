@@ -1,5 +1,6 @@
 ﻿using app.advertise.DataAccess.ConnectionStrings;
 using app.advertise.DataAccess.Repositories.Admin;
+using app.advertise.DataAccess.Repositories.Vendor;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace app.advertise.DataAccess
@@ -19,6 +20,8 @@ namespace app.advertise.DataAccess
             services.AddScoped(typeof(IListItemRepository<>), typeof(ListItemRepository<>));
             services.AddTransient<IApplicationMasterRespository, ApplicationMasterRespository>();
             services.AddTransient<IAdminDashboardRepository, AdminDashboardRepository>();
+
+            services.AddTransient<IApplicationRepository, ApplicationRepository>();
             return services;
 
         }

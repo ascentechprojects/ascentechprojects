@@ -1,4 +1,4 @@
-﻿namespace app.advertise.dtos.Admin
+﻿namespace app.advertise.dtos
 {
     public class dtoBase
     {
