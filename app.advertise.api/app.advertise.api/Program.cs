@@ -7,6 +7,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.DataProtection;
 using Serilog;
 using Serilog.Events;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,8 +47,9 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
+builder.Services.Configure<FileStorageSetting>(builder.Configuration.GetSection("FileStorage"));
 
-var corsUrls = builder.Configuration.GetSection("Cors:AllowedOrigins").Value;
+var corsUrls = builder.Configuration.GetSection("Cors:AllowedOrigins").Value.Split(",");
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("_AdvCORSPolicy", builder =>

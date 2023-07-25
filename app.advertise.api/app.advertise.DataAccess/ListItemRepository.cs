@@ -1,4 +1,5 @@
-﻿using app.advertise.libraries;
+﻿using app.advertise.DataAccess.ConnectionStrings;
+using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,7 @@ namespace app.advertise.DataAccess
                  ListItemEntity.Prabhag => Queries.ListItem_Prabhags,
                  ListItemEntity.HoardingType => Queries.ListItem_HordingTypes,
                  ListItemEntity.LocationByPrabhag => Queries.ListItem_Locations_By_PrabhagId,
+                 ListItemEntity.HordingByLocId=>Queries.ListItem_Hording_by_LocationId,
                  _ => throw new DBException($"{AppConstants.Msg_InvalidEntityType} {entityType}", _logger)
              };
 

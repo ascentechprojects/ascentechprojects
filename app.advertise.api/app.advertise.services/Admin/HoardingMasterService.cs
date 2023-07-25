@@ -1,4 +1,4 @@
-﻿using app.advertise.DataAccess;
+﻿using app.advertise.DataAccess.Repositories.Admin;
 using app.advertise.dtos.Admin;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
@@ -80,6 +80,30 @@ namespace app.advertise.services.Admin
                 StatusFlag = result.VAR_HORDING_ACTIVE,
                 Ownership = result.VAR_HORDING_OWNERSHIP,
                 RecordId = _dataProtector.Protect(result.NUM_HORDING_ID.ToString()),
+            };
+        }
+
+        public async Task<dtoHoardingMaster> GetById(int recordId)
+        {
+
+            var result = await _hoardingMasterRepository.GetById(recordId, _authData.UlbId);
+
+            return new dtoHoardingMaster
+            {
+                Name = result.VAR_HORDING_HOLDNAME,
+                Address = result.VAR_HORDING_HOLDADDRESS,
+                HoardingType = result.VAR_HORDING_HOLDTYPE,
+                DisplayTypeId = result.NUM_HORDING_DISPTYPEID,
+                PrabhagId = result.NUM_HORDING_PRABHAGID,
+                LocationId = result.NUM_HORDING_LOCATIONID,
+                Landmark = result.VAR_HORDING_LANDMARK,
+                Length = result.NUM_HORDING_LENGTH,
+                Width = result.NUM_HORDING_WIDTH,
+                TotalSQFT = result.NUM_HORDING_TOTALSQFT,
+                StatusFlag = result.VAR_HORDING_ACTIVE,
+                Ownership = result.VAR_HORDING_OWNERSHIP,
+                DisplayTypeName=result.VAR_DISPLAYTYPE_NAME,
+                HordingTypeName=result.VAR_HOARDINGTYPE_NAME
             };
         }
 

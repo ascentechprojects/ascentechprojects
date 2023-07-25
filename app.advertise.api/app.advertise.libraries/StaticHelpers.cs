@@ -15,13 +15,13 @@ namespace app.advertise.libraries
 
         public static Dictionary<string, string> HoardingOwnerships() => new() { { "P", "Private" }, { "C", "Corporation" } };
         public static Dictionary<string, string> RemarkStatus() => new() { { "A", "Approved" }, { "R", "Reject" }, { "P", "Pending" }, { "C", "Closed" } };
-
+        public static string[] AllowedFileExtensions() => new string[] { "jpg", "jpeg", "png" };
         public static bool InputValidator(this object input, ValidatorType validatorType)
         {
-            if(input == null)
+            if (input == null)
                 return false;
 
-            var inputstring= input.ToString();
+            var inputstring = input.ToString();
 
             if (string.IsNullOrEmpty(inputstring))
                 return false;
@@ -29,6 +29,8 @@ namespace app.advertise.libraries
             return validatorType switch
             {
                 ValidatorType.Pincode => Regex.IsMatch(inputstring, @"^\d{6}$"),
+                ValidatorType.MobileNo => Regex.IsMatch(inputstring, @"^[0-9]{10}$"),
+                ValidatorType.Email => Regex.IsMatch(inputstring, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
                 _ => false
             };
         }

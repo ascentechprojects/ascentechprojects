@@ -17,7 +17,7 @@
         public string PrabhagName { get; set; }
         public int PrabhagId { get; set; }
 
-        public string RecordId { get;set; }
+        public string RecordId { get; set; }
 
     }
 }

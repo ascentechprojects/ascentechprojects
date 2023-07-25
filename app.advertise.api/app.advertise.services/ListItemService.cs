@@ -3,21 +3,32 @@ using app.advertise.dtos;
 using app.advertise.libraries;
 using app.advertise.services.Interfaces;
 using Dapper;
-using System.Collections.Generic;
 
 namespace app.advertise.services
 {
     public class ListItemService : IListItemService
     {
         private readonly IListItemRepository<dtoListItem> _listItemRepository;
-        public ListItemService(IListItemRepository<dtoListItem> listItemRepository)
+        private readonly UserRequestHeaders _authData;
+        public ListItemService(IListItemRepository<dtoListItem> listItemRepository, UserRequestHeaders authData)
         {
             _listItemRepository = listItemRepository;
+            _authData = authData;
         }
 
         public async Task<IEnumerable<dtoListItem>> DisplayTypes() => await _listItemRepository.Items(ListItemEntity.DisplayType);
-        public async Task<IEnumerable<dtoListItem>> Locations() => await _listItemRepository.Items(ListItemEntity.Location);
-        public async Task<IEnumerable<dtoListItem>> Prabhags() => await _listItemRepository.Items(ListItemEntity.Prabhag);
+        public async Task<IEnumerable<dtoListItem>> Locations()
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("ulbId", _authData.UlbId);
+            return  await _listItemRepository.Items(ListItemEntity.Location, parameters);
+        }
+        public async Task<IEnumerable<dtoListItem>> Prabhags()
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("ulbId", _authData.UlbId);
+            return await _listItemRepository.Items(ListItemEntity.Prabhag, parameters);
+        }
         public async Task<IEnumerable<dtoListItem>> HoardingTypes() => await _listItemRepository.Items(ListItemEntity.HoardingType);
 
         public IEnumerable<dtoListItem> HoardingOwnerships() => StaticHelpers.HoardingOwnerships().Select(kv => new dtoListItem { Id = kv.Key, DisplayName = kv.Value });
@@ -26,7 +37,16 @@ namespace app.advertise.services
         {
             var parameters = new DynamicParameters();
             parameters.Add("prabhagId", prabhagId);
+            parameters.Add("ulbId", _authData.UlbId);
             return await _listItemRepository.Items(ListItemEntity.LocationByPrabhag, parameters);
+        }
+
+        public async Task<IEnumerable<dtoListItem>> HordingByLocId(int locId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("locationid", locId);
+            parameters.Add("ulbId", _authData.UlbId);
+            return await _listItemRepository.Items(ListItemEntity.HordingByLocId, parameters);
         }
     }
 }

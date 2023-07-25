@@ -11,5 +11,6 @@ namespace app.advertise.services.Interfaces
         IEnumerable<dtoListItem> HoardingOwnerships();
 
         Task<IEnumerable<dtoListItem>> LocationsByPrabhagId(int prabhagId);
+        Task<IEnumerable<dtoListItem>> HordingByLocId(int locId);
     }
 }

@@ -1,4 +1,4 @@
-﻿using app.advertise.dtos;
+﻿using app.advertise.dtos.Admin;
 using app.advertise.dtos.Admin.Validators;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;

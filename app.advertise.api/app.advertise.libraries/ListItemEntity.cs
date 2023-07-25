@@ -7,5 +7,6 @@
         DisplayType=3,
         Prabhag=4,
         LocationByPrabhag = 5,
+        HordingByLocId
     }
 }
