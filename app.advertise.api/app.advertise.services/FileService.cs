@@ -40,6 +40,22 @@ namespace app.advertise.services
                 throw new ApiException(ex.Message, _logger);
             }
         }
+        public async Task<byte[]> ReadFile(string fileId)
+        {
+            try
+            {
+                var file = Directory.GetFiles(_fileStorageBasePath).FirstOrDefault(item => Path.GetFileNameWithoutExtension(item).Equals(fileId));
+                if (string.IsNullOrEmpty(file))
+                    throw new ApiException("File not found.", _logger);
+
+                return await File.ReadAllBytesAsync(file);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex.Message, _logger);
+            }
+
+        }
     }
 
 }

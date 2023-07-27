@@ -7,5 +7,8 @@ namespace app.advertise.services.Vendor.Interfaces
     {
         Task<IEnumerable<dtoApplication>> OpenApplications();
         Task<dtoApplicationDetails> AddApplication(dtoApplicationDetails dto,IFormFile formFile);
+        Task<dtoApplicationDetails> ApplicationById(string id);
+        Task<dtoApplicationDetails> UpdateApplication(dtoApplicationDetails dto, IFormFile formFile);
+        Task<byte[]> AppImageById(string id);
     }
 }
