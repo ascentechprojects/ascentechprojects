@@ -11,7 +11,9 @@ namespace app.advertise.libraries
         [Description("Yes")]
         Y = 3,
         [Description("No")]
-        N = 4
+        N = 4,
+        [Description("P")]
+        Pending
     }
 
 }

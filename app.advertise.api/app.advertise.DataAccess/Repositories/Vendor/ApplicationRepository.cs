@@ -11,6 +11,7 @@ namespace app.advertise.DataAccess.Repositories.Vendor
     {
         Task<IEnumerable<Application>> OpenApplications(DynamicParameters parameters);
         Task<Application> InserUpdateApplication(DynamicParameters parameters);
+        Task<Application> ApplicationById(DynamicParameters parameters);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -61,6 +62,12 @@ namespace app.advertise.DataAccess.Repositories.Vendor
                 NUM_APPLI_ID = appliId,
                 VAR_APPLI_APPLINO=applino
             };
+        }
+
+        public async Task<Application> ApplicationById(DynamicParameters parameters)
+        {
+            using var connection = _context.CreateConnection();
+            return await connection.QueryFirstOrDefaultAsync<Application>(Queries.Appli_By_Id, parameters) ?? new Application();
         }
     }
 }

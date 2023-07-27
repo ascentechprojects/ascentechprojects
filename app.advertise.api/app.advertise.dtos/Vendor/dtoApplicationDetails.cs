@@ -16,6 +16,9 @@
         public int AppliPrabhagId { get;set; }
         public int AppliLocationId { get;set; }
         public int AppliHordingId { get;set; }
+        public string RemarkFlag { get; set; }
+        public string ApprovRemark { get; set; }
+        public string ApplicationDate { get;set;}
 
         public string HordingHoldAddress { get; set; }
         public string HordingOwnership { get; set; }
@@ -23,5 +26,6 @@
         public int HordingWidth { get; set; }
         public int HordingTotalSqFt { get; set; }
         public string DisplayTypeName { get;set; }
+        public string HordingTypeName { get; set; }
     }
 }

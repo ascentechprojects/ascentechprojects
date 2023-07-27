@@ -20,7 +20,7 @@ namespace app.advertise.api.Controllers.Vendor
         {
             _service = service;
             _logger = logger;
-           _hoardingMasterService = hoardingMasterService;
+            _hoardingMasterService = hoardingMasterService;
         }
         [HttpGet]
         [Route("OpenApps")]
@@ -58,11 +58,12 @@ namespace app.advertise.api.Controllers.Vendor
             }
         }
 
-        [HttpPost("addApp")]
+        [Route("addApp")]
+        [HttpPost]
         public async Task<IActionResult> AddApp([FromForm] dtoApplicationDetails dto)
         {
 
-            var validator = new ApplicationDetailsValidator();
+            var validator = new ApplicationDetailsValidator(QueryExecutionMode.Insert);
             var validationResult = validator.Validate(dto);
 
             if (!validationResult.IsValid)
@@ -70,7 +71,7 @@ namespace app.advertise.api.Controllers.Vendor
 
 
             var file = Request.Form.Files["File"];
-            var fileValidator=new FormFileValidator();
+            var fileValidator = new FormFileValidator();
             var fileValidationResult = fileValidator.Validate(file);
             if (!fileValidationResult.IsValid)
                 throw new FluentException(fileValidationResult);
@@ -81,6 +82,78 @@ namespace app.advertise.api.Controllers.Vendor
                 {
                     Status = libraries.StatusCode.Ok,
                     Data = await _service.AddApplication(dto, file)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [Route("updateApp")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateApp([FromForm] dtoApplicationDetails dto)
+        {
+
+            var validator = new ApplicationDetailsValidator(QueryExecutionMode.Update);
+            var validationResult = validator.Validate(dto);
+
+            if (!validationResult.IsValid)
+                throw new FluentException(validationResult);
+
+
+            var file = Request.Form.Files["File"];
+            if (file != null)
+            {
+                var fileValidator = new FormFileValidator();
+                var fileValidationResult = fileValidator.Validate(file);
+                if (!fileValidationResult.IsValid)
+                    throw new FluentException(fileValidationResult);
+            }
+
+
+            try
+            {
+                return Ok(new ApiResponse<dtoApplicationDetails>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.UpdateApplication(dto, file)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("{recordId}/file")]
+        public async Task<IActionResult> AppFile(string recordId)
+        {
+            try
+            {
+                return Ok(new ApiResponse<byte[]>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.AppImageById(recordId)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/ById")]
+        public async Task<IActionResult> ApplicationDetails(string id)
+        {
+            try
+            {
+                return Ok(new ApiResponse<dtoApplicationDetails>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.ApplicationById(id)
                 });
             }
             catch (Exception ex)
