@@ -8,7 +8,6 @@ using Dapper;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Data;
 
 namespace app.advertise.services.Vendor
@@ -210,7 +209,7 @@ namespace app.advertise.services.Vendor
 
         public async Task<IEnumerable<dtoApplication>> CloseApplications(dtoAppClose dto)
         {
-             var applicationIds = dto.AppliIds.Select(x => _dataProtector.Unprotect(x));
+            var applicationIds = dto.AppliIds.Select(x => _dataProtector.Unprotect(x));
             var getParameters = new DynamicParameters();
             getParameters.Add("p_appli_ids", applicationIds);
             getParameters.Add("p_ulb_id", _authData.UlbId);
@@ -239,6 +238,37 @@ namespace app.advertise.services.Vendor
             return result.Select(record => new dtoApplication
             {
                 ApplicationNo = record.VAR_APPLI_APPLINO,
+            });
+        }
+
+        public async Task<IEnumerable<dtoApplication>> ApplicationsByStatus(string status)
+        {
+            var statusKey = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Value.Equals(status, StringComparison.OrdinalIgnoreCase)).Key;
+            if (string.IsNullOrEmpty(statusKey))
+                statusKey = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(status, StringComparison.OrdinalIgnoreCase)).Key;
+
+            if (string.IsNullOrEmpty(statusKey) && !string.Equals(status, "all", StringComparison.OrdinalIgnoreCase))
+                throw new ApiException($"Invalid status {status}.", _logger);
+
+            var parameters = new DynamicParameters();
+            parameters.Add("ulbId", _authData.UlbId);
+            parameters.Add("userId", _authData.UserId);
+            parameters.Add("status", statusKey);
+
+           
+           var repoResult = await _repository.ApplicationsByStatus(parameters, string.Equals(status, "all", StringComparison.OrdinalIgnoreCase));
+
+            return repoResult.Select(record => new dtoApplication
+            {
+                ApplicationNo = record.VAR_APPLI_APPLINO,
+                AppliAppName = record.VAR_APPLI_APPLINAME,
+                RecordId = _dataProtector.Protect(record.NUM_APPLI_ID.ToString()),
+                AppliLicenseNo = record.VAR_APPLI_LICENO,
+                AppliDate = record.DAT_APPLI_APPLIDT.ToString(AppConstants.Date_Dafault_Format),
+                HordingHoldName = record.VAR_HORDING_HOLDNAME,
+                RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
+                PrabhagName = record.VAR_PRABHAG_NAME,
+                LocationName = record.VAR_LOCATION_NAME
             });
         }
     }

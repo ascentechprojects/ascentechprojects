@@ -41,6 +41,24 @@ namespace app.advertise.api.Controllers.Vendor
         }
 
         [HttpGet]
+        [Route("{appstatus}/Apps")]
+        public async Task<IActionResult> AppsByStatus(string appstatus)
+        {
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoApplication>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.ApplicationsByStatus(appstatus)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpGet]
         [Route("{recordId:int}/Hording")]
         public async Task<IActionResult> HordingDetail(int recordId)
         {

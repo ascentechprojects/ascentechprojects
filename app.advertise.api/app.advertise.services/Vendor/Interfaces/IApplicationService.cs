@@ -12,5 +12,6 @@ namespace app.advertise.services.Vendor.Interfaces
         Task<byte[]> AppImageById(string id);
         Task<IEnumerable<dtoApplication>> AppCloseSearch(dtoAppClose dtoAppClose);
         Task<IEnumerable<dtoApplication>> CloseApplications(dtoAppClose dto);
+        Task<IEnumerable<dtoApplication>> ApplicationsByStatus(string status);
     }
 }

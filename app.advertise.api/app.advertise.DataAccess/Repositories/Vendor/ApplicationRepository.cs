@@ -15,6 +15,7 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         Task<IEnumerable<Application>> AppCloseSearch(DynamicParameters parameters);
         Task<IEnumerable<Application>> ApplicationByIds(DynamicParameters parameters);
         Task<IEnumerable<Application>> CloseApplications(IEnumerable<Application> applications, DynamicParameters parameters);
+        Task<IEnumerable<Application>> ApplicationsByStatus(DynamicParameters parameters, bool all);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -32,6 +33,14 @@ namespace app.advertise.DataAccess.Repositories.Vendor
             return await connection.QueryAsync<Application>(Queries.Select_P_A_R_Applications, parameters) ?? Enumerable.Empty<Application>();
         }
 
+        public async Task<IEnumerable<Application>> ApplicationsByStatus(DynamicParameters parameters, bool all)
+        {
+            using var connection = _context.CreateConnection();
+            if (all)
+                return await connection.QueryAsync<Application>(Queries.Select_P_A_R_C_Applications, parameters) ?? Enumerable.Empty<Application>();
+
+            return await connection.QueryAsync<Application>(Queries.Select_P_A_R_Status_Applications, parameters) ?? Enumerable.Empty<Application>();
+        }
         public async Task<Application> InserUpdateApplication1(DynamicParameters parameters)
         {
             using var connection = _context.CreateConnection();
@@ -115,7 +124,7 @@ namespace app.advertise.DataAccess.Repositories.Vendor
             }
             catch (Exception ex)
             {
-                 throw new DBException($"Failed to close the application; {ex.Message}", _logger);
+                throw new DBException($"Failed to close the application; {ex.Message}", _logger);
             }
 
             return result;
