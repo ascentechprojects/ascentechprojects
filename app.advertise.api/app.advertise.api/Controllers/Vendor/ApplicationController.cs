@@ -41,6 +41,24 @@ namespace app.advertise.api.Controllers.Vendor
         }
 
         [HttpGet]
+        [Route("{appstatus}/Apps")]
+        public async Task<IActionResult> AppsByStatus(string appstatus)
+        {
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoApplication>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.ApplicationsByStatus(appstatus)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpGet]
         [Route("{recordId:int}/Hording")]
         public async Task<IActionResult> HordingDetail(int recordId)
         {
@@ -154,6 +172,57 @@ namespace app.advertise.api.Controllers.Vendor
                 {
                     Status = libraries.StatusCode.Ok,
                     Data = await _service.ApplicationById(id)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+
+        [Route("closeSearch")]
+        [HttpPost]
+        public async Task<IActionResult> AppCloseSearch(dtoAppClose dto)
+        {
+
+            var validator = new AppCloseValidator(QueryExecutionMode.Insert);
+            var validationResult = validator.Validate(dto);
+
+            if (!validationResult.IsValid)
+                throw new FluentException(validationResult);
+
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoApplication>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.AppCloseSearch(dto)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [Route("closeapps")]
+        [HttpPost]
+        public async Task<IActionResult> AppClose(dtoAppClose dto)
+        {
+
+            var validator = new AppCloseValidator(QueryExecutionMode.Update);
+            var validationResult = validator.Validate(dto);
+
+            if (!validationResult.IsValid)
+                throw new FluentException(validationResult);
+
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoApplication>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.CloseApplications(dto)
                 });
             }
             catch (Exception ex)

@@ -1,6 +1,6 @@
 ﻿namespace app.advertise.DataAccess.Entities.Vendor
 {
-    public record Application: baseEntity
+    public record Application : baseEntity
     {
         public int NUM_APPLI_ULBID { get; set; }
         public int NUM_APPLI_ID { get; set; }
@@ -38,5 +38,6 @@
         public string VAR_HORDING_HOLDNAME { get; set; }
         public string VAR_HORDING_OWNERSHIP { get; set; }
         public string VAR_DISPLAYTYPE_NAME { get; set; }
+        public int num_appliclose_id { get; set; }
     }
 }

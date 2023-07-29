@@ -15,7 +15,7 @@ namespace app.advertise.dtos.Vendor.Validators
 
             RuleFor(p => p.AppliPrabhagId).Must(value => { return value > 0; }).WithMessage("Prabhag is required.");
             RuleFor(p => p.AppliLocationId).Must(value => { return value > 0; }).WithMessage("Location is required.");
-            RuleFor(p => p.AppliHordingId).Must(value => { return value > 0; }).WithMessage("Display Type is required.");
+            RuleFor(p => p.AppliHordingId).Must(value => { return value > 0; }).WithMessage("Hording is required.");
             RuleFor(p => p.AppliAppName).NotEmpty().WithMessage("Name is required.").Length(1, 150).WithMessage("Input length must be between 1 and 150 characters.");
             RuleFor(p => p.AppliLicenseOutNo).NotEmpty().WithMessage("Name is required.").Length(1, 150).WithMessage("Input length must be between 1 and 150 characters.");
             RuleFor(p => p.AppliAddress).NotEmpty().WithMessage("Address is required.").Length(1, 150).WithMessage("Input length must be between 1 and 150 characters.");

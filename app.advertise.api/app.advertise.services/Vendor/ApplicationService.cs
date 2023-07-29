@@ -75,7 +75,7 @@ namespace app.advertise.services.Vendor
             exisParameters.Add("p_appli_id", recordId);
             exisParameters.Add("p_ulb_id", _authData.UlbId);
             var exisRecord = await _repository.ApplicationById(exisParameters) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
-           
+
             var parameters = new DynamicParameters();
             parameters.Add("in_ULBID", _authData.UlbId, DbType.Int32);
             parameters.Add("in_UserId", _authData.UserId, DbType.String);
@@ -144,7 +144,7 @@ namespace app.advertise.services.Vendor
             parameters.Add("p_appli_id", recordId);
             parameters.Add("p_ulb_id", _authData.UlbId);
 
-            var record = await _repository.ApplicationById(parameters);
+            var record = await _repository.ApplicationById(parameters) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
 
             return new dtoApplicationDetails()
             {
@@ -163,8 +163,8 @@ namespace app.advertise.services.Vendor
                 AppliLocationId = record.NUM_APPLI_LOCATIONID,
                 AppliHordingId = record.NUM_APPLI_HORDINGID,
                 ApprovRemark = record.VAR_APPLI_APPROVREMARK,
-                ApplicationDate=record.DAT_APPLI_APPLIDT.ToString(AppConstants.Date_Dafault_Format),
-                RecordId=_dataProtector.Protect(record.NUM_APPLI_ID.ToString()),
+                ApplicationDate = record.DAT_APPLI_APPLIDT.ToString(AppConstants.Date_Dafault_Format),
+                RecordId = _dataProtector.Protect(record.NUM_APPLI_ID.ToString()),
 
                 HordingHoldAddress = record.VAR_HORDING_HOLDADDRESS,
                 HordingOwnership = StaticHelpers.HoardingOwnerships().TryGetValue(record.VAR_HORDING_OWNERSHIP, out var value) && value != null && !string.IsNullOrEmpty(value) ? value : string.Empty,
@@ -176,6 +176,100 @@ namespace app.advertise.services.Vendor
             };
         }
 
-        public async Task<byte[]> AppImageById(string id)=> await _fileService.ReadFile(_dataProtector.Unprotect(id));
+        public async Task<byte[]> AppImageById(string id) => await _fileService.ReadFile(_dataProtector.Unprotect(id));
+
+
+        public async Task<IEnumerable<dtoApplication>> AppCloseSearch(dtoAppClose dto)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("ulbId", _authData.UlbId);
+            parameters.Add("userId", _authData.UserId);
+            parameters.Add("prabhagId", dto.AppliPrabhagId);
+            parameters.Add("locationId", dto.AppliLocationId);
+            parameters.Add("hordingId", dto.AppliHordingId);
+
+            var result = await _repository.AppCloseSearch(parameters);
+
+            return result.Select(record => new dtoApplication
+            {
+                ApplicationNo = record.VAR_APPLI_APPLINO,
+                AppliAppName = record.VAR_APPLI_APPLINAME,
+                RecordId = _dataProtector.Protect(record.NUM_APPLI_ID.ToString()),
+                AppliLicenseNo = record.VAR_APPLI_LICENO,
+                AppliDate = record.DAT_APPLI_APPLIDT.ToString(AppConstants.Date_Dafault_Format),
+                HordingHoldName = record.VAR_HORDING_HOLDNAME,
+                RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
+                PrabhagName = record.VAR_PRABHAG_NAME,
+                LocationName = record.VAR_LOCATION_NAME,
+                AppliFrom = record.DAT_APPLI_FROMDT.Equals(DateTime.MinValue) ? string.Empty : record.DAT_APPLI_FROMDT.ToString(AppConstants.Date_Dafault_Format),
+                AppliTo = record.DAT_APPLI_UPTODT.Equals(DateTime.MinValue) ? string.Empty : record.DAT_APPLI_UPTODT.ToString(AppConstants.Date_Dafault_Format),
+                AppliCloseId = record.num_appliclose_id
+            });
+        }
+
+        public async Task<IEnumerable<dtoApplication>> CloseApplications(dtoAppClose dto)
+        {
+            var applicationIds = dto.AppliIds.Select(x => _dataProtector.Unprotect(x));
+            var getParameters = new DynamicParameters();
+            getParameters.Add("p_appli_ids", applicationIds);
+            getParameters.Add("p_ulb_id", _authData.UlbId);
+            getParameters.Add("prabhagId", dto.AppliPrabhagId);
+            getParameters.Add("locationId", dto.AppliLocationId);
+            getParameters.Add("hordingId", dto.AppliHordingId);
+
+            var records = await _repository.ApplicationByIds(getParameters) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
+
+            if (!records.Any())
+                throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
+
+            var invalidAppIds = applicationIds.Except(records.Select(x => x.NUM_APPLI_ID.ToString()));
+            if (invalidAppIds.Any())
+                throw new ApiException($"Invalid Application(s) {string.Join(",", invalidAppIds)}", _logger);
+
+            var parameters = new DynamicParameters();
+            parameters.Add("in_ulbID", _authData.UlbId, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("in_userid", _authData.UserId, DbType.String, ParameterDirection.Input);
+            parameters.Add("in_ipaddress", _authData.IpAddress, DbType.String, ParameterDirection.Input);
+            parameters.Add("in_source", _authData.Source, DbType.String, ParameterDirection.Input);
+            parameters.Add("in_remark", dto.Remark, DbType.String, ParameterDirection.Input);
+
+            var result = await _repository.CloseApplications(records, parameters);
+
+            return result.Select(record => new dtoApplication
+            {
+                ApplicationNo = record.VAR_APPLI_APPLINO,
+            });
+        }
+
+        public async Task<IEnumerable<dtoApplication>> ApplicationsByStatus(string status)
+        {
+            var statusKey = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Value.Equals(status, StringComparison.OrdinalIgnoreCase)).Key;
+            if (string.IsNullOrEmpty(statusKey))
+                statusKey = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(status, StringComparison.OrdinalIgnoreCase)).Key;
+
+            if (string.IsNullOrEmpty(statusKey) && !string.Equals(status, "all", StringComparison.OrdinalIgnoreCase))
+                throw new ApiException($"Invalid status {status}.", _logger);
+
+            var parameters = new DynamicParameters();
+            parameters.Add("ulbId", _authData.UlbId);
+            parameters.Add("userId", _authData.UserId);
+            parameters.Add("status", statusKey);
+
+           
+           var repoResult = await _repository.ApplicationsByStatus(parameters, string.Equals(status, "all", StringComparison.OrdinalIgnoreCase));
+
+            return repoResult.Select(record => new dtoApplication
+            {
+                ApplicationNo = record.VAR_APPLI_APPLINO,
+                AppliAppName = record.VAR_APPLI_APPLINAME,
+                RecordId = _dataProtector.Protect(record.NUM_APPLI_ID.ToString()),
+                AppliLicenseNo = record.VAR_APPLI_LICENO,
+                AppliDate = record.DAT_APPLI_APPLIDT.ToString(AppConstants.Date_Dafault_Format),
+                HordingHoldName = record.VAR_HORDING_HOLDNAME,
+                RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
+                PrabhagName = record.VAR_PRABHAG_NAME,
+                LocationName = record.VAR_LOCATION_NAME
+            });
+        }
     }
 }
