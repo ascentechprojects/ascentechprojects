@@ -10,5 +10,7 @@ namespace app.advertise.services.Vendor.Interfaces
         Task<dtoApplicationDetails> ApplicationById(string id);
         Task<dtoApplicationDetails> UpdateApplication(dtoApplicationDetails dto, IFormFile formFile);
         Task<byte[]> AppImageById(string id);
+        Task<IEnumerable<dtoApplication>> AppCloseSearch(dtoAppClose dtoAppClose);
+        Task<IEnumerable<dtoApplication>> CloseApplications(dtoAppClose dto);
     }
 }

@@ -9,5 +9,10 @@
         public string RemarkFlag { get; set; }
         public string AppliDate { get; set; }
         public string AppliLicenseNo { get; set; }
+
+        public string AppliFrom { get; set;}
+        public string AppliTo { get; set;}
+
+        public int AppliCloseId { get;set; }
     }
 }
