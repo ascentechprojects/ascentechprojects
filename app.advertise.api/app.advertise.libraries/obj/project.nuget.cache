@@ -1,11 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "zqdEhp6B3F5qLuhMwPCsf7xfiU7d4Qb8SptFgpZHkkBRe85D4kxhmp7dyBN2R7RfhLWvQBrzNh3E5Qgi8BvWDw==",
+  "dgSpecHash": "CDf6xTLaF31ez+XTE+bfW9263L6MkvUPnLfr9/tz8fqbA877cmn+sBcX4a04UAJaJg0PvzRGyNXpz/vVHKT7Nw==",
   "success": true,
-  "projectFilePath": "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
+  "projectFilePath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Manoj\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
-    "C:\\Users\\Manoj\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.1\\microsoft.extensions.logging.abstractions.7.0.1.nupkg.sha512"
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.5.1\\fluentvalidation.dependencyinjectionextensions.11.5.1.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\7.0.1\\microsoft.extensions.logging.abstractions.7.0.1.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\microsoft.extensions.primitives\\2.2.0\\microsoft.extensions.primitives.2.2.0.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\system.memory\\4.5.1\\system.memory.4.5.1.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.1\\system.runtime.compilerservices.unsafe.4.5.1.nupkg.sha512",
+    "C:\\Users\\RAJNEESH\\.nuget\\packages\\system.text.encodings.web\\4.5.0\\system.text.encodings.web.4.5.0.nupkg.sha512"
   ],
   "logs": []
 }

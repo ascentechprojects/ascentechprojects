@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {}
+    "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {}
   },
   "projects": {
-    "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {
+    "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
+        "projectUniqueName": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
         "projectName": "app.advertise.libraries",
-        "projectPath": "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
-        "packagesPath": "C:\\Users\\Manoj\\.nuget\\packages\\",
-        "outputPath": "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.libraries\\obj\\",
+        "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
+        "packagesPath": "C:\\Users\\RAJNEESH\\.nuget\\packages\\",
+        "outputPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Manoj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\RAJNEESH\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,6 +43,14 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
               "version": "[6.0.0, )"
@@ -47,6 +58,10 @@
             "Microsoft.Extensions.Logging.Abstractions": {
               "target": "Package",
               "version": "[7.0.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             }
           },
           "imports": [
@@ -65,7 +80,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

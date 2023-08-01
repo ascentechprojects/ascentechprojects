@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.api\\app.advertise.api.csproj": {}
+    "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.api\\app.advertise.api.csproj": {}
   },
   "projects": {
-    "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.api\\app.advertise.api.csproj": {
+    "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.api\\app.advertise.api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.api\\app.advertise.api.csproj",
+        "projectUniqueName": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.api\\app.advertise.api.csproj",
         "projectName": "app.advertise.api",
-        "projectPath": "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.api\\app.advertise.api.csproj",
-        "packagesPath": "C:\\Users\\Manoj\\.nuget\\packages\\",
-        "outputPath": "D:\\ke\\New folder\\advertisementapi\\app.advertise.api\\app.advertise.api\\obj\\",
+        "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.api\\app.advertise.api.csproj",
+        "packagesPath": "C:\\Users\\RAJNEESH\\.nuget\\packages\\",
+        "outputPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.api\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Manoj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\RAJNEESH\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,13 +25,26 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.302\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.DataAccess\\app.advertise.DataAccess.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.DataAccess\\app.advertise.DataAccess.csproj"
+              },
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.dtos\\app.advertise.dtos.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.dtos\\app.advertise.dtos.csproj"
+              },
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj"
+              },
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.services\\app.advertise.services.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.services\\app.advertise.services.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -40,6 +56,40 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Microsoft.AspNetCore.Cryptography.Internal": {
+              "target": "Package",
+              "version": "[6.0.20, )"
+            },
+            "Microsoft.AspNetCore.DataProtection": {
+              "target": "Package",
+              "version": "[6.0.20, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.OpenApi": {
+              "target": "Package",
+              "version": "[1.6.4, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.5.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -59,7 +109,309 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.DataAccess\\app.advertise.DataAccess.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.DataAccess\\app.advertise.DataAccess.csproj",
+        "projectName": "app.advertise.DataAccess",
+        "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.DataAccess\\app.advertise.DataAccess.csproj",
+        "packagesPath": "C:\\Users\\RAJNEESH\\.nuget\\packages\\",
+        "outputPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.DataAccess\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\RAJNEESH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.dtos\\app.advertise.dtos.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.dtos\\app.advertise.dtos.csproj"
+              },
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.0.138, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.Options": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
+            "Oracle.ManagedDataAccess.Core": {
+              "target": "Package",
+              "version": "[3.21.100, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.dtos\\app.advertise.dtos.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.dtos\\app.advertise.dtos.csproj",
+        "projectName": "app.advertise.dtos",
+        "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.dtos\\app.advertise.dtos.csproj",
+        "packagesPath": "C:\\Users\\RAJNEESH\\.nuget\\packages\\",
+        "outputPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.dtos\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\RAJNEESH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[11.5.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
+        "projectName": "app.advertise.libraries",
+        "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj",
+        "packagesPath": "C:\\Users\\RAJNEESH\\.nuget\\packages\\",
+        "outputPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\RAJNEESH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[11.3.0, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[7.0.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.services\\app.advertise.services.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.services\\app.advertise.services.csproj",
+        "projectName": "app.advertise.services",
+        "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.services\\app.advertise.services.csproj",
+        "packagesPath": "C:\\Users\\RAJNEESH\\.nuget\\packages\\",
+        "outputPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.services\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\RAJNEESH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.DataAccess\\app.advertise.DataAccess.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.DataAccess\\app.advertise.DataAccess.csproj"
+              },
+              "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj": {
+                "projectPath": "F:\\AdvertisingManagement\\API\\app.advertise.api\\app.advertise.libraries\\app.advertise.libraries.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.11, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
         }
       }
     }

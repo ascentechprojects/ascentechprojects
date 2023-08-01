@@ -49,6 +49,7 @@ builder.Host.UseSerilog();
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
 builder.Services.Configure<FileStorageSetting>(builder.Configuration.GetSection("FileStorage"));
 
+
 var corsUrls = builder.Configuration.GetSection("Cors:AllowedOrigins").Value.Split(",");
 builder.Services.AddCors(options =>
 {
