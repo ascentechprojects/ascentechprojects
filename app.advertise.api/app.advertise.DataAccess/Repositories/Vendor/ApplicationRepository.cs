@@ -16,6 +16,7 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         Task<IEnumerable<Application>> ApplicationByIds(DynamicParameters parameters);
         Task<IEnumerable<Application>> CloseApplications(IEnumerable<Application> applications, DynamicParameters parameters);
         Task<IEnumerable<Application>> ApplicationsByStatus(DynamicParameters parameters, bool all);
+        Task<Application> ValidateAppById(DynamicParameters parameters,bool appNotNull=false);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -30,7 +31,7 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         public async Task<IEnumerable<Application>> OpenApplications(DynamicParameters parameters)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryAsync<Application>(Queries.Select_P_A_R_Applications, parameters) ?? Enumerable.Empty<Application>();
+            return await connection.QueryAsync<Application>(Queries.Select_P_A_R_C_Applications, parameters) ?? Enumerable.Empty<Application>();
         }
 
         public async Task<IEnumerable<Application>> ApplicationsByStatus(DynamicParameters parameters, bool all)
@@ -129,6 +130,12 @@ namespace app.advertise.DataAccess.Repositories.Vendor
 
             return result;
 
+        }
+
+        public async Task<Application> ValidateAppById(DynamicParameters parameters,bool appNotNull)
+        {
+            using var connection = _context.CreateConnection();
+            return await connection.QueryFirstOrDefaultAsync<Application>(appNotNull? Queries.Validate_Appli_By_Id_Number: Queries.Validate_Appli_By_Id, parameters) ?? new Application();
         }
     }
 }

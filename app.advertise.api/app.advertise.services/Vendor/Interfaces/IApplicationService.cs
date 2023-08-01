@@ -1,4 +1,5 @@
-﻿using app.advertise.dtos.Vendor;
+﻿using app.advertise.dtos;
+using app.advertise.dtos.Vendor;
 using Microsoft.AspNetCore.Http;
 
 namespace app.advertise.services.Vendor.Interfaces
@@ -13,5 +14,6 @@ namespace app.advertise.services.Vendor.Interfaces
         Task<IEnumerable<dtoApplication>> AppCloseSearch(dtoAppClose dtoAppClose);
         Task<IEnumerable<dtoApplication>> CloseApplications(dtoAppClose dto);
         Task<IEnumerable<dtoApplication>> ApplicationsByStatus(string status);
+        Task<dtoAppTemplate> ValidateApplication(string id, string appno=null);
     }
 }

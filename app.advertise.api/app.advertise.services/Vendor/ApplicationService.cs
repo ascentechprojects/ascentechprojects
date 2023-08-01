@@ -1,4 +1,5 @@
 ﻿using app.advertise.DataAccess.Repositories.Vendor;
+using app.advertise.dtos;
 using app.advertise.dtos.Vendor;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
@@ -131,7 +132,10 @@ namespace app.advertise.services.Vendor
                 HordingHoldName = record.VAR_HORDING_HOLDNAME,
                 RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
                 PrabhagName = record.VAR_PRABHAG_NAME,
-                LocationName = record.VAR_LOCATION_NAME
+                LocationName = record.VAR_LOCATION_NAME,
+                AppliFrom = record.DAT_APPLI_FROMDT.Equals(DateTime.MinValue) ? string.Empty : record.DAT_APPLI_FROMDT.ToString(AppConstants.Date_Dafault_Format),
+                AppliTo = record.DAT_APPLI_UPTODT.Equals(DateTime.MinValue) ? string.Empty : record.DAT_APPLI_UPTODT.ToString(AppConstants.Date_Dafault_Format),
+                AppliCloseId = record.num_appliclose_id
             });
         }
 
@@ -271,5 +275,39 @@ namespace app.advertise.services.Vendor
                 LocationName = record.VAR_LOCATION_NAME
             });
         }
+
+        public async Task<dtoAppTemplate> ValidateApplication(string id,string appno)
+        {
+            var recordId = Convert.ToInt32(_dataProtector.Unprotect(id));
+
+            var parameters = new DynamicParameters();
+            parameters.Add("p_appli_id", recordId);
+            parameters.Add("p_app_no", appno);
+
+            var record = await _repository.ValidateAppById(parameters,!string.IsNullOrEmpty(appno)) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
+
+            return new dtoAppTemplate()
+            {
+                ApplicationNo = record.VAR_APPLI_APPLINO,
+                AppliAppName = record.VAR_APPLI_APPLINAME,
+                AppliAddress = record.VAR_APPLI_ADDRESS,
+                AppliEmail = record.VAR_APPLI_EMAIL,
+                AppliMobileNo = record.NUM_APPLI_MOBILENO,
+                AppliFromDate = record.DAT_APPLI_FROMDT.ToString(AppConstants.Date_Dafault_Format),
+                AppliUpToDate = record.DAT_APPLI_UPTODT.ToString(AppConstants.Date_Dafault_Format),
+                RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
+                Quantity = record.NUM_APPLI_QTY,
+                ApprovRemark = record.VAR_APPLI_APPROVREMARK,
+                ApplicationDate = record.DAT_APPLI_APPLIDT.ToString(AppConstants.Date_Dafault_Format),
+
+                HordingHoldAddress = record.VAR_HORDING_HOLDADDRESS,
+                AppliPrabhagName = record.VAR_PRABHAG_NAME,
+                AppliHordingName = record.VAR_HORDING_HOLDNAME,
+                DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
+                HordingTypeName = record.VAR_HOARDINGTYPE_NAME,
+                AppliLocationName=record.VAR_LOCATION_NAME
+            };
+        }
+
     }
 }
