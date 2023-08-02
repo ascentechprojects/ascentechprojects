@@ -135,7 +135,7 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         public async Task<Application> ValidateAppById(DynamicParameters parameters,bool appNotNull)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<Application>(appNotNull? Queries.Validate_Appli_By_Id_Number: Queries.Validate_Appli_By_Id, parameters) ?? new Application();
+            return await connection.QueryFirstOrDefaultAsync<Application>(appNotNull? Queries.Validate_Appli_By_Id_Number: Queries.Validate_Appli_By_Id, parameters) ?? throw new DBException("No record found.",_logger);
         }
     }
 }
