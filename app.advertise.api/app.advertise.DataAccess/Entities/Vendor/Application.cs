@@ -39,5 +39,7 @@
         public string VAR_HORDING_OWNERSHIP { get; set; }
         public string VAR_DISPLAYTYPE_NAME { get; set; }
         public int num_appliclose_id { get; set; }
+
+        public string VAR_HOARDINGTYPE_NAME { get;set; }
     }
 }
