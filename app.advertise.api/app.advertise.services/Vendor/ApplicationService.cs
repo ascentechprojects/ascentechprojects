@@ -16,11 +16,11 @@ namespace app.advertise.services.Vendor
     public class ApplicationService : IApplicationService
     {
         private readonly IApplicationRepository _repository;
-        private readonly UserRequestHeaders _authData;
+        private readonly VendorRequestHeaders _authData;
         private readonly IDataProtector _dataProtector;
         private readonly ILogger<ApplicationService> _logger;
         private readonly IFileService _fileService;
-        public ApplicationService(IApplicationRepository repository, UserRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger, IFileService fileService)
+        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger, IFileService fileService)
         {
             _repository = repository;
             _authData = authData;

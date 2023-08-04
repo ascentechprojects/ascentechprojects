@@ -4,5 +4,6 @@
     {
         public readonly string RecordIdRouteValue= "_recordIdRouteValue";
         public readonly string AdminAuthValue = "_authRequestValue";
+        public readonly string VendorAuthValue = "_vendorRequestValue";
     }
 }
