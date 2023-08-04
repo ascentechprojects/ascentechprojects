@@ -7,15 +7,17 @@ using System.Data;
 
 namespace app.advertise.DataAccess.Repositories.Vendor
 {
-    public interface IoAuthRepository
+    public interface ICitizenRepository
     {
         Task<CitizenUser> VerifyCitizen(DynamicParameters parameters);
+        Task<CitizenUser> RegisterCitizen(DynamicParameters parameters);
+        Task<CitizenUser> VerifyUserEmail(CitizenUser citizen);
     }
-    public class oAuthRepository : IoAuthRepository
+    public class CitizenRepository : ICitizenRepository
     {
         private readonly AdvertisementDbContext _context;
-        private readonly ILogger<oAuthRepository> _logger;
-        public oAuthRepository(AdvertisementDbContext context, ILogger<oAuthRepository> logger)
+        private readonly ILogger<CitizenRepository> _logger;
+        public CitizenRepository(AdvertisementDbContext context, ILogger<CitizenRepository> logger)
         {
             _context = context;
             _logger = logger;
@@ -47,6 +49,34 @@ namespace app.advertise.DataAccess.Repositories.Vendor
                 VAR_CORPORATION_NAME = parameters.Get<string>("out_corporationName"),
                 VAR_CORPORATION_ADDRESS = parameters.Get<string>("out_corporationAddr")
             }; 
+        }
+
+        public async Task<CitizenUser> RegisterCitizen(DynamicParameters parameters)
+        {
+            parameters.Add("out_EmailLink", dbType: DbType.String, direction: ParameterDirection.Output);
+            parameters.Add("out_errcode", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("out_ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output);
+
+            using var connection = _context.CreateConnection();
+            await connection.ExecuteAsync(Queries.SP_CitzenRegistration_Ins, parameters, commandType: CommandType.StoredProcedure);
+
+            var errcode = parameters.Get<int>("out_errcode");
+            var errmsg = parameters.Get<string>("out_ErrMsg");
+
+            if (errcode != 9999)
+                throw new DBException(errmsg ?? "Error occured at DB config.", _logger);
+
+            return new CitizenUser
+            {
+                VAR_CITIZENUSER_EMAILLINK = parameters.Get<string>("out_EmailLink"),
+            };
+        }
+
+        public async Task<CitizenUser> VerifyUserEmail(CitizenUser citizen)
+        {
+
+            using var connection = _context.CreateConnection();
+            return await connection.QueryFirstOrDefaultAsync<CitizenUser>(Queries.Select_Citizen_By_Email, citizen);
         }
     }
 }

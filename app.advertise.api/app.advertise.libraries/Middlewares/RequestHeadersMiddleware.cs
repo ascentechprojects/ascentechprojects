@@ -17,7 +17,7 @@ namespace app.advertise.libraries.Middlewares
             _next = next;
             _userRequestHeaders = userRequestHeaders;
             _logger = logger;
-            _adminDataProtector = adminDataProtector.CreateProtector(dataProtectionPurpose.AdminAuthValue);
+            _adminDataProtector = adminDataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
             _citizenRequestHeaders = citizenRequestHeaders;
 
         }

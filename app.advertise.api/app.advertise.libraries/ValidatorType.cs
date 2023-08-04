@@ -4,6 +4,7 @@
     {
         Pincode,
         MobileNo,
-        Email
+        Email,
+        AAdhaar
     }
 }

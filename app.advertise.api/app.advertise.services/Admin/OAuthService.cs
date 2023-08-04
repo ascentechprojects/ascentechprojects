@@ -21,7 +21,7 @@ namespace app.advertise.services.Admin
             _adminUserRepository = adminUserRepository;
             _logger = logger;
             _authData = authData;
-            _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.AdminAuthValue);
+            _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
         }
 
         //to do claim,

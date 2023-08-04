@@ -22,7 +22,7 @@ namespace app.advertise.api.Controllers.Vendor
 
         [HttpPost]
         [Route("Verify")]
-        public async Task<IActionResult> Add(dtoCitizenLoginRequest dto)
+        public async Task<IActionResult> Verify(dtoCitizenLoginRequest dto)
         {
             try
             {
@@ -41,6 +41,36 @@ namespace app.advertise.api.Controllers.Vendor
                 {
                     Status = libraries.StatusCode.Ok,
                     Data = await _authService.VerifyCitizen(dto)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex, dto);
+            }
+        }
+
+        [HttpPost]
+        [Route("Register")]
+        public async Task<IActionResult> Register(dtoCitizen dto)
+        {
+            try
+            {
+
+                if (dto == null)
+                    throw new ApiException("Invalid input request", _logger);
+
+
+                var validator = new CitizenValidator();
+                var validationResult = validator.Validate(dto);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+
+                return Ok(new ApiResponse<dtoCitizen>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _authService.RegisterCitizen(dto)
                 });
             }
             catch (Exception ex)
