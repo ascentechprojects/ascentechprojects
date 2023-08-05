@@ -141,5 +141,23 @@ namespace app.advertise.api.Controllers
                 return HandleError(ex);
             }
         }
+
+        [HttpGet]
+        [Route("CORPORATIONS")]
+        public async Task<IActionResult> Corporations()
+        {
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoListItem>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data =await _listItemService.Corporations()
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
     }
 }

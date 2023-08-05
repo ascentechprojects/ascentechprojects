@@ -16,11 +16,11 @@ namespace app.advertise.services.Vendor
     public class ApplicationService : IApplicationService
     {
         private readonly IApplicationRepository _repository;
-        private readonly UserRequestHeaders _authData;
+        private readonly VendorRequestHeaders _authData;
         private readonly IDataProtector _dataProtector;
         private readonly ILogger<ApplicationService> _logger;
         private readonly IFileService _fileService;
-        public ApplicationService(IApplicationRepository repository, UserRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger, IFileService fileService)
+        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger, IFileService fileService)
         {
             _repository = repository;
             _authData = authData;
@@ -305,7 +305,9 @@ namespace app.advertise.services.Vendor
                 AppliHordingName = record.VAR_HORDING_HOLDNAME,
                 DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
                 HordingTypeName = record.VAR_HOARDINGTYPE_NAME,
-                AppliLocationName=record.VAR_LOCATION_NAME
+                AppliLocationName=record.VAR_LOCATION_NAME,
+
+                OrgName=record.VAR_CORPORATION_NAME
             };
         }
 

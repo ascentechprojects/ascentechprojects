@@ -21,7 +21,7 @@ namespace app.advertise.services.Admin
             _adminUserRepository = adminUserRepository;
             _logger = logger;
             _authData = authData;
-            _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.AdminAuthValue);
+            _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
         }
 
         //to do claim,
@@ -77,8 +77,8 @@ namespace app.advertise.services.Admin
                 MobileNo = response.MobileNo,
                 OrgId = response.OrgId,
                 AuthKey=Guid.NewGuid().ToString(),
-                ULBId="1",//response.UlbId,
-                P_ULBId= _dataProtector.Protect("1"),
+                ULBId="1",//response.UlbId_dataProtector.Protect(response.UserId),
+                P_ULBId = _dataProtector.Protect("1"),
             };
         }
 

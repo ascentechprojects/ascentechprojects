@@ -41,5 +41,8 @@
         public int num_appliclose_id { get; set; }
 
         public string VAR_HOARDINGTYPE_NAME { get;set; }
+
+        public string VAR_CORPORATION_NAME { get; set; }
+        public int NUM_CORPORATION_ID { get; set; }
     }
 }

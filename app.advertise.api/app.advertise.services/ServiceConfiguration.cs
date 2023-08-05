@@ -23,6 +23,7 @@ namespace app.advertise.services
 
             services.AddTransient<IApplicationService, ApplicationService>();
             services.AddTransient<IFileService, FileService>();
+            services.AddTransient<IoAuthService, oAuthService>();
             return services;
         }
     }
