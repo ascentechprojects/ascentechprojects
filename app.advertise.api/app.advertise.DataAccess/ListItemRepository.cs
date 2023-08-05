@@ -36,6 +36,7 @@ namespace app.advertise.DataAccess
                  ListItemEntity.HoardingType => Queries.ListItem_HordingTypes,
                  ListItemEntity.LocationByPrabhag => Queries.ListItem_Locations_By_PrabhagId,
                  ListItemEntity.HordingByLocId=>Queries.ListItem_Hording_by_LocationId,
+                 ListItemEntity.Corporation => Queries.ListItem_Corporations,
                  _ => throw new DBException($"{AppConstants.Msg_InvalidEntityType} {entityType}", _logger)
              };
 

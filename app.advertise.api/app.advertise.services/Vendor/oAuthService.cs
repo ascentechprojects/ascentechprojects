@@ -27,6 +27,7 @@ namespace app.advertise.services.Vendor
 
         public async Task<dtoCitizenLoginResponse> VerifyCitizen(dtoCitizenLoginRequest request)
         {
+            var pa=new Sha256Encryptor(request.SecretKey,_logger).EncrptedData;
             //use pass encryption
             var parameters = new DynamicParameters();
             parameters.Add("in_userid", request.UserId, DbType.String, ParameterDirection.Input);
@@ -40,8 +41,6 @@ namespace app.advertise.services.Vendor
             if (response == null || !(response.NUM_CITIZENUSER_ULBID > 0) || string.IsNullOrEmpty(response.VAR_CORPORATION_NAME) || string.IsNullOrEmpty(response.VAR_CORPORATION_ADDRESS) || !(response.NUM_CITIZENUSER_USERID > 0))
                 throw new ApiException("User Not found.", _logger);
 
-            //assume user role and usertype is vendor
-
 
             return new dtoCitizenLoginResponse()
             {
@@ -51,6 +50,7 @@ namespace app.advertise.services.Vendor
                 OrgAddress = response.VAR_CORPORATION_ADDRESS,
                 OrgName = response.VAR_CORPORATION_NAME,
                 ReqToken = Guid.NewGuid().ToString(),
+                UserType=UserTypeEnum.Citizen.ToString()
             };
         }
 

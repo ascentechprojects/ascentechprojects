@@ -11,13 +11,13 @@ namespace app.advertise.libraries.Middlewares
         private readonly UserRequestHeaders _userRequestHeaders;
         private readonly VendorRequestHeaders _citizenRequestHeaders;
         private readonly ILogger<RequestHeadersMiddleware> _logger;
-        private readonly IDataProtector _adminDataProtector;
-        public RequestHeadersMiddleware(RequestDelegate next, UserRequestHeaders userRequestHeaders, ILogger<RequestHeadersMiddleware> logger, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider adminDataProtector, VendorRequestHeaders citizenRequestHeaders)
+        private readonly IDataProtector _dataProtector;
+        public RequestHeadersMiddleware(RequestDelegate next, UserRequestHeaders userRequestHeaders, ILogger<RequestHeadersMiddleware> logger, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, VendorRequestHeaders citizenRequestHeaders)
         {
             _next = next;
             _userRequestHeaders = userRequestHeaders;
             _logger = logger;
-            _adminDataProtector = adminDataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
+            _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
             _citizenRequestHeaders = citizenRequestHeaders;
 
         }
@@ -27,14 +27,14 @@ namespace app.advertise.libraries.Middlewares
             var userIpAddress = context.Request.Headers[AppConstants.Header_IPAddress];
             if (context.Request.Headers.ContainsKey(AppConstants.Header_ULB))
             {
-                var ulb = context.Request.Headers[AppConstants.Header_ULB];
-                _userRequestHeaders.UlbId= string.IsNullOrEmpty(ulb) ? throw new ApiException("Invalid Ulb header", _logger) : !(Convert.ToInt32(_adminDataProtector.Unprotect(ulb)) >0)? throw new ApiException("Invalid Ulb header", _logger): Convert.ToInt32(_adminDataProtector.Unprotect(ulb));
+                var ulb = context.Request.Headers[AppConstants.Header_ULB].ToString().Trim('"');
+                _userRequestHeaders.UlbId= string.IsNullOrEmpty(ulb) ? throw new ApiException($"Invalid Ulb header {ulb}", _logger) : !(Convert.ToInt32(_dataProtector.Unprotect(ulb)) >0)? throw new ApiException("Invalid Ulb header", _logger): Convert.ToInt32(_dataProtector.Unprotect(ulb));
             }
 
             if (context.Request.Headers.ContainsKey(AppConstants.Header_User))
             {
-                var user = context.Request.Headers[AppConstants.Header_User];
-                _userRequestHeaders.UserId = string.IsNullOrEmpty(user) ? throw new ApiException("Invalid User header", _logger) : _adminDataProtector.Unprotect(user);
+                var user = context.Request.Headers[AppConstants.Header_User].ToString().Trim('"');
+                _userRequestHeaders.UserId = string.IsNullOrEmpty(user) ? throw new ApiException("Invalid User header", _logger) : _dataProtector.Unprotect(user);
             }
 
             _userRequestHeaders.IpAddress= context.Connection.RemoteIpAddress.ToString()?? userIpAddress;
@@ -45,8 +45,8 @@ namespace app.advertise.libraries.Middlewares
 
             if (context.Request.Headers.ContainsKey(AppConstants.Header_Vendor_ULB))
             {
-                var ulb = context.Request.Headers[AppConstants.Header_Vendor_ULB];
-                _citizenRequestHeaders.UlbId = string.IsNullOrEmpty(ulb) ? throw new ApiException("Invalid Ulb header", _logger) : !(Convert.ToInt32(_adminDataProtector.Unprotect(ulb)) > 0) ? throw new ApiException("Invalid Ulb header", _logger) : Convert.ToInt32(_adminDataProtector.Unprotect(ulb));
+                var venulb = context.Request.Headers[AppConstants.Header_Vendor_ULB].ToString().Trim('"');
+                _citizenRequestHeaders.UlbId = string.IsNullOrEmpty(venulb) ? throw new ApiException($"Invalid Ulb header {venulb}", _logger) : !(Convert.ToInt32(_dataProtector.Unprotect(venulb)) > 0) ? throw new ApiException("Invalid Ulb header", _logger) : Convert.ToInt32(_dataProtector.Unprotect(venulb));
             }
 
 

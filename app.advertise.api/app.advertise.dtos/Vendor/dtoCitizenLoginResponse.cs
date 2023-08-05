@@ -8,5 +8,6 @@
         public string OrgName { get; set;}
         public string OrgAddress { get; set;}
         public string ReqToken { get; set;}
+        public string UserType { get; set; }
     }
 }

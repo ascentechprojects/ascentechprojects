@@ -48,5 +48,7 @@ namespace app.advertise.services
             parameters.Add("ulbId", _authData.UlbId);
             return await _listItemRepository.Items(ListItemEntity.HordingByLocId, parameters);
         }
+
+        public async Task<IEnumerable<dtoListItem>> Corporations()=> await _listItemRepository.Items(ListItemEntity.Corporation);
     }
 }

@@ -305,7 +305,9 @@ namespace app.advertise.services.Vendor
                 AppliHordingName = record.VAR_HORDING_HOLDNAME,
                 DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
                 HordingTypeName = record.VAR_HOARDINGTYPE_NAME,
-                AppliLocationName=record.VAR_LOCATION_NAME
+                AppliLocationName=record.VAR_LOCATION_NAME,
+
+                OrgName=record.VAR_CORPORATION_NAME
             };
         }
 
