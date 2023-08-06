@@ -78,5 +78,36 @@ namespace app.advertise.api.Controllers.Vendor
                 return HandleError(ex, dto);
             }
         }
+
+        [HttpPost]
+        [Route("VerifyReset")]
+        public async Task<IActionResult> VerifyOTPAndReset(dtoOTPPasswordReset dto)
+        {
+            try
+            {
+
+                if (dto == null)
+                    throw new ApiException("Invalid input request", _logger);
+
+
+                var validator = new OTPPasswordResetValidator();
+                var validationResult = validator.Validate(dto);
+
+                if (!validationResult.IsValid)
+                    throw new FluentException(validationResult);
+
+
+                return Ok(new ApiResponse<dtoOTPPasswordResponse>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _authService.OtpWithResetPassword(dto)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex, dto);
+            }
+        }
+
     }
 }

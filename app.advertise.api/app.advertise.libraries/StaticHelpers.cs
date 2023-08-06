@@ -19,9 +19,9 @@ namespace app.advertise.libraries
 
         public static bool ValidateDate(DateTime date)
         {
-            if(date ==null) return false;
+            if (date == null) return false;
 
-           return date==DateTime.MinValue;
+            return date != DateTime.MinValue;
         }
         public static bool InputValidator(this object input, ValidatorType validatorType)
         {
@@ -39,6 +39,7 @@ namespace app.advertise.libraries
                 ValidatorType.MobileNo => Regex.IsMatch(inputstring, @"^[0-9]{10}$"),
                 ValidatorType.Email => Regex.IsMatch(inputstring, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
                 ValidatorType.AAdhaar => Regex.IsMatch(inputstring, @"^[0-9]{12}$"),
+                ValidatorType.OnlyNumber => Regex.IsMatch(inputstring, @"^[0-9]+$"),
                 _ => false
             };
         }

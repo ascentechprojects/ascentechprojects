@@ -92,5 +92,10 @@ namespace app.advertise.services.Vendor
                 EmailLink = result.VAR_CITIZENUSER_EMAILLINK
             };
         }
+
+        public async Task<dtoOTPPasswordResponse> OtpWithResetPassword(dtoOTPPasswordReset dto)
+        {
+            return new dtoOTPPasswordResponse();
+        }
     }
 }
