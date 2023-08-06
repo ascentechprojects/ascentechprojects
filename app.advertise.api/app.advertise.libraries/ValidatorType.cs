@@ -5,6 +5,7 @@
         Pincode,
         MobileNo,
         Email,
-        AAdhaar
+        AAdhaar,
+        OnlyNumber
     }
 }

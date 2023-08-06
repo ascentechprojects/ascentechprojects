@@ -6,5 +6,6 @@ namespace app.advertise.services.Vendor.Interfaces
     {
         Task<dtoCitizenLoginResponse> VerifyCitizen(dtoCitizenLoginRequest request);
         Task<dtoCitizen> RegisterCitizen(dtoCitizen request);
+        Task<dtoOTPPasswordResponse> OtpWithResetPassword(dtoOTPPasswordReset dto);
     }
 }
