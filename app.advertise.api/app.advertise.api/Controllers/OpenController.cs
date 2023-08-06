@@ -3,6 +3,7 @@ using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using app.advertise.libraries.Interfaces;
 using app.advertise.services.Vendor.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace app.advertise.api.Controllers
@@ -20,6 +21,7 @@ namespace app.advertise.api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route("{id}/Validate")]
         public async Task<IActionResult> ValidateApplication(string id)
         {

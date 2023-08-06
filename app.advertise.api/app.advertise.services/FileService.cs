@@ -5,6 +5,7 @@ namespace app.advertise.services
     using app.advertise.dtos;
     using app.advertise.libraries.AppSettings;
     using app.advertise.libraries.Exceptions;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using System;
@@ -22,6 +23,13 @@ namespace app.advertise.services
             _logger = logger;
         }
 
+        public string ConvertToBase64(IFormFile file)
+        {
+            using var memoryStream = new MemoryStream();
+            file.CopyTo(memoryStream);
+            byte[] fileBytes = memoryStream.ToArray();
+            return Convert.ToBase64String(fileBytes);
+        }
         public async Task WriteFile(dtoFormFile file)
         {
             try

@@ -1,4 +1,5 @@
 ﻿using app.advertise.dtos;
+using Microsoft.AspNetCore.Http;
 
 namespace app.advertise.services.Interfaces
 {
@@ -6,5 +7,6 @@ namespace app.advertise.services.Interfaces
     {
         Task WriteFile(dtoFormFile file);
         Task<byte[]> ReadFile(string fileId);
+        string ConvertToBase64(IFormFile file);
     }
 }
