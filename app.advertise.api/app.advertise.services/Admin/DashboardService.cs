@@ -1,7 +1,6 @@
 ﻿using app.advertise.DataAccess.Repositories.Admin;
 using app.advertise.dtos.Admin;
 using app.advertise.libraries;
-using app.advertise.libraries.Exceptions;
 using app.advertise.services.Admin.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -21,34 +20,32 @@ namespace app.advertise.services.Admin
 
         public async Task<dtoDashboard> DashboardDetails()
         {
-            var result = new dtoDashboard();
+            var result = new dtoDashboard() { ApplicationStatus = new dtoDashboardStatus(), PrabhagOverview = Enumerable.Empty<dtoDashboardPrabhagOverview>() };
 
             var records = await _adminDashboardRepository.DashboardData(_authData.UlbId);
 
-            if (!records.FlagStatus.All(record => StaticHelpers.RemarkStatus().ContainsKey(record.VAR_APPLI_APPROVFLAG)) || !records.PrabhagOverview.All(record => StaticHelpers.RemarkStatus().ContainsKey(record.VAR_APPLI_APPROVFLAG)))
-                throw new ApiException("Invalid Status key", logger: _logger);
-
-            var statusDictionary = records.FlagStatus.ToDictionary(x => x.VAR_APPLI_APPROVFLAG, x => x.APPROVFLAG_StatusCount);
 
             result.ApplicationStatus = new dtoDashboardStatus()
             {
-                StatusFlag_Pending = GetStatusCount(statusDictionary, "P"),
-                StatusFlag_Approved = GetStatusCount(statusDictionary, "A"),
-                StatusFlag_Closed = GetStatusCount(statusDictionary, "C"),
-                StatusFlag_Rejected = GetStatusCount(statusDictionary, "R"),
+                StatusFlag_Pending = records.FlagStatus.Sum(x => x.Pending),
+                StatusFlag_Approved = records.FlagStatus.Sum(x => x.Approved),
+                StatusFlag_Cancelled = records.FlagStatus.Sum(x => x.Cancelled),
+                StatusFlag_Rejected = records.FlagStatus.Sum(x => x.Rejected)
             };
-            //To Do: Pivod This and one more properties TotalApplication
-            result.PrabhagOverview = records.PrabhagOverview.Select(x => new dtoDashboardPrabhagOverview()
-            {
-                PrabhagName = x.VAR_PRABHAG_NAME,
-                PrabhagId = x.NUM_APPLI_PRABHAGID,
-                AppliStatusFlag = StaticHelpers.RemarkStatus()[x.VAR_APPLI_APPROVFLAG],
-                StatusFlagTotal = x.APPROVFLAG_StatusCount
-            });
+
+            result.PrabhagOverview = from item in records.PrabhagOverview
+                                     select new dtoDashboardPrabhagOverview()
+                                     {
+                                         Pending = item.Pending,
+                                         PrabhaName = item.VAR_PRABHAG_NAME,
+                                         PrabhaId = item.NUM_APPLI_PRABHAGID,
+                                         Total = item.TOTALCOUNT,
+                                         Sanction = item.SANCTION,
+                                         Expired = item.EXPIRED,
+                                     };
 
             return result;
         }
 
-        private static int GetStatusCount(Dictionary<string, int> statusDictionary, string statusFlag) => statusDictionary.TryGetValue(statusFlag, out int statusCount) ? statusCount : 0;
     }
 }

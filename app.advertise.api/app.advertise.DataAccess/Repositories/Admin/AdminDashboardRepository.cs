@@ -7,7 +7,7 @@ namespace app.advertise.DataAccess.Repositories.Admin
 {
     public interface IAdminDashboardRepository
     {
-        Task<(IEnumerable<AdminDashboard> FlagStatus, IEnumerable<AdminDashboard> PrabhagOverview)> DashboardData(int ulbId);
+        Task<(IEnumerable<AdminDashboardStatusOverview> FlagStatus, IEnumerable<AdminDashboardPrabhagOverview> PrabhagOverview)> DashboardData(int ulbId);
     }
     public class AdminDashboardRepository : IAdminDashboardRepository
     {
@@ -19,18 +19,18 @@ namespace app.advertise.DataAccess.Repositories.Admin
             _logger = logger;
         }
 
-        public async Task<(IEnumerable<AdminDashboard> FlagStatus, IEnumerable<AdminDashboard> PrabhagOverview)> DashboardData(int ulbId)
+        public async Task<(IEnumerable<AdminDashboardStatusOverview> FlagStatus, IEnumerable<AdminDashboardPrabhagOverview> PrabhagOverview)> DashboardData(int ulbId)
         {
 
             using (var connection = _context.CreateConnection())
             {
 
-                var flagStatus = connection.QueryAsync<AdminDashboard>(Queries.Admin_Dashboard_Approval_Flag_Status, new { ulbId });
-                var prabhagOverview = connection.QueryAsync<AdminDashboard>(Queries.Admin_Dashboard_Prabhag_Overview, new { ulbId });
+                var flagStatus = connection.QueryAsync<AdminDashboardStatusOverview>(Queries.Admin_Dashboard_Approval_Flag_Status, new { ulbId });
+                var prabhagOverview = connection.QueryAsync<AdminDashboardPrabhagOverview>(Queries.Admin_Dashboard_Prabhag_Overview, new { ulbId });
 
                 await Task.WhenAll(flagStatus, prabhagOverview);
 
-                return (FlagStatus: flagStatus.Result, PrabhagOverview: prabhagOverview.Result);
+                return (FlagStatus: flagStatus.Result ?? Enumerable.Empty<AdminDashboardStatusOverview>(), PrabhagOverview: prabhagOverview.Result ?? Enumerable.Empty<AdminDashboardPrabhagOverview>());
             }
 
 

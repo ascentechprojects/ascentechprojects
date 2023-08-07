@@ -1,11 +1,19 @@
 ﻿namespace app.advertise.DataAccess.Entities.Admin
 {
-    public record AdminDashboard : baseEntity
+    public record AdminDashboardStatusOverview
     {
-        public int NUM_APPLI_ULBID { get; set; }
-        public string VAR_APPLI_APPROVFLAG { get; set; }
-        public int APPROVFLAG_StatusCount { get; set; }
-        public int NUM_APPLI_PRABHAGID { get; set; }
+        public int Pending { get; set; }
+        public int Approved { get; set; }
+        public int Rejected { get; set; }
+        public int Cancelled { get; set; }
+    }
+
+    public record AdminDashboardPrabhagOverview {
+        public int Pending { get; set; }
         public string VAR_PRABHAG_NAME { get; set; }
+        public int NUM_APPLI_PRABHAGID { get; set; }
+        public int TOTALCOUNT { get; set; }
+        public int SANCTION { get; set; }
+        public int EXPIRED { get; set; }
     }
 }
