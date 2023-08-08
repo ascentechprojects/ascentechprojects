@@ -7,24 +7,19 @@
     }
 
 
-    public class dtoDashboardStatus : dtoBase
+    public class dtoDashboardStatus
     {
         public int StatusFlag_Pending { get; set; }
         public int StatusFlag_Rejected { get; set; }
-        public int StatusFlag_Closed { get; set; }
+        public int StatusFlag_Cancelled { get; set; }
         public int StatusFlag_Approved { get; set; }
     }
-    public class dtoDashboardPrabhagOverview : dtoBase
+    public class dtoDashboardPrabhagOverview
     {
-        public string AppliStatusFlag { get; set; }
-        public int StatusFlagTotal { get; set; }
-    }
-
-    public class dtoDashboardPrabhagOverview1 : dtoBase
-    {
-        //prabhag name from dtobase
-        public int Total { get; set; }
         public int Pending { get; set; }
+        public string PrabhaName { get; set; }
+        public int PrabhaId { get; set; }
+        public int Total { get; set; }
         public int Sanction { get; set; }
         public int Expired { get; set; }
     }
