@@ -44,5 +44,26 @@ namespace app.advertise.libraries
             };
         }
 
+
+        public static (DateTime Start, DateTime End) CurrentFinancialYear
+        {
+            get
+            {
+                var year = DateTime.Now.Year;
+                var month = DateTime.Now.Month;
+                var financialYearStartMonth = 4;
+
+                if (month < financialYearStartMonth)
+                {
+                    year--;
+                }
+
+                var financialYearStart = new DateTime(year, financialYearStartMonth, 1);
+                var financialYearEnd = financialYearStart.AddYears(1).AddDays(-1);
+
+                return (Start: financialYearStart, End: financialYearEnd);
+            }
+        }
     }
+
 }

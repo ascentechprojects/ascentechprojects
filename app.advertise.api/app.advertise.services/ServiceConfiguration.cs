@@ -19,11 +19,12 @@ namespace app.advertise.services
             services.AddTransient<IHoardingMasterService, HoardingMasterService>();
             services.AddTransient<IListItemService, ListItemService>();
             services.AddTransient<IApplicationMasterService, ApplicationMasterService>();
-            services.AddTransient<IDashboardService, DashboardService>();
+            services.AddTransient<Admin.Interfaces.IDashboardService, Admin.DashboardService>();
 
             services.AddTransient<IApplicationService, ApplicationService>();
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IoAuthService, oAuthService>();
+            services.AddTransient<Vendor.Interfaces.IDashboardService, Vendor.DashboardService>();
             return services;
         }
     }
