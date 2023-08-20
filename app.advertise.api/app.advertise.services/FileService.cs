@@ -23,12 +23,11 @@ namespace app.advertise.services
             _logger = logger;
         }
 
-        public string ConvertToBase64(IFormFile file)
+        public byte[] ConvertToBytes(IFormFile file)
         {
             using var memoryStream = new MemoryStream();
             file.CopyTo(memoryStream);
-            byte[] fileBytes = memoryStream.ToArray();
-            return Convert.ToBase64String(fileBytes);
+            return memoryStream.ToArray();
         }
         public async Task WriteFile(dtoFormFile file)
         {

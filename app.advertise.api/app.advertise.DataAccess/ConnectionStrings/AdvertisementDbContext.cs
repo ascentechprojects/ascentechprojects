@@ -15,5 +15,7 @@ namespace app.advertise.DataAccess.ConnectionStrings
         }
         public IDbConnection CreateConnection()
        => new OracleConnection(_connectionString);
+
+        public OracleConnection OracleConnection=>new (_connectionString);
     }
 }

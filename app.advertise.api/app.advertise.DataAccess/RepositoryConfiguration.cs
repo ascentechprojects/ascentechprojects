@@ -24,6 +24,7 @@ namespace app.advertise.DataAccess
             services.AddTransient<IApplicationRepository, ApplicationRepository>();
             services.AddTransient<ICitizenRepository, CitizenRepository>();
             services.AddTransient<IDashboardRepository, DashboardRepository>();
+            services.AddTransient<IAppliDocRepository,AppliDocRepository>();
             return services;
 
         }
