@@ -19,14 +19,14 @@ namespace app.advertise.services.Vendor
         private readonly VendorRequestHeaders _authData;
         private readonly IDataProtector _dataProtector;
         private readonly ILogger<ApplicationService> _logger;
-        private readonly IFileService _fileService;
-        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger, IFileService fileService)
+        private readonly IAppliDocService _appliDocService;
+        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger,  IAppliDocService appliDocService)
         {
             _repository = repository;
             _authData = authData;
             _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
             _logger = logger;
-            _fileService = fileService;
+            _appliDocService = appliDocService;
         }
 
         public async Task<dtoApplicationDetails> AddApplication(dtoApplicationDetails dto, IFormFile formFile)
@@ -58,7 +58,8 @@ namespace app.advertise.services.Vendor
 
             var appResult = await _repository.InserUpdateApplication(parameters);
 
-            await _fileService.WriteFile(new dtos.dtoFormFile() { FormFile = formFile, FileName = $"{appResult.NUM_APPLI_ID}.{formFile.FileName.Split('.').Last()}" });
+
+            await _appliDocService.InsertUpdateDoc(new dtoFormFile() { FormFile = formFile, ApplicationId = appResult.NUM_APPLI_ID, ApplicationNumber = appResult.VAR_APPLI_APPLINO });
 
             return new dtoApplicationDetails()
             {
@@ -104,7 +105,7 @@ namespace app.advertise.services.Vendor
             var appResult = await _repository.InserUpdateApplication(parameters);
 
             if (formFile != null)
-                await _fileService.WriteFile(new dtos.dtoFormFile() { FormFile = formFile, FileName = $"{appResult.NUM_APPLI_ID}.{formFile.FileName.Split('.').Last()}" });
+                await _appliDocService.InsertUpdateDoc(new dtoFormFile() { FormFile = formFile, ApplicationId = appResult.NUM_APPLI_ID, ApplicationNumber = exisRecord.VAR_APPLI_APPLINO });
 
             return new dtoApplicationDetails()
             {
@@ -180,7 +181,7 @@ namespace app.advertise.services.Vendor
             };
         }
 
-        public async Task<byte[]> AppImageById(string id) => await _fileService.ReadFile(_dataProtector.Unprotect(id));
+        public async Task<byte[]> AppImageById(string id) => await _appliDocService.GetFileBytes(new dtoFormFile() { ApplicationId= Convert.ToInt32(_dataProtector.Unprotect(id)) });
 
 
         public async Task<IEnumerable<dtoApplication>> AppCloseSearch(dtoAppClose dto)
@@ -259,8 +260,8 @@ namespace app.advertise.services.Vendor
             parameters.Add("userId", _authData.UserId);
             parameters.Add("status", statusKey);
 
-           
-           var repoResult = await _repository.ApplicationsByStatus(parameters, string.Equals(status, "all", StringComparison.OrdinalIgnoreCase));
+
+            var repoResult = await _repository.ApplicationsByStatus(parameters, string.Equals(status, "all", StringComparison.OrdinalIgnoreCase));
 
             return repoResult.Select(record => new dtoApplication
             {
@@ -276,7 +277,7 @@ namespace app.advertise.services.Vendor
             });
         }
 
-        public async Task<dtoAppTemplate> ValidateApplication(string id,string appno)
+        public async Task<dtoAppTemplate> ValidateApplication(string id, string appno)
         {
             var recordId = Convert.ToInt32(_dataProtector.Unprotect(id));
 
@@ -284,7 +285,7 @@ namespace app.advertise.services.Vendor
             parameters.Add("p_appli_id", recordId);
             parameters.Add("p_app_no", appno);
 
-            var record = await _repository.ValidateAppById(parameters,!string.IsNullOrEmpty(appno)) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
+            var record = await _repository.ValidateAppById(parameters, !string.IsNullOrEmpty(appno)) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
 
             return new dtoAppTemplate()
             {
@@ -305,11 +306,12 @@ namespace app.advertise.services.Vendor
                 AppliHordingName = record.VAR_HORDING_HOLDNAME,
                 DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
                 HordingTypeName = record.VAR_HOARDINGTYPE_NAME,
-                AppliLocationName=record.VAR_LOCATION_NAME,
+                AppliLocationName = record.VAR_LOCATION_NAME,
 
-                OrgName=record.VAR_CORPORATION_NAME
+                OrgName = record.VAR_CORPORATION_NAME
             };
         }
+
 
     }
 }

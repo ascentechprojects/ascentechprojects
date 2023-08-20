@@ -6,5 +6,8 @@ namespace app.advertise.dtos
     {
         public IFormFile FormFile { get; set; }
         public string FileName { get;set; }
+
+        public int ApplicationId { get; set; }
+        public string ApplicationNumber { get; set; }
     }
 }

@@ -1,15 +1,9 @@
 ﻿using app.advertise.DataAccess.ConnectionStrings;
 using app.advertise.DataAccess.Entities.Vendor;
-using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using Dapper;
 using Microsoft.Extensions.Logging;
-using Oracle.ManagedDataAccess.Client;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Reflection;
 
 namespace app.advertise.DataAccess.Repositories.Vendor
 {
@@ -23,7 +17,6 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         Task<IEnumerable<Application>> CloseApplications(IEnumerable<Application> applications, DynamicParameters parameters);
         Task<IEnumerable<Application>> ApplicationsByStatus(DynamicParameters parameters, bool all);
         Task<Application> ValidateAppById(DynamicParameters parameters,bool appNotNull=false);
-        Task UpdateImage(OracleParameter parameters);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -143,49 +136,6 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         {
             using var connection = _context.CreateConnection();
             return await connection.QueryFirstOrDefaultAsync<Application>(appNotNull? Queries.Validate_Appli_By_Id_Number: Queries.Validate_Appli_By_Id, parameters) ?? throw new DBException("No record found.",_logger);
-        }
-
-        public async Task UpdateImage(OracleParameter parameters)
-        {
-            try
-            {
-                DynamicParameters parameters2 = new DynamicParameters();
-                parameters2.Add("abc","XY");
-                string sql = "Update Advertisement.aoad_applidoc_mst SET BLO_APPLIDOC_IMAGE =:abc WHERE NUM_APPLIDOC_ID = 343";//"INSERT INTO Test (Name, Image) VALUES (:Name, :Image)";
-
-                using (var orc = _context.OracleConnection)
-                {
-                    orc.Open();
-                    OracleCommand cmd = new OracleCommand(sql, orc);
-                    cmd.BindByName=true;
-                    cmd.Parameters.Add(parameters);
-                    OracleDataAdapter oda = new OracleDataAdapter(cmd);
-                    var dt = new DataTable();
-                    oda.Fill(dt);
-                    cmd.ExecuteNonQuery();
-                    cmd.Dispose();
-
-                    //UPDATE Advertisement.AOAD_DISPLAYTYPE_MST Set VAR_DISPLAYTYPE_STATUS=:VAR_DISPLAYTYPE_STATUS,VAR_DISPLAYTYPE_UPDBY=:VAR_DISPLAYTYPE_UPDBY,DAT_DISPLAYTYPE_UPDT=:DAT_DISPLAYTYPE_UPDT Where NUM_DISPLAYTYPE_ID=:NUM_DISPLAYTYPE_ID
-                    // SQL query with parameters
-                    //string sql = "Update aoad_applidoc_mst SET BLO_APPLIDOC_IMAGE =:BLO_APPLIDOC_IMAGE WHERE NUM_APPLIDOC_ID = 343";//"INSERT INTO Test (Name, Image) VALUES (:Name, :Image)";
-
-                    // Execute the query using Dapper
-                    //orc.Execute(sql, parameters);
-                }
-                /*  using var connection = _context.CreateConnection();
-                  //connection.Open();
-                  //OracleCommand command = new OracleCommand(Queries.Update_Appli_Doc, connection);
-                  var rowsAffected = await connection.ExecuteAsync(sql, parameters);
-                  */
-                //if (!(rowsAffected > 0))
-                //    throw new DBException($"Failed to update image for {parameters.VAR_APPLIDOC_APPLINO}", _logger);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-            
         }
     }
 }

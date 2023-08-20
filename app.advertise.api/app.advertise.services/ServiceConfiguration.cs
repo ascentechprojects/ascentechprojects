@@ -25,6 +25,7 @@ namespace app.advertise.services
             services.AddTransient<IFileService, FileService>();
             services.AddTransient<IoAuthService, oAuthService>();
             services.AddTransient<Vendor.Interfaces.IDashboardService, Vendor.DashboardService>();
+            services.AddTransient<IAppliDocService, AppliDocService>();
             return services;
         }
     }
