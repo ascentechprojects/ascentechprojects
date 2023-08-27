@@ -25,7 +25,8 @@ namespace app.advertise.services.Vendor
 
             var result = new dtoDashboard() { ApplicationStatus = new dtoStatusOverview(), PrabhagOverview = Enumerable.Empty<dtoPrabhagOverview>() };
             var parameters = new DynamicParameters();
-            parameters.Add("ulbId", 1, dbType:DbType.Int32);
+            parameters.Add("userId", _authData.UserId, DbType.String);
+            parameters.Add("ulbId", _authData.UlbId, dbType:DbType.Int32);
             parameters.Add("finStart", currentFin.Start.Date, dbType: DbType.Date);
             parameters.Add("finEnd", currentFin.End.Date, dbType: DbType.Date);
 
