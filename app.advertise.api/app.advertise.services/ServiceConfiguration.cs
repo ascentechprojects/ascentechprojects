@@ -26,6 +26,8 @@ namespace app.advertise.services
             services.AddTransient<IoAuthService, oAuthService>();
             services.AddTransient<Vendor.Interfaces.IDashboardService, Vendor.DashboardService>();
             services.AddTransient<IAppliDocService, AppliDocService>();
+
+            services.AddScoped<IEmailService, EmailService>();
             return services;
         }
     }

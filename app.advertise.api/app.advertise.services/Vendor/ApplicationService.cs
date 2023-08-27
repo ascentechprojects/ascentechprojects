@@ -3,7 +3,6 @@ using app.advertise.dtos;
 using app.advertise.dtos.Vendor;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
-using app.advertise.services.Interfaces;
 using app.advertise.services.Vendor.Interfaces;
 using Dapper;
 using Microsoft.AspNetCore.DataProtection;

@@ -13,5 +13,8 @@
         public string AadharNo { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string EmailLink { get; set; }
+        public string User { get;set; }
+
+        public string P_UlbId { get; set; }
     }
 }
