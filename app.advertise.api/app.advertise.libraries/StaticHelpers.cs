@@ -64,6 +64,13 @@ namespace app.advertise.libraries
                 return (Start: financialYearStart, End: financialYearEnd);
             }
         }
+
+        public static int Random4Digits()
+        {
+            var random = new Random();
+            return random.Next(1000, 10000);
+        }
+
     }
 
 }

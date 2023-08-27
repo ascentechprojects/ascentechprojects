@@ -34,7 +34,7 @@ namespace app.advertise.libraries.Middlewares
             if (context.Request.Headers.ContainsKey(AppConstants.Header_User))
             {
                 var user = context.Request.Headers[AppConstants.Header_User].ToString().Trim('"');
-                _userRequestHeaders.UserId = string.IsNullOrEmpty(user) ? throw new ApiException("Invalid User header", _logger) : _dataProtector.Unprotect(user);
+                _userRequestHeaders.UserId = string.IsNullOrEmpty(user) ? throw new ApiException("Invalid User header", _logger) : _dataProtector.Unprotect(user).ToLower();
             }
 
             _userRequestHeaders.IpAddress= context.Connection.RemoteIpAddress.ToString()?? userIpAddress;
@@ -49,6 +49,11 @@ namespace app.advertise.libraries.Middlewares
                 _citizenRequestHeaders.UlbId = string.IsNullOrEmpty(venulb) ? throw new ApiException($"Invalid Ulb header {venulb}", _logger) : !(Convert.ToInt32(_dataProtector.Unprotect(venulb)) > 0) ? throw new ApiException("Invalid Ulb header", _logger) : Convert.ToInt32(_dataProtector.Unprotect(venulb));
             }
 
+            if (context.Request.Headers.ContainsKey(AppConstants.Header_Vendor_User))
+            {
+                var venUser = context.Request.Headers[AppConstants.Header_Vendor_User].ToString().Trim('"');
+                _citizenRequestHeaders.UserId = string.IsNullOrEmpty(venUser) ? throw new ApiException($"Invalid User header", _logger) : _dataProtector.Unprotect(venUser).ToLower();
+            }
 
             await _next(context);
         }

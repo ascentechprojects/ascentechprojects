@@ -12,6 +12,9 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         Task<CitizenUser> VerifyCitizen(DynamicParameters parameters);
         Task<CitizenUser> RegisterCitizen(DynamicParameters parameters);
         Task<CitizenUser> VerifyUserEmail(CitizenUser citizen);
+        void UpdateUserOTP(CitizenUser citizen);
+        CitizenUser VerifyUserOTP(CitizenUser citizen);
+        Task UpdateUserPassword(CitizenUser citizen);
     }
     public class CitizenRepository : ICitizenRepository
     {
@@ -48,7 +51,7 @@ namespace app.advertise.DataAccess.Repositories.Vendor
                 VAR_CITIZENUSER_NAME = parameters.Get<string>("out_userFullName"),
                 VAR_CORPORATION_NAME = parameters.Get<string>("out_corporationName"),
                 VAR_CORPORATION_ADDRESS = parameters.Get<string>("out_corporationAddr")
-            }; 
+            };
         }
 
         public async Task<CitizenUser> RegisterCitizen(DynamicParameters parameters)
@@ -77,6 +80,31 @@ namespace app.advertise.DataAccess.Repositories.Vendor
 
             using var connection = _context.CreateConnection();
             return await connection.QueryFirstOrDefaultAsync<CitizenUser>(Queries.Select_Citizen_By_Email, citizen);
+        }
+
+        public void UpdateUserOTP(CitizenUser citizen)
+        {
+            using var connection = _context.CreateConnection();
+            var affectedRow = connection.Execute(Queries.Update_User_OTP, citizen);
+
+            if (affectedRow != 1)
+                throw new DBException($"Failed to update verification key for {citizen.VAR_CITIZENUSER_EMAILID}", _logger);
+        }
+
+        public CitizenUser VerifyUserOTP(CitizenUser citizen)
+        {
+
+            using var connection = _context.CreateConnection();
+            return  connection.QueryFirstOrDefault<CitizenUser>(Queries.Verify_User_OTP, citizen);
+        }
+
+        public async Task UpdateUserPassword(CitizenUser citizen)
+        {
+            using var connection = _context.CreateConnection();
+            var affectedRow =await connection.ExecuteAsync(Queries.Update_User_Password, citizen);
+
+            if (affectedRow != 1)
+                throw new DBException($"Failed to reset password for {citizen.VAR_CITIZENUSER_EMAILID}", _logger);
         }
     }
 }
