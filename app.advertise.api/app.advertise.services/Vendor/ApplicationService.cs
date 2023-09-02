@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Data;
+using System.Linq;
 
 namespace app.advertise.services.Vendor
 {
@@ -176,7 +177,7 @@ namespace app.advertise.services.Vendor
                 HordingWidth = record.NUM_HORDING_WIDTH,
                 HordingTotalSqFt = record.NUM_HORDING_TOTALSQFT,
                 DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
-                HordingTypeName = record.VAR_HORDING_HOLDNAME
+                HordingTypeName = record.VAR_HOARDINGTYPE_NAME
             };
         }
 
@@ -211,12 +212,12 @@ namespace app.advertise.services.Vendor
             });
         }
 
-        public async Task<IEnumerable<dtoApplication>> CloseApplications(dtoAppClose dto)
+        public async Task CloseApplications(dtoAppClose dto)
         {
             var applicationIds = dto.AppliIds.Select(x => _dataProtector.Unprotect(x));
             var getParameters = new DynamicParameters();
             getParameters.Add("p_appli_ids", applicationIds);
-            getParameters.Add("p_ulb_id", _authData.UlbId);
+            getParameters.Add("p_ulb_id", 1);
             getParameters.Add("prabhagId", dto.AppliPrabhagId);
             getParameters.Add("locationId", dto.AppliLocationId);
             getParameters.Add("hordingId", dto.AppliHordingId);
@@ -236,13 +237,11 @@ namespace app.advertise.services.Vendor
             parameters.Add("in_ipaddress", _authData.IpAddress, DbType.String, ParameterDirection.Input);
             parameters.Add("in_source", _authData.Source, DbType.String, ParameterDirection.Input);
             parameters.Add("in_remark", dto.Remark, DbType.String, ParameterDirection.Input);
-
-            var result = await _repository.CloseApplications(records, parameters);
-
-            return result.Select(record => new dtoApplication
-            {
-                ApplicationNo = record.VAR_APPLI_APPLINO,
-            });
+            parameters.Add("IN_AppCloseID", 0, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("in_Holding", dto.AppliHordingId, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("in_STR", "870$,869$", DbType.String, ParameterDirection.Input);
+            //string.Join("$",applicationIds)
+            await _repository.CloseApplications(parameters);
         }
 
         public async Task<IEnumerable<dtoApplication>> ApplicationsByStatus(string status)
@@ -311,6 +310,44 @@ namespace app.advertise.services.Vendor
             };
         }
 
+        public async Task<dtoViewApplication> ViewApplicationById(string id)
+        {
+            var recordId = Convert.ToInt32(_dataProtector.Unprotect(id));
 
+            var parameters = new DynamicParameters();
+            parameters.Add("p_appli_id", recordId);
+            parameters.Add("p_ulb_id", _authData.UlbId);
+
+            var record = await _repository.ViewApplicationById(parameters) ?? throw new ApiException(AppConstants.Msg_RecordNotFound, _logger);
+
+            return new dtoViewApplication()
+            {
+                ApplicationNo = record.VAR_APPLI_APPLINO,
+                AppliAppName = record.VAR_APPLI_APPLINAME,
+                AppliLicenseNo = record.VAR_APPLI_LICENO,
+                AppliLicenseOutNo = record.VAR_APPLI_LICEOUTNO,
+                AppliAddress = record.VAR_APPLI_ADDRESS,
+                AppliEmail = record.VAR_APPLI_EMAIL,
+                AppliMobileNo = record.NUM_APPLI_MOBILENO,
+                AppliFromDate = record.DAT_APPLI_FROMDT.ToString(AppConstants.Date_Dafault_Format),
+                AppliUpToDate = record.DAT_APPLI_UPTODT.ToString(AppConstants.Date_Dafault_Format),
+                RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
+                Quantity = record.NUM_APPLI_QTY,
+                AppliPrabhag = record.VAR_PRABHAG_NAME,
+                AppliLocation = record.VAR_LOCATION_NAME,
+                AppliHording = record.VAR_HORDING_HOLDNAME,
+                ApprovRemark = record.VAR_APPLI_APPROVREMARK,
+                ApplicationDate = record.DAT_APPLI_APPLIDT.ToString(AppConstants.Date_Dafault_Format),
+
+
+                HordingHoldAddress = record.VAR_HORDING_HOLDADDRESS,
+                HordingOwnership = StaticHelpers.HoardingOwnerships().TryGetValue(record.VAR_HORDING_OWNERSHIP, out var value) && value != null && !string.IsNullOrEmpty(value) ? value : string.Empty,
+                HordingLength = record.NUM_HORDING_LENGTH,
+                HordingWidth = record.NUM_HORDING_WIDTH,
+                HordingTotalSqFt = record.NUM_HORDING_TOTALSQFT,
+                DisplayTypeName = record.VAR_DISPLAYTYPE_NAME,
+                HordingTypeName = record.VAR_HOARDINGTYPE_NAME
+            };
+        }
     }
 }

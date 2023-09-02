@@ -14,9 +14,10 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         Task<Application> ApplicationById(DynamicParameters parameters);
         Task<IEnumerable<Application>> AppCloseSearch(DynamicParameters parameters);
         Task<IEnumerable<Application>> ApplicationByIds(DynamicParameters parameters);
-        Task<IEnumerable<Application>> CloseApplications(IEnumerable<Application> applications, DynamicParameters parameters);
+        Task CloseApplications(DynamicParameters parameters);
         Task<IEnumerable<Application>> ApplicationsByStatus(DynamicParameters parameters, bool all);
         Task<Application> ValidateAppById(DynamicParameters parameters,bool appNotNull=false);
+        Task<Application> ViewApplicationById(DynamicParameters parameters);
     }
     public class ApplicationRepository : IApplicationRepository
     {
@@ -95,22 +96,30 @@ namespace app.advertise.DataAccess.Repositories.Vendor
             return await connection.QueryAsync<Application>(Queries.Select_multi_Applications, parameters) ?? Enumerable.Empty<Application>();
         }
 
-        public async Task<IEnumerable<Application>> CloseApplications(IEnumerable<Application> applications, DynamicParameters parameters)
+        public async Task CloseApplications(DynamicParameters parameters)
         {
-            var result = new List<Application>();
 
-            try
-            {
                 parameters.Add("out_AppCloseID", dbType: DbType.String, direction: ParameterDirection.Output, size: 100);
                 parameters.Add("out_errorcode", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 parameters.Add("out_errormsg", dbType: DbType.String, size: 4000, direction: ParameterDirection.Output);
 
                 using var connection = _context.CreateConnection();
-                foreach (var app in applications)
+                await connection.ExecuteAsync(Queries.SP_aoad_AppliClose_ins, parameters, commandType: CommandType.StoredProcedure);
+
+                var closeId = parameters.Get<string>("out_AppCloseID");
+                var errorCode = parameters.Get<int>("out_errcode");
+                var errorMsg = parameters.Get<string>("out_ErrMsg")??string.Empty;
+
+                if (errorCode != 9999)
+                    throw new DBException($"Failed to close the application, {errorMsg}", _logger);
+
+
+                /*foreach (var app in applications)
                 {
                     parameters.Add("IN_AppCloseID", app.num_appliclose_id, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("in_Holding", app.NUM_APPLI_HORDINGID, DbType.Int32, ParameterDirection.Input);
-                    parameters.Add("in_STR", app.VAR_APPLI_APPLINO, DbType.String, ParameterDirection.Input);
+                    parameters.Add("in_STR", $"{app.VAR_APPLI_APPLINO}$", DbType.String, ParameterDirection.Input);
+
 
                     await connection.ExecuteAsync(Queries.SP_aoad_AppliClose_ins, parameters, commandType: CommandType.StoredProcedure);
 
@@ -120,15 +129,7 @@ namespace app.advertise.DataAccess.Repositories.Vendor
                     errorCode = 9999;
                     if (errorCode != 9999)
                         result.Add(new Application { VAR_APPLI_APPLINO = app.VAR_APPLI_APPLINO });
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw new DBException($"Failed to close the application; {ex.Message}", _logger);
-            }
-
-            return result;
+                }*/
 
         }
 
@@ -136,6 +137,12 @@ namespace app.advertise.DataAccess.Repositories.Vendor
         {
             using var connection = _context.CreateConnection();
             return await connection.QueryFirstOrDefaultAsync<Application>(appNotNull? Queries.Validate_Appli_By_Id_Number: Queries.Validate_Appli_By_Id, parameters) ?? throw new DBException("No record found.",_logger);
+        }
+
+        public async Task<Application> ViewApplicationById(DynamicParameters parameters)
+        {
+            using var connection = _context.CreateConnection();
+            return await connection.QueryFirstOrDefaultAsync<Application>(Queries.View_Appli_By_Id, parameters) ?? new Application();
         }
     }
 }

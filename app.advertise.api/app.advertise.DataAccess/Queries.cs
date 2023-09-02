@@ -36,10 +36,10 @@
         internal const string ListItem_Locations = "select NUM_LOCATION_ID As Id, VAR_LOCATION_NAME As DisplayName from aoad_location_mst where VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_ULBID=:ulbId";
         internal const string ListItem_DisplayTypes = "Select NUM_DISPLAYTYPE_ID As Id ,VAR_DISPLAYTYPE_NAME As DisplayName,VAR_DISPLAYTYPE_STATUS as Active from aoad_displaytype_mst where VAR_DISPLAYTYPE_STATUS='A'";
         internal const string ListItem_Prabhags = "SELECT NUM_PRABHAG_ID As Id, VAR_PRABHAG_NAME As DisplayName from aoad_prabhag_mas where VAR_PRABHAG_STATUS='Y' OR VAR_PRABHAG_STATUS= 'A' AND VAR_PRABHAG_ULBID=:ulbId";
-        internal const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId AND NUM_LOCATION_ULBID=:ulbId";
-        internal const string ListItem_Hording_by_LocationId = "SELECT num_hording_id AS Id,var_hording_holdname As DisplayName from aoad_hording_mst WHERE num_hording_locationid=:locationid AND var_hording_active='A' AND NUM_HORDING_ULBID=:ulbId";
-        //internal const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId";
-        //internal const string ListItem_Hording_by_LocationId = "SELECT num_hording_id AS Id,var_hording_holdname As DisplayName from aoad_hording_mst WHERE num_hording_locationid=:locationid AND var_hording_active='A'";
+        //internal const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId AND NUM_LOCATION_ULBID=:ulbId";
+        //internal const string ListItem_Hording_by_LocationId = "SELECT num_hording_id AS Id,var_hording_holdname As DisplayName from aoad_hording_mst WHERE num_hording_locationid=:locationid AND var_hording_active='A' AND NUM_HORDING_ULBID=:ulbId";
+        internal const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId";
+        internal const string ListItem_Hording_by_LocationId = "SELECT num_hording_id AS Id,var_hording_holdname As DisplayName from aoad_hording_mst WHERE num_hording_locationid=:locationid AND var_hording_active='A'";
         internal const string ListItem_Corporations = "SELECT NUM_CORPORATION_ID AS Id,VAR_CORPORATION_NAME AS DisplayName,VAR_CORPORATION_MNAME FROM admins.aoma_corporation_mas WHERE var_corporation_name IS NOT NULL";
 
 
@@ -121,6 +121,21 @@
                   VALUES (:NUM_APPLIDOC_ULBID, :NUM_APPLIDOC_APPID, :VAR_APPLIDOC_APPLINO, :BLO_APPLIDOC_IMAGE, :VAR_APPLIDOC_INSBY, TO_DATE(:DAT_APPLIDOC_INSDT, 'YYYY-MM-DD HH24:MI:SS'))";
 
         internal const string Update_User_OTP = "UPDATE aoad_citizennuser_mst SET NUM_CITIZENUSER_OTP=:NUM_CITIZENUSER_OTP WHERE NUM_CITIZENUSER_USERID=:NUM_CITIZENUSER_USERID AND NUM_CITIZENUSER_ULBID=:NUM_CITIZENUSER_ULBID";
+        internal const string View_Appli_By_Id =
+            @"SELECT apm.NUM_APPLI_ULBID,apm.NUM_APPLI_ID,apm.VAR_APPLI_APPLINO,apm.DAT_APPLI_APPLIDT,apm.VAR_APPLI_LICENO, apm.VAR_APPLI_LICEOUTNO,apm.VAR_APPLI_APPLINAME,apm.VAR_APPLI_ADDRESS,apm.VAR_APPLI_EMAIL, apm.NUM_APPLI_MOBILENO,apm.DAT_APPLI_FROMDT,apm.DAT_APPLI_UPTODT,apm.NUM_APPLI_QTY, apm.DAT_APPLI_INSDT,apm.VAR_APPLI_APPROVFLAG,apm.DAT_APPLI_APPROVDT,apm.DAT_APPLI_UPDT,apm.VAR_APPLI_APPROVBY,apm.VAR_APPLI_APPROVREMARK, apm.NUM_APPLI_HORDINGID,apm.NUM_APPLI_PRABHAGID,apm.NUM_APPLI_LOCATIONID, 
+                ahm.VAR_HORDING_HOLDNAME,ahm.VAR_HORDING_HOLDADDRESS,ahm.NUM_HORDING_LENGTH,ahm.NUM_HORDING_WIDTH,ahm.NUM_HORDING_TOTALSQFT,ahm.VAR_HORDING_OWNERSHIP, 
+                adm.VAR_DISPLAYTYPE_NAME,adm.num_displaytype_id,
+                ahtm.VAR_HOARDINGTYPE_NAME,
+                aprm.VAR_PRABHAG_NAME, 
+                alm.VAR_LOCATION_NAME
+                FROM aoad_appli_mst apm 
+                LEFT JOIN aoad_hording_mst ahm ON ahm.NUM_HORDING_ID = apm.NUM_APPLI_HORDINGID   
+                LEFT JOIN aoad_displaytype_mst adm ON adm.num_displaytype_id=ahm.NUM_HORDING_DISPTYPEID  
+                LEFT JOIN aoad_hoardingtype_mst ahtm ON ahtm.NUM_HOARDINGTYPE_ID=ahm.VAR_HORDING_HOLDTYPE 
+                LEFT JOIN aoad_prabhag_mas aprm ON aprm.NUM_PRABHAG_ID=apm.NUM_APPLI_PRABHAGID
+                LEFT JOIN aoad_location_mst alm ON alm.NUM_LOCATION_ID=apm.NUM_APPLI_LOCATIONID
+                WHERE  apm.NUM_APPLI_ULBID=:p_ulb_id AND apm.NUM_APPLI_ID=:p_appli_id";
+
     }
 }
 

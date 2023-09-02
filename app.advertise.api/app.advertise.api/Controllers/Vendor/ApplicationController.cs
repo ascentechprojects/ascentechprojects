@@ -219,10 +219,29 @@ namespace app.advertise.api.Controllers.Vendor
 
             try
             {
-                return Ok(new ApiResponse<IEnumerable<dtoApplication>>
+                await _service.CloseApplications(dto);
+
+                return Ok(new ApiResponse
+                {
+                    Status = libraries.StatusCode.Ok
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/View")]
+        public async Task<IActionResult> ViewApplication(string id)
+        {
+            try
+            {
+                return Ok(new ApiResponse<dtoViewApplication>
                 {
                     Status = libraries.StatusCode.Ok,
-                    Data = await _service.CloseApplications(dto)
+                    Data = await _service.ViewApplicationById(id)
                 });
             }
             catch (Exception ex)

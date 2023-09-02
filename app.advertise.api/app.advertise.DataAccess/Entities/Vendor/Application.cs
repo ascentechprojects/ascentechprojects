@@ -44,5 +44,6 @@
 
         public string VAR_CORPORATION_NAME { get; set; }
         public int NUM_CORPORATION_ID { get; set; }
+
     }
 }
