@@ -22,5 +22,6 @@
         public string AppliPrabhagName { get; set; }
         public string AppliHordingName { get; set; }
         public string OrgName { get; set; }
+        public string OrgLogo { get; set; }
     }
 }

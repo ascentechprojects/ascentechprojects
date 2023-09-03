@@ -3,6 +3,7 @@ using app.advertise.dtos;
 using app.advertise.dtos.Vendor;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
+using app.advertise.services.Interfaces;
 using app.advertise.services.Vendor.Interfaces;
 using Dapper;
 using Microsoft.AspNetCore.DataProtection;
@@ -20,13 +21,15 @@ namespace app.advertise.services.Vendor
         private readonly IDataProtector _dataProtector;
         private readonly ILogger<ApplicationService> _logger;
         private readonly IAppliDocService _appliDocService;
-        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger,  IAppliDocService appliDocService)
+        private readonly IFileService _fileService;
+        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger,  IAppliDocService appliDocService, IFileService fileService)
         {
             _repository = repository;
             _authData = authData;
             _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
             _logger = logger;
             _appliDocService = appliDocService;
+            _fileService= fileService;
         }
 
         public async Task<dtoApplicationDetails> AddApplication(dtoApplicationDetails dto, IFormFile formFile)
@@ -306,7 +309,8 @@ namespace app.advertise.services.Vendor
                 HordingTypeName = record.VAR_HOARDINGTYPE_NAME,
                 AppliLocationName = record.VAR_LOCATION_NAME,
 
-                OrgName = record.VAR_CORPORATION_NAME
+                OrgName = record.VAR_CORPORATION_NAME,
+                OrgLogo= _fileService.ByteToBase64(record.BLO_APPLIDOC_IMAGE)
             };
         }
 

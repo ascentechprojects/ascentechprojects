@@ -45,5 +45,6 @@
         public string VAR_CORPORATION_NAME { get; set; }
         public int NUM_CORPORATION_ID { get; set; }
 
+        public byte[] BLO_APPLIDOC_IMAGE { get;set; }
     }
 }
