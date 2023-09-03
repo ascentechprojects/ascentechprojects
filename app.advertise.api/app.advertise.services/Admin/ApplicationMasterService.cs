@@ -3,6 +3,7 @@ using app.advertise.dtos.Admin;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using app.advertise.services.Admin.Interfaces;
+using app.advertise.services.Interfaces;
 using Dapper;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
@@ -16,12 +17,14 @@ namespace app.advertise.services.Admin
         private readonly UserRequestHeaders _authData;
         private readonly IDataProtector _dataProtector;
         private readonly ILogger<ApplicationMasterService> _logger;
-        public ApplicationMasterService(IApplicationMasterRespository repository, UserRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationMasterService> logger)
+        private readonly IFileService _fileService;
+        public ApplicationMasterService(IApplicationMasterRespository repository, UserRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationMasterService> logger, IFileService fileService)
         {
             _repository = repository;
             _authData = authData;
             _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
             _logger = logger;
+            _fileService = fileService;
         }
 
         public async Task<IEnumerable<dtoApplicationAuthResult>> AuthSerach(dtoApplicationAuthRequest dto)
@@ -95,7 +98,8 @@ namespace app.advertise.services.Admin
                 LocationName = record.VAR_LOCATION_NAME,
                 RemarkFlag = StaticHelpers.RemarkStatus().FirstOrDefault(x => x.Key.Equals(record.VAR_APPLI_APPROVFLAG)).Value,
                 Quantity = record.NUM_APPLI_QTY,
-                Remark = record.VAR_APPLI_APPROVREMARK
+                Remark = record.VAR_APPLI_APPROVREMARK,
+                AppImage= _fileService.ByteToBase64(record.BLO_APPLIDOC_IMAGE)
             };
         }
 

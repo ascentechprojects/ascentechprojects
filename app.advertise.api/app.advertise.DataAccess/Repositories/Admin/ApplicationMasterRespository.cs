@@ -1,5 +1,6 @@
 ﻿using app.advertise.DataAccess.ConnectionStrings;
 using app.advertise.DataAccess.Entities.Admin;
+using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
 using Dapper;
 using Microsoft.Extensions.Logging;
@@ -44,7 +45,7 @@ namespace app.advertise.DataAccess.Repositories.Admin
         public async Task<Application> ApplicationById(DynamicParameters parameters)
         {
             using var connection = _context.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<Application>(Queries.Application_Details_By_AppliId, parameters) ?? new Application();
+            return await connection.QueryFirstOrDefaultAsync<Application>(Queries.Application_Details_By_AppliId, parameters) ?? throw new DBException(AppConstants.Msg_RecordNotFound,_logger);
         }
 
         public async Task UpdateAppliStatus(DynamicParameters parameters)

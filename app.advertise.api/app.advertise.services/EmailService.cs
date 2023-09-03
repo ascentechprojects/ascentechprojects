@@ -27,8 +27,7 @@ namespace app.advertise.services
                 {
                     Port = _settings.SmtpPort,
                     Credentials = new NetworkCredential(_settings.Username, _settings.Password),
-                    EnableSsl = true,
-                    UseDefaultCredentials = true
+                    EnableSsl = false
                 };
 
                 var mailMessage = new MailMessage

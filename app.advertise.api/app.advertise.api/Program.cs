@@ -47,7 +47,6 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 builder.Configuration.GetSection("ConnectionStrings").Get<DBSettings>();
-builder.Services.Configure<FileStorageSetting>(builder.Configuration.GetSection("FileStorage"));
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 

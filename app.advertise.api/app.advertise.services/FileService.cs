@@ -13,7 +13,15 @@ namespace app.advertise.services
             file.CopyTo(memoryStream);
             return memoryStream.ToArray();
         }
-        
+
+
+        public string ByteToBase64(byte[] bytes)
+        {
+            if (bytes == null || bytes.Length == 0)
+                return null;
+
+            return Convert.ToBase64String(bytes);
+        }
     }
 
 }

@@ -38,5 +38,7 @@
         public string VAR_HORDING_HOLDNAME { get; set; }
         public string VAR_HORDING_OWNERSHIP { get; set; }
         public string VAR_DISPLAYTYPE_NAME { get; set; }
+
+        public byte[] BLO_APPLIDOC_IMAGE { get; set; }  
     }
 }

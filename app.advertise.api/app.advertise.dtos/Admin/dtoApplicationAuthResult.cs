@@ -26,5 +26,6 @@
         public string LocationName { get; set; }
         public string Remark { get; set; }
         public string RemarkFlag { get; set; }
+        public string AppImage { get; set; }
     }
 }
