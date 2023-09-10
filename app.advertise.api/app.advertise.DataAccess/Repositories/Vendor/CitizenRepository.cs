@@ -56,9 +56,9 @@ namespace app.advertise.DataAccess.Repositories.Vendor
 
         public async Task<CitizenUser> RegisterCitizen(DynamicParameters parameters)
         {
-            parameters.Add("out_EmailLink", dbType: DbType.String, direction: ParameterDirection.Output);
+            parameters.Add("out_EmailLink", dbType: DbType.String, direction: ParameterDirection.Output, size: 4000);
             parameters.Add("out_errcode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("out_ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output);
+            parameters.Add("out_ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 4000);
 
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(Queries.SP_CitzenRegistration_Ins, parameters, commandType: CommandType.StoredProcedure);

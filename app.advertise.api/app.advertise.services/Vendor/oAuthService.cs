@@ -70,21 +70,21 @@ namespace app.advertise.services.Vendor
 
 
             var parameters = new DynamicParameters();
-            parameters.Add("in_ulbID", request.UlbId, DbType.Int32);
+            parameters.Add("in_ulbID", request.UlbId);
             parameters.Add("in_userid", null);
-            parameters.Add("in_fname", request.FName, DbType.String);
-            parameters.Add("in_mname", request.MName, DbType.String);
-            parameters.Add("in_lname", request.LName, DbType.String);
-            parameters.Add("in_address", request.Address, DbType.String);
-            parameters.Add("in_dob", request.DateOfBirth, DbType.Date);
-            parameters.Add("in_emailid", request.EmailId.Trim(), DbType.String);
-            parameters.Add("in_mobnumber", request.MobileNo, DbType.Int64);
-            parameters.Add("IN_Gender", request.Gender, DbType.String);
-            parameters.Add("in_domainlink", null, DbType.String);
-            parameters.Add("In_AdharNo", request.AadharNo, DbType.String);
-            parameters.Add("in_ipaddress", _authData.IpAddress, DbType.String);
-            parameters.Add("in_source", _authData.Source, DbType.String);
-
+            parameters.Add("in_fname", request.FName);
+            parameters.Add("in_mname", request.MName);
+            parameters.Add("in_lname", request.LName);
+            parameters.Add("in_address", request.Address);
+            parameters.Add("in_dob", request.DateOfBirth);
+            parameters.Add("in_emailid", request.EmailId.Trim().ToLower());
+            parameters.Add("in_mobnumber", request.MobileNo);
+            parameters.Add("IN_Gender", request.Gender);
+            parameters.Add("in_domainlink", null);
+            parameters.Add("In_AdharNo", request.AadharNo);
+            parameters.Add("in_ipaddress", _authData.IpAddress);
+            parameters.Add("in_source", _authData.Source);
+            
             var result = await _repository.RegisterCitizen(parameters);
 
             if (result == null || string.IsNullOrEmpty(result.VAR_CITIZENUSER_EMAILLINK))
