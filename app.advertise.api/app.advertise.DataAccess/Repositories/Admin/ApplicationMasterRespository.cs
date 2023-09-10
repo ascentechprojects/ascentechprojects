@@ -66,20 +66,26 @@ namespace app.advertise.DataAccess.Repositories.Admin
 
         public async Task<ApplicationClose> DeauthAppliStatus(DynamicParameters parameters)
         {
+            parameters.Add("out_AppCloseID", dbType: DbType.String, direction: ParameterDirection.Output, size: 50);
             parameters.Add("out_errcode", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("out_ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 2000);
-            parameters.Add("out_AppCloseID", dbType: DbType.String, direction: ParameterDirection.Output, size: 2000);
+            parameters.Add("out_ErrMsg", dbType: DbType.String, direction: ParameterDirection.Output, size: 200);
 
             using var connection = _context.CreateConnection();
             await connection.ExecuteAsync(Queries.SP_AppliClose_Ins, parameters, commandType: CommandType.StoredProcedure);
 
-            var errorCode = parameters.Get<int?>("out_errcode");
-            var errorMsg = parameters.Get<string?>("out_ErrMsg");
+            var closeIds = parameters.Get<string>("out_AppCloseID");
+            var errorCode = parameters.Get<int>("out_errcode");
+            var errorMsg = parameters.Get<string>("out_ErrMsg");
+
+
 
             if (errorCode != 9999)
                 throw new DBException($"Status:{errorCode}, Message:{errorMsg} ", _logger);
 
-            return new ApplicationClose() { VAR_APPLICLOSE_ID = parameters.Get<string?>("out_AppCloseID") };
+            if (string.IsNullOrEmpty(closeIds))
+                throw new DBException($"Failed to close the application", _logger);
+
+            return new ApplicationClose() { VAR_APPLICLOSE_ID = closeIds };
         }
 
         public async Task<ApplicationClose> ApplicationCloseByAppId(ApplicationClose parameters)

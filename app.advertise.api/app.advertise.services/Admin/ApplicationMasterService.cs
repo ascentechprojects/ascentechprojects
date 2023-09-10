@@ -174,12 +174,12 @@ namespace app.advertise.services.Admin
             var appCloseParameters = new DynamicParameters();
             appCloseParameters.Add("in_ulbID", _authData.UlbId);
             appCloseParameters.Add("in_userid", _authData.UserId);
-            appCloseParameters.Add("IN_AppCloseID", appClose.NUM_APPLICLOSE_ID);
+            appCloseParameters.Add("IN_AppCloseID", appClose?.NUM_APPLICLOSE_ID);
             appCloseParameters.Add("in_Holding", application.NUM_APPLI_HORDINGID);
             appCloseParameters.Add("in_remark", dto.Remark);
-            appCloseParameters.Add("in_STR", application.VAR_APPLI_APPLINO);
+            appCloseParameters.Add("in_STR", $"{application.NUM_APPLI_ID}$");
             appCloseParameters.Add("in_ipaddress", _authData.IpAddress);
-            appCloseParameters.Add("in_source", _authData.Source.ToString());
+            appCloseParameters.Add("in_source", _authData.Source);
 
             var result= await _repository.DeauthAppliStatus(appCloseParameters);
             return result.VAR_APPLICLOSE_ID;

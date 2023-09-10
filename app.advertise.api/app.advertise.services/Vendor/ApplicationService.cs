@@ -233,7 +233,7 @@ namespace app.advertise.services.Vendor
             if (invalidAppIds.Any())
                 throw new ApiException($"Invalid Application(s) {string.Join(",", invalidAppIds)}", _logger);
 
-            var appCloseIds = string.Join("$", records.Select(x => x.NUM_APPLI_ID.ToString()).ToArray()) ;
+            var appCloseIds = string.Join("$", applicationIds.ToArray()) ;
             var parameters = new DynamicParameters();
             parameters.Add("in_ulbID", _authData.UlbId);
             parameters.Add("in_userid", _authData.UserId);
