@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Data;
-using System.Linq;
 
 namespace app.advertise.services.Vendor
 {
@@ -22,14 +21,14 @@ namespace app.advertise.services.Vendor
         private readonly ILogger<ApplicationService> _logger;
         private readonly IAppliDocService _appliDocService;
         private readonly IFileService _fileService;
-        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger,  IAppliDocService appliDocService, IFileService fileService)
+        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger, IAppliDocService appliDocService, IFileService fileService)
         {
             _repository = repository;
             _authData = authData;
             _dataProtector = dataProtector.CreateProtector(dataProtectionPurpose.RecordIdRouteValue);
             _logger = logger;
             _appliDocService = appliDocService;
-            _fileService= fileService;
+            _fileService = fileService;
         }
 
         public async Task<dtoApplicationDetails> AddApplication(dtoApplicationDetails dto, IFormFile formFile)
@@ -184,7 +183,7 @@ namespace app.advertise.services.Vendor
             };
         }
 
-        public async Task<byte[]> AppImageById(string id) => await _appliDocService.GetFileBytes(new dtoFormFile() { ApplicationId= Convert.ToInt32(_dataProtector.Unprotect(id)) });
+        public async Task<byte[]> AppImageById(string id) => await _appliDocService.GetFileBytes(new dtoFormFile() { ApplicationId = Convert.ToInt32(_dataProtector.Unprotect(id)) });
 
 
         public async Task<IEnumerable<dtoApplication>> AppCloseSearch(dtoAppClose dto)
@@ -220,7 +219,7 @@ namespace app.advertise.services.Vendor
             var applicationIds = dto.AppliIds.Select(x => _dataProtector.Unprotect(x));
             var getParameters = new DynamicParameters();
             getParameters.Add("p_appli_ids", applicationIds);
-            getParameters.Add("p_ulb_id", 1);
+            getParameters.Add("p_ulb_id", _authData.UlbId);
             getParameters.Add("prabhagId", dto.AppliPrabhagId);
             getParameters.Add("locationId", dto.AppliLocationId);
             getParameters.Add("hordingId", dto.AppliHordingId);
@@ -234,16 +233,16 @@ namespace app.advertise.services.Vendor
             if (invalidAppIds.Any())
                 throw new ApiException($"Invalid Application(s) {string.Join(",", invalidAppIds)}", _logger);
 
+            var appCloseIds = string.Join("$", records.Select(x => x.NUM_APPLI_ID.ToString()).ToArray()) ;
             var parameters = new DynamicParameters();
-            parameters.Add("in_ulbID", _authData.UlbId, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_userid", _authData.UserId, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_ipaddress", _authData.IpAddress, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_source", _authData.Source, DbType.String, ParameterDirection.Input);
-            parameters.Add("in_remark", dto.Remark, DbType.String, ParameterDirection.Input);
-            parameters.Add("IN_AppCloseID", 0, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_Holding", dto.AppliHordingId, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("in_STR", "870$,869$", DbType.String, ParameterDirection.Input);
-            //string.Join("$",applicationIds)
+            parameters.Add("in_ulbID", _authData.UlbId);
+            parameters.Add("in_userid", _authData.UserId);
+            parameters.Add("IN_AppCloseID", 0);
+            parameters.Add("in_Holding", dto.AppliHordingId);
+            parameters.Add("in_remark", dto.Remark);
+            parameters.Add("in_STR", $"{appCloseIds}$");
+            parameters.Add("in_ipaddress", _authData.IpAddress);
+            parameters.Add("in_source", _authData.Source);
             await _repository.CloseApplications(parameters);
         }
 
@@ -310,7 +309,7 @@ namespace app.advertise.services.Vendor
                 AppliLocationName = record.VAR_LOCATION_NAME,
 
                 OrgName = record.VAR_CORPORATION_NAME,
-                OrgLogo= _fileService.ByteToBase64(record.BLO_APPLIDOC_IMAGE)
+                OrgLogo = _fileService.ByteToBase64(record.BLO_APPLIDOC_IMAGE)
             };
         }
 
