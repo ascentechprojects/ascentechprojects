@@ -13,5 +13,8 @@ namespace app.advertise.services.Interfaces
         Task<IEnumerable<dtoListItem>> LocationsByPrabhagId(int prabhagId);
         Task<IEnumerable<dtoListItem>> HordingByLocId(int locId);
         Task<IEnumerable<dtoListItem>> Corporations();
+
+        Task<IEnumerable<dtoListItem>> LocationsByPrabhagId(int prabhagId, int ulbId);
+        Task<IEnumerable<dtoListItem>> HordingByLocId(int locId,int ulbId);
     }
 }

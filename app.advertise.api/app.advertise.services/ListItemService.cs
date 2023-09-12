@@ -21,7 +21,7 @@ namespace app.advertise.services
         {
             var parameters = new DynamicParameters();
             parameters.Add("ulbId", _authData.UlbId);
-            return  await _listItemRepository.Items(ListItemEntity.Location, parameters);
+            return await _listItemRepository.Items(ListItemEntity.Location, parameters);
         }
         public async Task<IEnumerable<dtoListItem>> Prabhags()
         {
@@ -49,6 +49,22 @@ namespace app.advertise.services
             return await _listItemRepository.Items(ListItemEntity.HordingByLocId, parameters);
         }
 
-        public async Task<IEnumerable<dtoListItem>> Corporations()=> await _listItemRepository.Items(ListItemEntity.Corporation);
+        public async Task<IEnumerable<dtoListItem>> Corporations() => await _listItemRepository.Items(ListItemEntity.Corporation);
+
+        public async Task<IEnumerable<dtoListItem>> LocationsByPrabhagId(int prabhagId, int ulbId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("prabhagId", prabhagId);
+            parameters.Add("ulbId", ulbId);
+            return await _listItemRepository.Items(ListItemEntity.LocationByPrabhag, parameters);
+        }
+
+        public async Task<IEnumerable<dtoListItem>> HordingByLocId(int locId,int ulbId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("locationid", locId);
+            parameters.Add("ulbId", ulbId);
+            return await _listItemRepository.Items(ListItemEntity.HordingByLocId, parameters);
+        }
     }
 }

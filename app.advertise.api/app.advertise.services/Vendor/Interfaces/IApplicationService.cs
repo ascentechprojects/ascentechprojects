@@ -16,5 +16,7 @@ namespace app.advertise.services.Vendor.Interfaces
         Task<IEnumerable<dtoApplication>> ApplicationsByStatus(string status);
         Task<dtoAppTemplate> ValidateApplication(string id, string appno=null);
         Task<dtoViewApplication> ViewApplicationById(string id);
+        Task<IEnumerable<dtoListItem>> LocationsByPrabhagId(int prabhagId);
+        Task<IEnumerable<dtoListItem>> HordingByLocId(int locId);
     }
 }

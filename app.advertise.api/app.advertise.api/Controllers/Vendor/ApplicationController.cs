@@ -1,4 +1,5 @@
-﻿using app.advertise.dtos.Vendor;
+﻿using app.advertise.dtos;
+using app.advertise.dtos.Vendor;
 using app.advertise.dtos.Vendor.Validators;
 using app.advertise.libraries;
 using app.advertise.libraries.Exceptions;
@@ -242,6 +243,43 @@ namespace app.advertise.api.Controllers.Vendor
                 {
                     Status = libraries.StatusCode.Ok,
                     Data = await _service.ViewApplicationById(id)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("{prabhagId:int}/PrabhaLocations")]
+        public async Task<IActionResult> LocationsByPrabhagId(int prabhagId)
+        {
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoListItem>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.LocationsByPrabhagId(prabhagId)
+                });
+            }
+            catch (Exception ex)
+            {
+                return HandleError(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("{locationId:int}/LocHordings")]
+        public async Task<IActionResult> HordingsByLocationId(int locationId)
+        {
+            try
+            {
+                return Ok(new ApiResponse<IEnumerable<dtoListItem>>
+                {
+                    Status = libraries.StatusCode.Ok,
+                    Data = await _service.HordingByLocId(locationId)
                 });
             }
             catch (Exception ex)

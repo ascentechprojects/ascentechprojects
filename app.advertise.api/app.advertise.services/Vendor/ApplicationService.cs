@@ -21,7 +21,8 @@ namespace app.advertise.services.Vendor
         private readonly ILogger<ApplicationService> _logger;
         private readonly IAppliDocService _appliDocService;
         private readonly IFileService _fileService;
-        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger, IAppliDocService appliDocService, IFileService fileService)
+        private readonly IListItemService _listItemService;
+        public ApplicationService(IApplicationRepository repository, VendorRequestHeaders authData, DataProtectionPurpose dataProtectionPurpose, IDataProtectionProvider dataProtector, ILogger<ApplicationService> logger, IAppliDocService appliDocService, IFileService fileService, IListItemService listItemService)
         {
             _repository = repository;
             _authData = authData;
@@ -29,6 +30,7 @@ namespace app.advertise.services.Vendor
             _logger = logger;
             _appliDocService = appliDocService;
             _fileService = fileService;
+            _listItemService = listItemService;
         }
 
         public async Task<dtoApplicationDetails> AddApplication(dtoApplicationDetails dto, IFormFile formFile)
@@ -352,5 +354,9 @@ namespace app.advertise.services.Vendor
                 HordingTypeName = record.VAR_HOARDINGTYPE_NAME
             };
         }
+
+        public async Task<IEnumerable<dtoListItem>> LocationsByPrabhagId(int prabhagId)=> await _listItemService.LocationsByPrabhagId(prabhagId: prabhagId, ulbId: _authData.UlbId);
+
+        public async Task<IEnumerable<dtoListItem>> HordingByLocId(int locId) => await _listItemService.HordingByLocId(locId: locId, ulbId: _authData.UlbId);
     }
 }

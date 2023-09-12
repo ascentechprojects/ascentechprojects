@@ -37,10 +37,10 @@
         internal const string ListItem_Locations = "select NUM_LOCATION_ID As Id, VAR_LOCATION_NAME As DisplayName from aoad_location_mst where VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_ULBID=:ulbId";
         internal const string ListItem_DisplayTypes = "Select NUM_DISPLAYTYPE_ID As Id ,VAR_DISPLAYTYPE_NAME As DisplayName,VAR_DISPLAYTYPE_STATUS as Active from aoad_displaytype_mst where VAR_DISPLAYTYPE_STATUS='A'";
         internal const string ListItem_Prabhags = "SELECT NUM_PRABHAG_ID As Id, VAR_PRABHAG_NAME As DisplayName from aoad_prabhag_mas where VAR_PRABHAG_STATUS='Y' OR VAR_PRABHAG_STATUS= 'A' AND VAR_PRABHAG_ULBID=:ulbId";
-        //internal const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId AND NUM_LOCATION_ULBID=:ulbId";
-        //internal const string ListItem_Hording_by_LocationId = "SELECT num_hording_id AS Id,var_hording_holdname As DisplayName from aoad_hording_mst WHERE num_hording_locationid=:locationid AND var_hording_active='A' AND NUM_HORDING_ULBID=:ulbId";
-        internal const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId";
-        internal const string ListItem_Hording_by_LocationId = "SELECT num_hording_id AS Id,var_hording_holdname As DisplayName from aoad_hording_mst WHERE num_hording_locationid=:locationid AND var_hording_active='A'";
+        internal const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId AND NUM_LOCATION_ULBID=:ulbId";
+        internal const string ListItem_Hording_by_LocationId = "SELECT num_hording_id AS Id,var_hording_holdname As DisplayName from aoad_hording_mst WHERE num_hording_locationid=:locationid AND var_hording_active='A' AND NUM_HORDING_ULBID=:ulbId";
+       // internal const string ListItem_Locations_By_PrabhagId = "SELECT NUM_LOCATION_ID As Id,VAR_LOCATION_NAME As DisplayName FROM aoad_location_mst WHERE VAR_LOCATION_ACTIVE='A' AND NUM_LOCATION_PRABHAGID=:prabhagId";
+       // internal const string ListItem_Hording_by_LocationId = "SELECT num_hording_id AS Id,var_hording_holdname As DisplayName from aoad_hording_mst WHERE num_hording_locationid=:locationid AND var_hording_active='A'";
         internal const string ListItem_Corporations = "SELECT NUM_CORPORATION_ID AS Id,VAR_CORPORATION_NAME AS DisplayName,VAR_CORPORATION_MNAME FROM admins.aoma_corporation_mas WHERE var_corporation_name IS NOT NULL";
 
 
