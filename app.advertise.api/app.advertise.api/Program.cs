@@ -7,7 +7,6 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.DataProtection;
 using Serilog;
 using Serilog.Events;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
